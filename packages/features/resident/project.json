@@ -4,7 +4,7 @@
   "sourceRoot": "features/resident/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:feature", "domain:resident"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

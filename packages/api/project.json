@@ -4,7 +4,7 @@
   "sourceRoot": "packages/api/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:data-access", "platform:api", "domain:resident"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hhsc-compliance/consumers": ["features/consumers/src/index.ts"],
+      "@hhsc-compliance/consumers": [
+        "packages/features/consumers/src/index.ts"
+      ],
       "@hhsc-compliance/data-access": ["packages/api/src/index.ts"],
-      "@hhsc-compliance/resident": ["features/resident/src/index.ts"],
+      "@hhsc-compliance/resident": ["packages/features/resident/src/index.ts"],
       "@hhsc-compliance/shared-utils": ["packages/shared/src/index.ts"],
       "@hhsc-compliance/ui-components": ["packages/frontend/src/index.ts"]
     }
