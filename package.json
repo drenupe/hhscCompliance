@@ -2,7 +2,14 @@
   "name": "@hhsc-compliance/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {  "patch:frontend-config": "node --loader ts-node/esm ./frontend/tools/update-project-json.cts"},
+  "scripts": {
+     "typeorm:cli": "ts-node -r tsconfig-paths/register apps/api/ormconfig.ts",
+    "migration:generate": "npm run build:api && typeorm-ts-node-commonjs migration:generate -- -d dist/apps/api/ormconfig.js",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d dist/apps/api/ormconfig.js",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d dist/apps/api/ormconfig.js",
+    "build:api": "nx build api",
+    "patch:frontend-config": "node --loader ts-node/esm ./frontend/tools/update-project-json.cts"
+  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.0.0",
@@ -13,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~20.0.0",
     "@angular/router": "~20.0.0",
     "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.0",
     "@nestjs/mapped-types": "^2.1.0",
     "@nestjs/platform-express": "^11.0.0",

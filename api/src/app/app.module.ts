@@ -1,15 +1,17 @@
+// apps/api/src/app/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';;
-import { User } from '../users/entities/user.entity';
-import { typeOrmConfig } from '../configuration/typeorm.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { typeOrmAsyncConfig } from '../configuration/typeorm/async.config'; // See step 2
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmConfig),
-    TypeOrmModule.forFeature([User]),
-],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // <-- Ensures ConfigService is available app-wide
+      envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+    }),
+
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig), // ✅ DI-aware setup
+  ],
 })
 export class AppModule {}
