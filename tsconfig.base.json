@@ -15,12 +15,24 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hhsc-compliance/consumers": [
+      "@hhsc-compliance/behaviors": [
+        "packages/features/behaviors/src/index.ts"
+      ],
+    "@hhsc-compliance/consumers": [
         "packages/features/consumers/src/index.ts"
       ],
+      "@hhsc-compliance/dashboard": [
+        "packages/features/dashboard/src/index.ts"
+      ],
       "@hhsc-compliance/data-access": ["packages/api/src/index.ts"],
-      "@hhsc-compliance/resident": ["packages/features/resident/src/index.ts"],
-      "@hhsc-compliance/shared-utils": ["packages/shared/src/index.ts"],
+      "@hhsc-compliance/iis": ["packages/features/iis/src/index.ts"],
+      "@hhsc-compliance/medicals": ["packages/features/medicals/src/index.ts"],
+      "@hhsc-compliance/residents": ["packages/residents/src/index.ts"],
+      "@hhsc-compliance/shared-utils": [
+        "packages/features/shared/src/index.ts"
+      ],
+      "@hhsc-compliance/staff": ["packages/features/staff/src/index.ts"],
+      "@hhsc-compliance/training": ["packages/features/training/src/index.ts"],
       "@hhsc-compliance/ui-components": ["packages/frontend/src/index.ts"]
     }
   },
