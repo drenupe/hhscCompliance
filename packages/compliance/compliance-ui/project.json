@@ -1,0 +1,36 @@
+{
+  "name": "compliance-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/compliance/compliance-ui/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "packages/compliance/compliance-ui/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/compliance/compliance-ui/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/compliance/compliance-ui/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/compliance/compliance-ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

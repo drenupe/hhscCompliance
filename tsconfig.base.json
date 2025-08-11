@@ -18,7 +18,16 @@
       "@hhsc-compliance/behaviors": [
         "packages/features/behaviors/src/index.ts"
       ],
-    "@hhsc-compliance/consumers": [
+      "@hhsc-compliance/compliance-data-access": [
+        "packages/compliance/compliance-data-access/src/index.ts"
+      ],
+      "@hhsc-compliance/compliance-registry": [
+        "packages/compliance/compliance-registry/src/index.ts"
+      ],
+      "@hhsc-compliance/compliance-ui": [
+        "packages/compliance/compliance-ui/src/index.ts"
+      ],
+      "@hhsc-compliance/consumers": [
         "packages/features/consumers/src/index.ts"
       ],
       "@hhsc-compliance/dashboard": [
@@ -27,6 +36,7 @@
       "@hhsc-compliance/data-access": ["packages/api/src/index.ts"],
       "@hhsc-compliance/iis": ["packages/features/iis/src/index.ts"],
       "@hhsc-compliance/medicals": ["packages/features/medicals/src/index.ts"],
+      "@hhsc-compliance/models": ["packages/compliance/models/src/index.ts"],
       "@hhsc-compliance/residents": ["packages/residents/src/index.ts"],
       "@hhsc-compliance/shared-utils": [
         "packages/features/shared/src/index.ts"
