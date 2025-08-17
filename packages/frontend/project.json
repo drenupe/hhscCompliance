@@ -1,20 +1,29 @@
 {
   "name": "ui-components",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/frontend/src",
+  "sourceRoot": "packages/ui-components/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared", "platform:frontend"],
   "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/packages/ui-components"],
+      "options": {
+        "project": "packages/ui-components/ng-package.json",
+        "tsConfig": "packages/ui-components/tsconfig.lib.json",
+        "assets": [
+          { "input": "packages/ui-theme/fonts", "glob": "**/*", "output": "./assets/fonts" }
+        ],
+        "updateBuildableProjectDepsInPackageJson": true,
+        "buildableProjectDepsInPackageJsonType": "dependencies"
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "packages/frontend/jest.config.ts"
-      }
+      "options": { "jestConfig": "packages/frontend/jest.config.ts" }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    }
+    "lint": { "executor": "@nx/eslint:lint" }
   }
 }

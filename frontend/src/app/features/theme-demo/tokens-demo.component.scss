@@ -1,0 +1,9 @@
+@use "tokens/spacing.base" as s;
+.demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: s.$space-4; }
+.swatch {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 40px; min-width: 120px; padding: 0 s.$space-4;
+  background: var(--swatch); color: #0b1220; border-radius: var(--radius-md);
+  border: 1px solid var(--border); box-shadow: var(--shadow-1);
+  text-transform: uppercase; font-weight: 700; letter-spacing: .02em;
+}

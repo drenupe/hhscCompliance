@@ -1,0 +1,11 @@
+@use "../tokens/spacing.base" as s;
+@use "../core/mixins" as m;
+
+.form-field { display: grid; gap: s.$space-2; }
+.label { font-weight: 600; color: var(--muted); }
+.input, .select, .textarea {
+  width: 100%; padding: s.$space-2 s.$space-4; border-radius: var(--radius-md);
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { @include m.focus-ring; }
+.help { color: var(--muted); font-size: 0.875rem; }

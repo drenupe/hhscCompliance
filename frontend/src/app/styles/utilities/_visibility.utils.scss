@@ -1,0 +1,5 @@
+@use "../core/mixins" as m;
+
+.sr-only { @include m.sr-only; }
+.hide { display: none !important; }
+@media (max-width: 640px) { .hide-sm { display: none !important; } }

@@ -1,0 +1,22 @@
+@use "../tokens/spacing.base" as s;
+@use "../core/mixins" as m;
+
+.btn {
+  display: inline-flex; align-items: center; gap: s.$space-2;
+  padding: s.$space-2 s.$space-4; border-radius: var(--radius-md);
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  box-shadow: var(--shadow-1);
+  text-decoration: none;
+
+  &:focus-visible { @include m.focus-ring; }
+
+  .icon { margin-right: s.$space-2; }
+}
+
+.btn--primary {
+  background: linear-gradient(180deg, var(--security), var(--brand));
+  border: none; color: #0b1220; font-weight: 700;
+}
+
+.btn--ghost { background: transparent; border-color: var(--border); }
+.btn--danger { background: #ef4444; border: none; color: #fff; }

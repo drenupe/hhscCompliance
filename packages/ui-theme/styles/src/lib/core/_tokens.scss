@@ -1,0 +1,8 @@
+// Minimal bundle (no Style Dictionary required).
+// Forward all static token partials so components can @use "core/tokens".
+@forward "../tokens/colors.base";
+@forward "../tokens/typography.base";
+@forward "../tokens/spacing.base";
+@forward "../tokens/radius.base";
+@forward "../tokens/shadows.base";
+@forward "../tokens/zindex.base";

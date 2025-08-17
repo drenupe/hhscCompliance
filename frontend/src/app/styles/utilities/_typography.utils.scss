@@ -1,0 +1,12 @@
+@use "../tokens/typography.base" as t;
+
+.h1 { font-family: t.$font-heading; font-size: t.$fs-36; line-height: t.$lh-tight; }
+.h2 { font-family: t.$font-heading; font-size: t.$fs-30; line-height: t.$lh-tight; }
+.h3 { font-family: t.$font-heading; font-size: t.$fs-24; line-height: t.$lh-tight; }
+.h4 { font-family: t.$font-heading; font-size: t.$fs-20; line-height: t.$lh-tight; }
+.text-muted { color: var(--muted); }
+
+.icon { width: 1em; height: 1em; stroke-width: t.$icon-stroke; }
+.icon--sm { width: t.$icon-size-sm; height: t.$icon-size-sm; }
+.icon--md { width: t.$icon-size-md; height: t.$icon-size-md; }
+.icon--lg { width: t.$icon-size-lg; height: t.$icon-size-lg; }

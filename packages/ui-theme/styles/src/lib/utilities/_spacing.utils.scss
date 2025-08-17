@@ -1,0 +1,8 @@
+@use "../tokens/spacing.base" as s;
+
+.m-0 { margin: s.$space-0; }
+.mt-2 { margin-top: s.$space-2; }
+.mb-2 { margin-bottom: s.$space-2; }
+.p-4 { padding: s.$space-4; }
+.px-4 { padding-inline: s.$space-4; }
+.py-4 { padding-block: s.$space-4; }

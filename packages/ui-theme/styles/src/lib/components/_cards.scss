@@ -1,0 +1,34 @@
+@use "../tokens/spacing.base" as s;
+
+.card {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: s.$space-4;
+}
+
+.card--elevated { box-shadow: var(--shadow-2); }
+.card--outline { box-shadow: none; }
+
+.card__header { display: flex; align-items: center; justify-content: space-between; gap: s.$space-4; margin-bottom: s.$space-4; }
+.card__title { font-weight: 700; }
+.card__meta { color: var(--muted); font-size: 0.875rem; }
+.card__body { display: block; }
+.card__footer { display: flex; gap: s.$space-2; margin-top: s.$space-4; }
+
+/* Interactive state */
+.card--interactive { cursor: pointer; transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease; }
+.card--interactive:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); }
+.card--interactive:active { transform: translateY(0); }
+
+/* Status accents */
+.card--success { border-color: var(--success); }
+.card--warning { border-color: var(--warning); }
+.card--danger  { border-color: var(--danger); }
+
+/* High-contrast */
+@media (forced-colors: active) {
+  .card { border: 1px solid CanvasText; background: Canvas; color: CanvasText; box-shadow: none; }
+}

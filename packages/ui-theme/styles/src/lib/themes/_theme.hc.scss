@@ -1,0 +1,26 @@
+@use "../core/mixins" as m;
+
+[data-theme="hc"] {
+  @include m.export-css-vars((
+    bg:        #000,
+    surface:   #000,
+    text:      #fff,
+    muted:     #fff,
+    border:    #fff,
+
+    brand:     #0ff,
+    security:  #0ff,
+    savings:   #0f0,
+
+    success:   #0f0,
+    warning:   #ff0,
+    danger:    #f00,
+
+    radius-sm: 0,
+    radius-md: 0,
+    radius-lg: 0,
+
+    shadow-1:  none,
+    shadow-2:  none
+  ));
+}

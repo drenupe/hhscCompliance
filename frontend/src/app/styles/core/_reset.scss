@@ -1,0 +1,20 @@
+@use "../tokens/typography.base" as t;
+@use "../tokens/colors.base" as c;
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: t.$font-body;
+  line-height: t.$lh-normal;
+  color: c.$color-text;
+  background: c.$color-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: none; }

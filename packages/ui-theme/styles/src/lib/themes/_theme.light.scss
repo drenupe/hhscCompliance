@@ -1,0 +1,28 @@
+@use "../core/tokens" as t;
+@use "../core/mixins" as m;
+
+:root,
+[data-theme="light"] {
+  @include m.export-css-vars((
+    bg:        t.$color-bg,
+    surface:   t.$color-surface,
+    text:      t.$color-text,
+    muted:     t.$color-muted,
+    border:    t.$color-border,
+
+    brand:     t.$color-brand,
+    security:  t.$color-security,
+    savings:   t.$color-savings,
+
+    success:   t.$color-success,
+    warning:   t.$color-warning,
+    danger:    t.$color-danger,
+
+    radius-sm: t.$radius-sm,
+    radius-md: t.$radius-md,
+    radius-lg: t.$radius-lg,
+
+    shadow-1:  t.$shadow-1,
+    shadow-2:  t.$shadow-2
+  ));
+}
