@@ -47,7 +47,7 @@ async function main() {
     console.error('❌ Failed to connect:', err.message);
     process.exit(1);
   } finally {
-    try { await client.end(); } catch {}
+    try { await client.end(); } catch { /* empty */ }
   }
 }
 

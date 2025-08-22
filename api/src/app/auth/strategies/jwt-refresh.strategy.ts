@@ -6,12 +6,17 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-  constructor(cs: ConfigService) {
+  constructor(cfg: ConfigService) {
+    const secret =
+      cfg.get<string>('JWT_REFRESH_SECRET') ??
+      cfg.get<string>('JWT_SECRET') ??            // fallback for convenience
+      cfg.get<string>('jwt.refreshSecret');
+
+    if (!secret) throw new Error('JWT_REFRESH_SECRET / JWT_SECRET missing');
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
-      secretOrKey: cs.get<string>('JWT_REFRESH_SECRET'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
+      secretOrKey: secret,
     });
   }
-  validate(payload: any) { return { sub: payload.sub, sid: payload.sid }; }
 }

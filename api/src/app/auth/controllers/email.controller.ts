@@ -1,6 +1,6 @@
 // api/src/app/auth/controllers/email.controller.ts
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { Public } from '../../authorization/decorators/public.decorator';
+import { Public } from '../decorators/public.decorator';
 import { EmailService } from '../services/email.service';
 import { VerifyEmailDto } from '../dto/verify-email.dto';
 

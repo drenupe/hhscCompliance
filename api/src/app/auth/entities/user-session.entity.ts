@@ -5,9 +5,7 @@ import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, Update
 export class UserSession {
   @PrimaryGeneratedColumn('uuid') id!: string;
   @Index() @Column({ type: 'uuid' }) userId!: string;
-  @Index() @Column({ type: 'uuid' }) familyId!: string; // session family for rotation
-  @Column({ type: 'text', nullable: true }) refreshHash?: string; // hashed refresh
-  @Column({ type: 'text', nullable: true }) ua?: string;
+  @Column({ type: 'text', nullable: true }) userAgent?: string;
   @Column({ type: 'inet', nullable: true }) ip?: string;
   @Column({ type: 'timestamptz', nullable: true }) revokedAt?: Date;
   @CreateDateColumn({ type: 'timestamptz' }) createdAt!: Date;

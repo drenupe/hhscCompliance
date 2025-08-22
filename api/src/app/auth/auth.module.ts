@@ -25,20 +25,39 @@ import { RefreshToken } from './entities/refresh-token.entity';
 import { EmailVerification } from './entities/email-verification.entity';
 import { PasswordReset } from './entities/password-reset.entity';
 import { MfaSecret } from './entities/mfa-secret.entity';
+import { UsersModule } from '../users/users.module';
+import { LoginAttempt } from './entities/login-attempt.entity';
+import { AccountProtectionService } from './services/account-protection.service';
+import { RetentionModule } from './retention/retention.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(), // ✅ enables @Cron
+    RetentionModule,          // ✅ our cleanup jobs
     ConfigModule,
+    UsersModule, // ✅ use UsersService instead of injecting Repository<User> here
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (cs: ConfigService) => ({
-        secret: cs.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: cs.get<string>('ACCESS_TOKEN_TTL') ?? '15m' },
-      }),
       inject: [ConfigService],
+      useFactory: (cs: ConfigService) => ({
+        secret: cs.get<string>('JWT_SECRET')!,
+        signOptions: { expiresIn: cs.get<string>('JWT_EXPIRES_IN') ?? '15m' },
+      }),
     }),
-    TypeOrmModule.forFeature([UserSession, RefreshToken, EmailVerification, PasswordReset, MfaSecret]),
+
+    // No need to include User here; UsersModule already registers it
+    TypeOrmModule.forFeature([
+      UserSession,
+      RefreshToken,
+      EmailVerification,
+      PasswordReset,
+      MfaSecret,
+      LoginAttempt
+    ]),
   ],
   controllers: [AuthController, MfaController, EmailController],
   providers: [
@@ -48,6 +67,7 @@ import { MfaSecret } from './entities/mfa-secret.entity';
     PasswordService,
     MfaService,
     EmailService,
+    AccountProtectionService,
     LocalStrategy,
     JwtAccessStrategy,
     JwtRefreshStrategy,

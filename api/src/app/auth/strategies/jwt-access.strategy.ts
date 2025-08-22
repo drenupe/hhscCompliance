@@ -4,14 +4,20 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
+type AccessPayload = { sub: string; sid: string; roles?: string[] };
+
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(cs: ConfigService) {
+  constructor(cfg: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: cs.get<string>('JWT_SECRET'),
       ignoreExpiration: false,
+      secretOrKey: cfg.get<string>('JWT_SECRET'),
+      clockTolerance: 5,
     });
   }
-  validate(payload: any) { return { sub: payload.sub, roles: payload.roles ?? [], sid: payload.sid }; }
+  validate(p: AccessPayload) {
+    // This becomes req.user
+    return { sub: p.sub, sid: p.sid, roles: p.roles ?? [] };
+  }
 }

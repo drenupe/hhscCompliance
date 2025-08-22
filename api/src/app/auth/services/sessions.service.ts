@@ -1,14 +1,24 @@
 // api/src/app/auth/services/sessions.service.ts
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, IsNull, Not } from 'typeorm';
+import { UserSession } from '../entities/user-session.entity';
 
 @Injectable()
 export class SessionsService {
-  async create(userId: string, _meta: { ip?: string; ua?: string; deviceName?: string }) {
-    // TODO: persist to DB; return session and family ids
-    return { id: `sess_${Date.now()}`, familyId: `fam_${userId}` };
+  constructor(@InjectRepository(UserSession) private repo: Repository<UserSession>) {}
+
+  create(userId: string, meta: { ip?: string; ua?: string }) {
+    const s = this.repo.create({ userId, ip: meta.ip, userAgent: meta.ua });
+    return this.repo.save(s);
   }
-  async revoke(_sessionId: string) { /* TODO */ }
-  async revokeFamily(_familyId: string) { /* TODO */ }
-  async enforceMaxDevices(_userId: string) { /* TODO */ }
-  async flagReuse(_familyId: string, _evidence: any) { /* TODO */ }
+  revoke(sessionId: string) {
+    return this.repo.update({ id: sessionId, revokedAt: IsNull() }, { revokedAt: new Date() });
+  }
+  revokeAllForUser(userId: string) {
+    return this.repo.update({ userId, revokedAt: IsNull() }, { revokedAt: new Date() });
+  }
+  findActiveById(id: string) {
+    return this.repo.findOne({ where: { id, revokedAt: IsNull() } });
+  }
 }

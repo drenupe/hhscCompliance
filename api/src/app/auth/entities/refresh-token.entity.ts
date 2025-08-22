@@ -1,15 +1,19 @@
 // api/src/app/auth/entities/refresh-token.entity.ts
-import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserSession } from './user-session.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('refresh_tokens')
 export class RefreshToken {
   @PrimaryGeneratedColumn('uuid') id!: string;
-  @ManyToOne(() => UserSession, { onDelete: 'CASCADE' }) session!: UserSession;
-  @Index() @Column({ type: 'uuid' }) sessionId!: string;
-  @Column({ type: 'text' }) tokenHash!: string; // never store raw tokens
-  @Column({ type: 'uuid', nullable: true }) prevId?: string; // for chain
-  @Column({ type: 'timestamptz', nullable: true }) rotatedAt?: Date;
-  @Column({ type: 'timestamptz', nullable: true }) revokedAt?: Date;
-  @CreateDateColumn({ type: 'timestamptz' }) createdAt!: Date;
+
+  @Column('uuid', { name: 'userId' })    userId!: string;
+  @Column('uuid', { name: 'sessionId' }) sessionId!: string;
+
+  @Column('text', { name: 'tokenHash' }) tokenHash!: string;
+
+  @Column('timestamptz', { name: 'expiresAt' })  expiresAt!: Date;
+  @Column('timestamptz', { name: 'rotatedAt', nullable: true }) rotatedAt?: Date;
+  @Column('timestamptz', { name: 'revokedAt', nullable: true }) revokedAt?: Date;
+
+  @Column('text', { name: 'userAgent', nullable: true }) userAgent?: string;
+  @Column('inet', { name: 'ip', nullable: true }) ip?: string;
 }

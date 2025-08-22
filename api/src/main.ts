@@ -1,39 +1,67 @@
 // api/src/main.ts
-import { Logger, ValidationPipe, VersioningType, ClassSerializerInterceptor } from '@nestjs/common';
+import {
+  Logger,
+  ValidationPipe,
+  VersioningType,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app/app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
+import { AppModule } from './app/app.module';
+
+function parseOrigins(csv?: string): string[] {
+  return (csv ?? '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
 
+  // If running behind a proxy (Render, Nginx, Cloudflare), this is needed for secure cookies & real IPs.
   app.set('trust proxy', 1);
 
+  // Versioning & prefix
   const globalPrefix = process.env.API_PREFIX || 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
-  app.use(helmet());
+  // Security + perf
+  app.use(helmet());          // includes HSTS in prod, XSS protections, etc.
   app.use(compression());
   app.use(cookieParser());
 
-  const origins = (process.env.CORS_ORIGIN || '').split(',').map(s => s.trim()).filter(Boolean);
-  app.enableCors({ origin: origins.length ? origins : true, credentials: true });
+  // CORS: safer default — disabled unless explicitly configured.
+  // (Avoids the invalid combo: wildcard "*" with credentials: true.)
+  const allowedOrigins = parseOrigins(process.env.CORS_ORIGIN);
+  app.enableCors({
+    origin: allowedOrigins.length ? allowedOrigins : false,
+    credentials: true,
+  });
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-    transformOptions: { enableImplicitConversion: true },
-  }));
+  // Validation + serialization
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
   const reflector = app.get(Reflector);
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
-  const enableSwagger = process.env.ENABLE_SWAGGER === 'true' || process.env.NODE_ENV !== 'production';
+  // Swagger (disable in prod unless explicitly enabled)
+  const enableSwagger =
+    process.env.ENABLE_SWAGGER === 'true' || process.env.NODE_ENV !== 'production';
+
   if (enableSwagger) {
     const config = new DocumentBuilder()
       .setTitle('API')
@@ -42,15 +70,20 @@ async function bootstrap() {
       .addBearerAuth()
       .addServer(`/${globalPrefix}`)
       .build();
+
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(`${globalPrefix}/docs`, app, document);
   }
 
+  // Graceful shutdown
   app.enableShutdownHooks();
 
-  const port = parseInt(process.env.PORT || '3000', 10);
+  const port = Number(process.env.PORT ?? 3000);
   await app.listen(port, '0.0.0.0');
-  Logger.log(`🚀 App: http://localhost:${port}/${globalPrefix}`);
-  if (enableSwagger) Logger.log(`📘 Docs: http://localhost:${port}/${globalPrefix}/docs`);
+
+  Logger.log(`🚀 App:  http://localhost:${port}/${globalPrefix}`);
+  if (enableSwagger)
+    Logger.log(`📘 Docs: http://localhost:${port}/${globalPrefix}/docs`);
 }
+
 bootstrap();

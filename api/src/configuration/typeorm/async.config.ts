@@ -1,38 +1,67 @@
 // apps/api/src/config/typeorm/async.config.ts
-import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { TlsOptions } from 'node:tls';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
-  useFactory: async (cfg: ConfigService) => {
-    // Prefer nested keys from configuration(), fall back to raw env keys
-    const nodeEnv = (cfg.get<string>('env') ?? cfg.get<string>('NODE_ENV') ?? 'development').toLowerCase();
+  useFactory: async (cfg: ConfigService): Promise<TypeOrmModuleOptions> => {
+    const nodeEnv = String(cfg.get('NODE_ENV') ?? 'development').toLowerCase();
+
+    // Prefer DATABASE_URL, allow nested config key too
     const url = cfg.get<string>('database.url') ?? cfg.get<string>('DATABASE_URL') ?? '';
+    const useUrl = url.length > 0;
 
-    const dbSslFlag = cfg.get<boolean>('database.ssl') ?? (String(cfg.get('DB_SSL') ?? '').toLowerCase() === 'true');
+    // SSL on if DB_SSL=true or url has sslmode=require
+    const dbSslFlag =
+      (cfg.get<boolean>('database.ssl') as boolean | undefined) ??
+      /^true$/i.test(String(cfg.get('DB_SSL') ?? ''));
     const sslFromUrl = /[?&]sslmode=require/i.test(url);
-    const sslOn = dbSslFlag || sslFromUrl;
+    const sslOn = Boolean(dbSslFlag || sslFromUrl);
 
-    // Optional CA cert (PEM). Supports literal newlines or 
-    
-    const caFromNested = cfg.get<string>('database.caCert');
-    const caFromEnv = cfg.get<string>('PG_CA_CERT');
-    const ca = (caFromNested ?? caFromEnv)?.replace(/\n/g, '');
-    const baseSsl = ca && ca.trim().length > 0 ? { ca } : { rejectUnauthorized: false };
+    // CA: support inline PEM (escaped \n) and a file path
+    const caInline = cfg.get<string>('database.caCert') ?? cfg.get<string>('PG_CA_CERT');
+    const caPath = cfg.get<string>('database.caCertPath') ?? cfg.get<string>('PG_CA_CERT_PATH');
+    let caPem: string | undefined;
+    if (caInline) caPem = caInline.replace(/\\n/g, '\n').trim(); // turn "\n" into real newlines
+    else if (caPath && existsSync(caPath)) caPem = readFileSync(caPath, 'utf8');
 
-    return {
-      type: 'postgres' as const,
-      url,
+    const sslConfig: boolean | TlsOptions = sslOn
+      ? (caPem ? { rejectUnauthorized: true, ca: caPem } : { rejectUnauthorized: false })
+      : false;
+
+    const base: TypeOrmModuleOptions = {
+      type: 'postgres',
       autoLoadEntities: true,
-      synchronize: nodeEnv !== 'production', // prefer migrations in prod
-      ssl: sslOn ? baseSsl : false,
+      // Only auto-sync for *local dev* when not using a URL (use migrations elsewhere)
+      synchronize: nodeEnv === 'development' && !useUrl,
+      ssl: sslConfig,
       extra: {
-        ...(sslOn ? { ssl: baseSsl } : {}),
+        ...(sslOn ? { ssl: sslConfig } : {}),
         keepAlive: true,
         connectionTimeoutMillis: 10_000,
-        idle_in_transaction_session_timeout: 30_000,
+        statement_timeout: 30_000,
+        query_timeout: 30_000,
       },
-      // migrations: ['dist/apps/api/migrations/*.js'], // uncomment if using migrations
+      // Adjust to your Nx output path
+      migrations: [resolve(process.cwd(), 'dist/api/migrations/*.js')],
+      // logging: nodeEnv === 'development' ? ['error','warn','schema','migration','log'] : ['error','warn'],
+    };
+
+    const discrete = {
+      host: cfg.get('database.host') ?? cfg.get('DB_HOST') ?? 'localhost',
+      port: parseInt(String(cfg.get('database.port') ?? cfg.get('DB_PORT') ?? '5432'), 10),
+      username: cfg.get('database.user') ?? cfg.get('DB_USER') ?? 'postgres',
+      password: cfg.get('database.pass') ?? cfg.get('DB_PASS') ?? 'postgres',
+      database: cfg.get('database.name') ?? cfg.get('DB_NAME') ?? 'postgres',
+    };
+
+    // Return a single, non-union shape
+    return {
+      ...base,
+      ...(useUrl ? { url } : discrete),
     };
   },
 };

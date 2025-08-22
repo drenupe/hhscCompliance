@@ -1,51 +1,105 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { TokensService } from './tokens.service';
-import { SessionsService } from './sessions.service';
+// api/src/app/auth/services/auth.service.ts
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PasswordService } from './password.service';
-import { UsersService } from '../../users/services/users.services';
+import { SessionsService } from './sessions.service';
+import { TokensService } from './tokens.service';
+import { UsersService } from '../../users/services/users.service';
+import { User } from '../../users/entities/user.entity';
+
+type TokenBundle = {
+  accessToken: string;
+  refreshToken: string;
+  sessionId: string;
+};
+
+type IssueMeta = {
+  ip?: string;
+  ua?: string;
+  roles?: string[];
+};
 
 @Injectable()
 export class AuthService {
   constructor(
-    private users: UsersService,
-    private passwords: PasswordService,
-    private tokens: TokensService,
-    private sessions: SessionsService,
+    private readonly passwords: PasswordService,
+    private readonly sessions: SessionsService,
+    private readonly tokens: TokensService,
+    private readonly users: UsersService,
   ) {}
 
-  /** Used by LocalStrategy. Validates credentials and returns a minimal user shape */
-  async validateUser(email: string, password: string) {
+  /** Register a new user (throws 409 if email already exists). */
+  async register(email: string, password: string): Promise<User> {
+    const existing = await this.users.findByEmail(email);
+    if (existing) throw new ConflictException('Email already registered');
+
+    const passwordHash = await this.passwords.hash(password);
+    return this.users.createUser(email, passwordHash);
+  }
+
+  /** Validate email/password (throws 401 if invalid). */
+  async validateUser(email: string, password: string): Promise<User> {
     const user = await this.users.findByEmail(email);
     if (!user) throw new UnauthorizedException('Invalid credentials');
-    const ok = await this.passwords.compare(password, user.passwordHash);
+
+    const ok = await this.passwords.verify(password, (user as User).passwordHash);
     if (!ok) throw new UnauthorizedException('Invalid credentials');
-    return { id: user.id, email: user.email, roles: (user as any).roles ?? [] };
+
+    return user;
   }
 
-  /** Enterprise: issue tokens after successful guard-authenticated login */
-  async issueTokensForUser(userId: string, meta?: { ip?: string; ua?: string }) {
-    const session = await this.sessions.create(userId, { ip: meta?.ip, ua: meta?.ua });
-    const tokens = await this.tokens.issue({ userId, sessionId: session.id });
-    return { ...tokens };
+  /**
+   * Issue access/refresh tokens for a user.
+   * IMPORTANT: TokensService MUST hash & persist the refresh token (tokenHash NOT NULL).
+   */
+  async issueTokensForUser(userId: string, meta: IssueMeta): Promise<TokenBundle> {
+    const session = await this.sessions.create(userId, { ip: meta.ip, ua: meta.ua });
+
+    // Access token (roles default to [])
+    const accessToken = await this.tokens.signAccess({
+      sub: userId,
+      sid: session.id,
+      roles: meta.roles ?? [],
+    });
+
+    // Refresh token – MUST be hashed & stored by TokensService to avoid DB NOT NULL errors.
+    // Ensure your TokensService.issueRefresh(...) persists tokenHash to the refresh_tokens table.
+    const { token: refreshToken } = await this.tokens.issueRefresh(session.id, userId);
+
+    return { accessToken, refreshToken, sessionId: session.id };
   }
 
-  /** Legacy direct login (still usable if you call it elsewhere) */
-  async login(dto: { email: string; password: string }) {
-    const user = await this.validateUser(dto.email, dto.password);
-    return this.issueTokensForUser(user.id);
-  }
+  /** Rotate refresh token and return fresh access + refresh. */
+// AuthService.refresh
+async refresh(presentedRefresh: string) {
+  const { next, decoded } = await this.tokens.rotateRefresh(presentedRefresh);
+  // Refresh payload is minimal: { sub, sid }
+  const user = await this.users.findById(decoded.sub); // or getRoles(decoded.sub)
+  const roles = (user as User)?.roles ?? [];           // adjust to your user shape
 
-  async refresh(refreshToken: string) {
-    return this.tokens.rotate(refreshToken, {});
-  }
+  const access = await this.tokens.signAccess({
+    sub: decoded.sub,
+    sid: decoded.sid,
+    roles,
+  });
 
-  async refreshWithMeta(refreshToken: string, meta?: { ip?: string; ua?: string }) {
-    // Hook for anomaly detection: compare meta with session/device data
-    return this.tokens.rotate(refreshToken, { ip: meta?.ip, ua: meta?.ua });
-  }
+  return { accessToken: access, refreshToken: next.token };
+}
 
-  async logoutCurrentSession() {
-    // TODO: extract sessionId from request context and revoke it
+
+  /** Revoke a session and all associated refresh tokens. */
+  async logout(sessionId: string): Promise<{ success: true }> {
+    await this.sessions.revoke(sessionId);
+    await this.tokens.revokeSessionTokens(sessionId);
     return { success: true };
+  }
+
+  /** Convenience: full login flow (optional helper). */
+  async login(email: string, password: string, meta: IssueMeta): Promise<TokenBundle> {
+    const user = await this.validateUser(email, password);
+    return this.issueTokensForUser((user as User).id, meta);
   }
 }
