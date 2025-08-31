@@ -1,3 +1,4 @@
+// apps/api/jest.config.ts  (unchanged; unit tests only)
 export default {
   displayName: 'api',
   preset: '../jest.preset.js',
@@ -7,4 +8,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../coverage/api',
+  testMatch: ['<rootDir>/src/**/*.spec.ts'],   // ⬅ add this line to scope to unit tests
 };

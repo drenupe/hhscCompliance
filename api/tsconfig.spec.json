@@ -1,13 +1,20 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    
     "module": "commonjs",
     "types": ["jest", "node"],
-    "outDir": "../dist/out-tsc"
+    "noEmit": true,
+    "outDir": "../../dist/tmp-jest",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
