@@ -6,7 +6,7 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+  import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 import compression from 'compression';
@@ -28,18 +28,17 @@ async function bootstrap() {
   // If running behind a proxy (Render, Nginx, Cloudflare), this is needed for secure cookies & real IPs.
   app.set('trust proxy', 1);
 
-  // Versioning & prefix
+  // Versioning & prefix → /api/v1/*
   const globalPrefix = process.env.API_PREFIX || 'api';
   app.setGlobalPrefix(globalPrefix);
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
   // Security + perf
-  app.use(helmet());          // includes HSTS in prod, XSS protections, etc.
+  app.use(helmet());
   app.use(compression());
   app.use(cookieParser());
 
-  // CORS: safer default — disabled unless explicitly configured.
-  // (Avoids the invalid combo: wildcard "*" with credentials: true.)
+  // CORS (disabled unless explicitly configured to avoid "*" + credentials)
   const allowedOrigins = parseOrigins(process.env.CORS_ORIGIN);
   app.enableCors({
     origin: allowedOrigins.length ? allowedOrigins : false,
@@ -68,7 +67,8 @@ async function bootstrap() {
       .setDescription('API documentation')
       .setVersion('1.0')
       .addBearerAuth()
-      .addServer(`/${globalPrefix}`)
+      // 👇 Important: point Swagger to the versioned base so "Try it out" calls /api/v1/*
+      .addServer(`/${globalPrefix}/v1`)
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
@@ -81,7 +81,8 @@ async function bootstrap() {
   const port = Number(process.env.PORT ?? 3000);
   await app.listen(port, '0.0.0.0');
 
-  Logger.log(`🚀 App:  http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`🚀 Base:  http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`🔢 v1:    http://localhost:${port}/${globalPrefix}/v1`);
   if (enableSwagger)
     Logger.log(`📘 Docs: http://localhost:${port}/${globalPrefix}/docs`);
 }

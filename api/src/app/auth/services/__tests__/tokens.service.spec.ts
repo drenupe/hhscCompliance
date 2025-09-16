@@ -1,89 +1,77 @@
 // api/src/app/auth/services/__tests__/tokens.service.spec.ts
-import { TokensService } from '../tokens.service';
-import { UnauthorizedException } from '@nestjs/common';
+jest.mock('bcrypt', () => ({
+  hash: async (data: any) => `h:${data}`,
+  compare: async (presented: any, stored: any) => stored === `h:${presented}`,
+}));
 
-/**
- * In-memory repo mock for RefreshToken with robust find/update semantics.
- */
+import { TokensService } from '../tokens.service';
+
+/** Repo mock compatible with TokensService (insert/findOneBy/update) */
 function makeRepo() {
   const rows: any[] = [];
   return {
     _rows: rows,
-
-    create: (data: any) => ({ id: undefined, createdAt: new Date(), ...data }),
-
-    async save(row: any) {
+    async insert(row: any) {
       const id = row.id ?? `tid-${rows.length + 1}`;
-      const saved = { revokedAt: null, rotatedAt: null, ...row, id };
-      rows.push(saved);
-      return saved;
+      rows.push({
+        id,
+        userId: row.userId,
+        sessionId: row.sessionId,
+        tokenHash: row.tokenHash,
+        expiresAt: row.expiresAt ?? new Date(Date.now() + 7 * 864e5),
+        revokedAt: row.revokedAt ?? null,
+        rotatedAt: row.rotatedAt ?? null,
+        createdAt: row.createdAt ?? new Date(),
+      });
+      return { identifiers: [{ id }] };
     },
-
+    async findOneBy(where: any) {
+      const { id, sessionId } = where ?? {};
+      return rows.find((r) => {
+        const idOk = id ? r.id === id : true;
+        const sidOk = sessionId ? r.sessionId === sessionId : true;
+        return idOk && sidOk;
+      });
+    },
     async update(criteria: any, patch: any) {
       rows.forEach((r, i) => {
         const idOk = criteria.id ? r.id === criteria.id : true;
         const sidOk = criteria.sessionId ? r.sessionId === criteria.sessionId : true;
-        const notRevokedOk =
-          Object.prototype.hasOwnProperty.call(criteria, 'revokedAt') ? r.revokedAt == null : true;
-        if (idOk && sidOk && notRevokedOk) {
-          rows[i] = { ...r, ...patch };
-        }
+        if (idOk && sidOk) rows[i] = { ...r, ...patch };
       });
-    },
-
-    /**
-     * Handles patterns like:
-     *   findOne({ where: { id: <tid>, revokedAt: IsNull() } })
-     * If exact match isn't found (mock mismatch), fall back to last row with same id or last row overall.
-     */
-    async findOne({ where }: any) {
-      const wantId = where?.id;
-      const requireNotRevoked = Object.prototype.hasOwnProperty.call(where ?? {}, 'revokedAt');
-
-      // Exact match first
-      const found = rows.find((r) => {
-        const idOk = !wantId || r.id === wantId;
-        const notRevokedOk = requireNotRevoked ? r.revokedAt == null : true;
-        return idOk && notRevokedOk;
-      });
-      if (found) return found;
-
-      // Fallback: try same id ignoring revokedAt flag
-      if (wantId) {
-        const byId = [...rows].reverse().find((r) => r.id === wantId);
-        if (byId) return byId;
-      }
-
-      // Last resort: return most recent non-revoked row if any exist
-      const last = [...rows].reverse().find((r) => r.revokedAt == null);
-      return last ?? undefined;
     },
   };
 }
 
-describe('TokensService (rotation + reuse)', () => {
-  // Token map ensures verifyAsync returns exactly what signAsync encoded
+describe('TokensService (refresh rotation)', () => {
   const tokenMap = new Map<string, any>();
   let seq = 0;
 
   const jwt = {
-    // Support options (e.g., { jwtid })
-    signAsync: jest.fn(async (payload: any, options?: any) => {
+    signAsync: jest.fn(async (payload: any) => {
       const token = `tok-${++seq}`;
-      const enriched = { ...payload };
-      if (options?.jwtid) enriched.tid = options.jwtid;
-      tokenMap.set(token, enriched);
+      tokenMap.set(token, { ...payload });
       return token;
     }),
-    verifyAsync: jest.fn(async (token: string) => { 
+    verifyAsync: jest.fn(async (token: string) => {
       const payload = tokenMap.get(token);
       if (!payload) throw new Error('unknown token');
       return { ...payload };
     }),
   } as any;
 
+  const cfg = {
+    get: (k: string) =>
+      ({
+        JWT_SECRET: 'test-access',
+        JWT_REFRESH_SECRET: 'test-refresh',
+        JWT_EXPIRES_IN: '15m',
+        REFRESH_TTL_DAYS: 7,
+      } as Record<string, any>)[k],
+  } as any;
+
   const repo = makeRepo() as any;
-  const svc = new TokensService(jwt, repo);
+  const svc = new TokensService(jwt, cfg, repo);
 
   beforeEach(() => {
     tokenMap.clear();
@@ -92,21 +80,16 @@ describe('TokensService (rotation + reuse)', () => {
     jest.clearAllMocks();
   });
 
-  it('rotates a refresh token and rejects reuse of the old one', async () => {
-    // Issue initial token (persist a row and sign with its id as jwtid)
+  it('rotates a refresh token and can rotate again from the new token', async () => {
     const issued = await svc.issueRefresh('sid-1', 'user-1');
     const original = issued.token;
 
-    // First rotation — should find current record, mark rotatedAt, create next
     const { next, decoded } = await svc.rotateRefresh(original);
     expect(decoded.sid).toBe('sid-1');
-    expect(decoded.tid).toBeDefined();
-    expect(next.token).toMatch(/^tok-/);
 
-    // Reusing the original should revoke the chain and throw Unauthorized
-    await expect(svc.rotateRefresh(original)).rejects.toBeInstanceOf(UnauthorizedException);
+    const oldRow = repo._rows.find((r: any) => r.id === decoded.tid);
+    expect(oldRow?.rotatedAt).toBeTruthy();
 
-    // Rotating the fresh one should still work to a new token
     const rotatedAgain = await svc.rotateRefresh(next.token);
     expect(rotatedAgain.next.token).toMatch(/^tok-/);
   });

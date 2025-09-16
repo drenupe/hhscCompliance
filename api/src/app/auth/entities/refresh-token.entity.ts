@@ -1,19 +1,39 @@
-// api/src/app/auth/entities/refresh-token.entity.ts
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  PrimaryColumn,      // ⬅️ use PrimaryColumn, not PrimaryGeneratedColumn
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('refresh_tokens')
 export class RefreshToken {
-  @PrimaryGeneratedColumn('uuid') id!: string;
+  @PrimaryColumn('uuid')
+  id!: string;
 
-  @Column('uuid', { name: 'userId' })    userId!: string;
-  @Column('uuid', { name: 'sessionId' }) sessionId!: string;
+  @Index() @Column({ type: 'uuid' })
+  userId!: string;
 
-  @Column('text', { name: 'tokenHash' }) tokenHash!: string;
+  @Index() @Column({ type: 'uuid' })
+  sessionId!: string;
 
-  @Column('timestamptz', { name: 'expiresAt' })  expiresAt!: Date;
-  @Column('timestamptz', { name: 'rotatedAt', nullable: true }) rotatedAt?: Date;
-  @Column('timestamptz', { name: 'revokedAt', nullable: true }) revokedAt?: Date;
+  @Column({ type: 'text' })
+  tokenHash!: string;
 
-  @Column('text', { name: 'userAgent', nullable: true }) userAgent?: string;
-  @Column('inet', { name: 'ip', nullable: true }) ip?: string;
+  // Portable dates (no explicit DB type needed)
+  @Column()
+  expiresAt!: Date;
+
+  @Column({ nullable: true })
+  revokedAt?: Date;
+
+  @Column({ nullable: true })
+  rotatedAt?: Date;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

@@ -1,8 +1,17 @@
 // api/src/app/auth/controllers/auth.controller.ts
 import {
-  Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards,
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { VERSION_NEUTRAL } from '@nestjs/common'; // or use version: '1'
 import { Request } from 'express';
 import { Throttle, seconds } from '@nestjs/throttler';
 
@@ -12,73 +21,111 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { Public } from '../decorators/public.decorator';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard'; // ⬅ adjust import path to your guard
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { MfaService } from '../services/mfa.service';
 
-// Option 1: pin to v1
-// @Controller({ path: 'auth', version: '1' })
+type VerifyMfaBody = { ticket: string; code?: string; backupCode?: string };
 
-// Option 2: respond both with/without /v1 (recommended while wiring)
-// so endpoints work at /api/auth/* AND /api/v1/auth/*
-@Controller({ path: 'auth', version: VERSION_NEUTRAL })
+@Controller({ path: 'auth', version: '1' })
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
+
   constructor(
     private readonly auth: AuthService,
     private readonly account: AccountProtectionService,
+    private readonly mfa: MfaService,
   ) {}
 
-  @Public()
-  @Throttle({ default: { limit: 20, ttl: seconds(60) } })
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body() dto: LoginDto, @Req() req: Request) {
-    const user = await this.auth.validateUser(dto.email, dto.password);
-    const ua = req.headers['user-agent'] as string | undefined;
-    const ip =
-      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip;
-
-    return this.auth.issueTokensForUser((user as any).id, {
-      ua,
-      ip,
-      roles: (user as any).roles,
-    });
-  }
-  
-
-
-
+  // -------- REGISTER --------
   @Public()
   @Throttle({ default: { limit: 10, ttl: seconds(60) } })
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
   async register(@Body() dto: RegisterDto) {
     const user = await this.auth.register(dto.email, dto.password);
     return { id: (user as any).id, email: (user as any).email };
   }
 
+  // -------- LOGIN (step 1) --------
+  @Public()
+  @Throttle({ default: { limit: 20, ttl: seconds(60) } })
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() dto: LoginDto, @Req() req: Request) {
+    const ua = req.headers['user-agent'] as string | undefined;
+    const ip =
+      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip;
+
+    try {
+      return await this.auth.loginOrTicket(dto.email, dto.password, { ua, ip });
+    } catch (err) {
+      this.logger.error(
+        `Login failed for ${dto.email} from ${ip}`,
+        (err as any)?.stack,
+      );
+      throw err;
+    }
+  }
+
+  // -------- LOGIN (step 2: MFA verify) --------
+  @Public()
+  @Throttle({ default: { limit: 30, ttl: seconds(60) } })
+  @Post('mfa/verify')
+  @HttpCode(HttpStatus.OK)
+  async verifyMfa(@Body() body: VerifyMfaBody, @Req() req: Request) {
+    if (!body?.ticket) {
+      throw new BadRequestException('ticket is required');
+    }
+
+    const { user } = await this.mfa.verifyTicketAndCode(body.ticket, {
+      code: body.code,
+      backupCode: body.backupCode,
+    });
+
+    const ua = req.headers['user-agent'] as string | undefined;
+    const ip =
+      (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.ip;
+
+    try {
+      return await this.auth.issueTokensForUser((user as any).id, {
+        ua,
+        ip,
+        roles: (user as any).roles ?? [],
+      });
+    } catch (err) {
+      this.logger.error(
+        `MFA verify succeeded but token issuance failed for ${(user as any)?.id}`,
+        (err as any)?.stack,
+      );
+      throw err;
+    }
+  }
+
+  // -------- REFRESH --------
   @Public()
   @Throttle({ default: { limit: 20, ttl: seconds(60) } })
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(@Body() dto: RefreshTokenDto) {
+    if (!dto?.refreshToken) throw new BadRequestException('refreshToken is required');
     return this.auth.refresh(dto.refreshToken);
   }
 
-    // NEW: GET /auth/me (requires access token)
-   @UseGuards(JwtAuthGuard)
+  // -------- ME --------
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   @HttpCode(HttpStatus.OK)
   me(@Req() req: any) {
-    const u = req.user;                         // set by JwtAccessStrategy.validate()
-    if (!u) throw new UnauthorizedException();  // avoid TypeError
+    const u = req.user;
+    if (!u) throw new UnauthorizedException();
     return {
-      id: u.sub,                // NOT u.id
+      id: u.sub,
       sessionId: u.sid ?? null,
       roles: Array.isArray(u.roles) ? u.roles : [],
     };
   }
 
-  
-
-
+  // -------- LOGOUT --------
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
@@ -87,6 +134,4 @@ export class AuthController {
     if (sessionId) await this.auth.logout(sessionId);
     return { success: true };
   }
-
-  
 }

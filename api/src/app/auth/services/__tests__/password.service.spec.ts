@@ -1,4 +1,9 @@
 // api/src/app/auth/services/__tests__/password.service.spec.ts
+jest.mock('bcrypt', () => ({
+  hash: async (data: any) => `HASH(${data})`,
+  compare: async (presented: any, stored: any) => stored === `HASH(${presented})`,
+}));
+
 import { PasswordService } from '../password.service';
 
 describe('PasswordService', () => {

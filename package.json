@@ -8,10 +8,14 @@
     "patch:frontend-config": "node --loader ts-node/esm ./frontend/tools/update-project-json.cts",
     "ssl:check": "ts-node --project api/tsconfig.typeorm.json api/scripts/ssl-check.ts",
     "typeorm": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts",
-    "db:gen": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/init_auth",
-    "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:run",
-    "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:revert",
-    "test:e2e": "cross-env NODE_ENV=test API_PREFIX=api jest --config apps/api/jest-e2e.json --runInBand"
+     "db:gen": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/add_auth_changes",
+     "db:create": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:create api/migrations/manual_fix",
+     "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:run",
+     "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:revert",
+     "test:e2e": "cross-env NODE_ENV=test API_PREFIX=api jest --config apps/api/jest-e2e.json --runInBand"
+
+
+
   },
   "dependencies": {
     "@angular/common": "~20.0.0",
@@ -33,6 +37,7 @@
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/throttler": "^6.4.0",
     "@nestjs/typeorm": "^11.0.0",
+    "@otplib/preset-default": "^12.0.1",
     "axios": "^1.6.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -41,6 +46,7 @@
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "helmet": "^8.1.0",
+    "otplib": "^12.0.1",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pino": "^9.9.0",
@@ -103,6 +109,7 @@
     "postcss": "^8.4.5",
     "postcss-url": "~10.1.3",
     "prettier": "^2.6.2",
+    "sqlite3": "^5.1.7",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.1",

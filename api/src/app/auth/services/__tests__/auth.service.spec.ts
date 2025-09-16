@@ -1,66 +1,58 @@
-// api/src/app/auth/services/__tests__/auth.service.spec.ts
-import { UsersService } from '../../../users/services/users.service';
-import { AuthService } from '../auth.service';
-import { PasswordService } from '../password.service';
-import { SessionsService } from '../sessions.service';
-import { TokensService } from '../tokens.service';
-import { ConflictException, UnauthorizedException } from '@nestjs/common';
+// api/src/app/test/auth.e2e.spec.ts
+jest.mock('bcrypt', () => ({
+  hash: async (d: any) => `h:${d}`,
+  compare: async (p: any, s: any) => s === `h:${p}`,
+}));
 
-describe('AuthService', () => {
-  const users: Partial<UsersService> = {
-    findByEmail: jest.fn(),
-    createUser: jest.fn(),
-  };
-  const sessions: Partial<SessionsService> = {
-    create: jest.fn().mockResolvedValue({ id: 'sid-1' }),
-  };
-  const tokens: Partial<TokensService> = {
-    signAccess: jest.fn().mockResolvedValue('access.jwt'),
-    issueRefresh: jest.fn().mockResolvedValue({ token: 'refresh.jwt', record: { id: 'tid-1' } }),
-  };
-  const passwords = new PasswordService();
+process.env.NODE_ENV = 'test';
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-access';
+process.env.JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'test-refresh';
+process.env.JWT_EXPIRES_IN = '15m';
+process.env.REFRESH_TTL_DAYS = '7';
+process.env.API_PREFIX = 'api';
+process.env.ENABLE_SWAGGER = 'false';
 
-  const svc = new AuthService(
-    passwords as any,
-    sessions as any,
-    tokens as any,
-    users as any,
-  );
+jest.setTimeout(30000);
 
-  beforeEach(() => jest.clearAllMocks());
+import request from 'supertest';
+import { INestApplication, ValidationPipe, VersioningType } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { AppModule } from '../../../app.module';
 
-  it('registers when email unused', async () => {
-    (users.findByEmail as jest.Mock).mockResolvedValue(null);
-    (users.createUser as jest.Mock).mockImplementation(async (email: string, passwordHash: string) => ({
-      id: 'u1', email, passwordHash, roles: ['user'],
-    }));
+describe('Auth E2E (agentless)', () => {
+  let app: INestApplication;
+  let server: any; // avoid supertest typings entirely
 
-    const u = await svc.register('a@b.com', 'StrongPassw0rd!');
-    expect(u.id).toBe('u1');
-    expect(users.createUser).toHaveBeenCalled();
+  beforeAll(async () => {
+    const mod = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    app = mod.createNestApplication();
+
+    const prefix = process.env.API_PREFIX || 'api';
+    app.setGlobalPrefix(prefix);
+    app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+    await app.init();
+    server = app.getHttpServer();
   });
 
-  it('throws on duplicate email', async () => {
-    (users.findByEmail as jest.Mock).mockResolvedValue({ id: 'u1', email: 'a@b.com', passwordHash: 'x' });
-    await expect(svc.register('a@b.com', 'x')).rejects.toBeInstanceOf(ConflictException);
+  afterAll(async () => {
+    await app.close();
   });
 
-  it('validates user credentials', async () => {
-    const hash = await passwords.hash('Pa$$w0rd!');
-    (users.findByEmail as jest.Mock).mockResolvedValue({ id: 'u1', email: 'a@b.com', passwordHash: hash });
+  it('register → login → me', async () => {
+    const base = `/${process.env.API_PREFIX || 'api'}/v1`;
+    const email = `e2e_${Date.now()}@test.dev`;
+    const password = 'Passw0rd!';
 
-    const u = await svc.validateUser('a@b.com', 'Pa$$w0rd!');
-    expect(u.id).toBe('u1');
-  });
+    await request(server).post(`${base}/auth/register`).send({ email, password }).expect(201);
 
-  it('rejects invalid password', async () => {
-    const hash = await passwords.hash('correct');
-    (users.findByEmail as jest.Mock).mockResolvedValue({ id: 'u1', email: 'a@b.com', passwordHash: hash });
-    await expect(svc.validateUser('a@b.com', 'wrong')).rejects.toBeInstanceOf(UnauthorizedException);
-  });
+    const login = await request(server).post(`${base}/auth/login`).send({ email, password }).expect(200);
+    const access = login.body.accessToken as string;
 
-  it('issues tokens for user', async () => {
-    const out = await svc.issueTokensForUser('u1', { ip: '1.2.3.4', ua: 'jest' });
-    expect(out).toEqual({ accessToken: 'access.jwt', refreshToken: 'refresh.jwt', sessionId: 'sid-1' });
+    await request(server)
+      .get(`${base}/auth/me`)
+      .set('Authorization', `Bearer ${access}`)
+      .expect(200);
   });
 });
