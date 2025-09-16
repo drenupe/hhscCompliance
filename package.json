@@ -8,14 +8,11 @@
     "patch:frontend-config": "node --loader ts-node/esm ./frontend/tools/update-project-json.cts",
     "ssl:check": "ts-node --project api/tsconfig.typeorm.json api/scripts/ssl-check.ts",
     "typeorm": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts",
-     "db:gen": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/add_auth_changes",
-     "db:create": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:create api/migrations/manual_fix",
-     "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:run",
-     "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:revert",
-     "test:e2e": "cross-env NODE_ENV=test API_PREFIX=api jest --config apps/api/jest-e2e.json --runInBand"
-
-
-
+    "db:gen": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/add_auth_changes",
+    "db:create": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:create api/migrations/manual_fix",
+    "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:run",
+    "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -d api/src/configuration/typeorm/data-source.ts migration:revert",
+    "test:e2e": "cross-env NODE_ENV=test API_PREFIX=api jest --config apps/api/jest-e2e.json --runInBand"
   },
   "dependencies": {
     "@angular/common": "~20.0.0",
@@ -47,6 +44,7 @@
     "dotenv": "^16.4.5",
     "helmet": "^8.1.0",
     "otplib": "^12.0.1",
+    "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pino": "^9.9.0",
