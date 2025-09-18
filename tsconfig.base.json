@@ -45,7 +45,7 @@
       "@hhsc-compliance/styles": ["packages/ui-theme/styles/src/index.ts"],
       "@hhsc-compliance/training": ["packages/features/training/src/index.ts"],
       "@hhsc-compliance/ui-components": ["packages/frontend/src/index.ts"],
-      "@hhsc/auth/data-access": ["auth/src/index.ts"]
+      "@hhsc/auth/data-access": ["packages/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
