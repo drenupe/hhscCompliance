@@ -33,7 +33,6 @@
       "@hhsc-compliance/dashboard": [
         "packages/features/dashboard/src/index.ts"
       ],
-      "@hhsc-compliance/data-access": ["packages/api/src/index.ts"],
       "@hhsc-compliance/fonts": ["packages/ui-theme/fronts/src/index.ts"],
       "@hhsc-compliance/iis": ["packages/features/iis/src/index.ts"],
       "@hhsc-compliance/medicals": ["packages/features/medicals/src/index.ts"],
@@ -45,7 +44,8 @@
       "@hhsc-compliance/staff": ["packages/features/staff/src/index.ts"],
       "@hhsc-compliance/styles": ["packages/ui-theme/styles/src/index.ts"],
       "@hhsc-compliance/training": ["packages/features/training/src/index.ts"],
-      "@hhsc-compliance/ui-components": ["packages/frontend/src/index.ts"]
+      "@hhsc-compliance/ui-components": ["packages/frontend/src/index.ts"],
+      "@hhsc/auth/data-access": ["auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
