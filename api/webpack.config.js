@@ -1,3 +1,4 @@
+// api/webpack.config.js
 const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
 const { join } = require('path');
 
@@ -14,7 +15,8 @@ module.exports = {
       assets: ['./src/assets'],
       optimization: false,
       outputHashing: 'none',
-      generatePackageJson: true,
+      generatePackageJson: true, // ✅ Nx writes dist/api/package.json
+      // externalization stays default (externals allowed)
     }),
   ],
 };

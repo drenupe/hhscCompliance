@@ -38,6 +38,23 @@
         }
       }
     },
+
+ "serve-dist": {
+  "executor": "nx:run-commands",
+  "options": {
+    "commands": [
+      { "command": "nx build api --skip-nx-cache" },
+      { "command": "node tools/postbuild/patch-dist-package.cjs" },
+      { "command": "npm ci --omit=dev --prefix dist/api" },
+      { "command": "node dist/api/main.js" }
+    ],
+    "parallel": false
+  }
+}
+
+
+
+,
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
