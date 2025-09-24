@@ -1,0 +1,58 @@
+<!-- Mobile overlay: focusable + keyboard accessible -->
+<div
+  class="sidebar-overlay"
+  *ngIf="(layout.isMobile$ | async) && (layout.sidebarOpen$ | async)"
+  role="button"
+  tabindex="0"
+  aria-label="Close sidebar"
+  (click)="onOverlayClick()"
+  (keydown.enter)="onOverlayClick()"
+  (keydown.space)="onOverlayClick()"
+></div>
+
+<nav
+  id="sidebar"
+  role="navigation"
+  aria-label="Primary"
+  [ngClass]="{
+    close: layout.isCollapsed$ | async,
+    'mobile-open': (layout.isMobile$ | async) && (layout.sidebarOpen$ | async)
+  }"
+>
+  <div class="logo">
+    My App
+    <button
+      id="toggle-btn"
+      type="button"
+      (click)="onToggle()"
+      [attr.aria-pressed]="(layout.isCollapsed$ | async) ? 'true' : 'false'"
+      aria-controls="sidebar"
+      title="Toggle sidebar"
+    >
+      <lucide-icon
+        [name]="(layout.isCollapsed$ | async) ? 'chevron-right' : 'chevron-left'"
+      ></lucide-icon>
+      <span class="sr-only">Toggle sidebar</span>
+    </button>
+  </div>
+
+  <ul>
+    <li *ngFor="let item of ROUTES_CONFIG; trackBy: trackByPath">
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        #rla="routerLinkActive"
+        [routerLinkActiveOptions]="{ exact: true }"
+        [attr.aria-current]="rla.isActive ? 'page' : null"
+      >
+        <lucide-icon
+          [name]="item.icon"
+          class="sidebar-icon"
+          [attr.title]="item.label"
+          aria-hidden="true"
+        ></lucide-icon>
+        <span class="label-text">{{ item.label }}</span>
+      </a>
+    </li>
+  </ul>
+</nav>
