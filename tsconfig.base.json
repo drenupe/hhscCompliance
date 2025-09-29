@@ -1,0 +1,26 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@hhsc-compliance/dashboard": ["libs/features/dashboard/src/index.ts"],
+      "@hhsc-compliance/data-access": ["libs/data-access/src/index.ts"],
+      "@hhsc-compliance/home": ["libs/features/home/src/index.ts"],
+      "@hhsc-compliance/shared-models": ["libs/shared-models/src/index.ts"],
+      "@hhsc-compliance/web-shell": ["libs/web-shell/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

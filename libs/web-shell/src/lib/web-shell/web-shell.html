@@ -1,0 +1,11 @@
+<header class="p-4 border-b flex items-center gap-4">
+  <h1 class="text-xl font-semibold">HHSC Compliance</h1>
+  <nav class="ml-auto flex gap-4">
+    <a routerLink="/" routerLinkActive="font-bold" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/dashboard" routerLinkActive="font-bold">Dashboard</a>
+  </nav>
+</header>
+
+<main class="p-6">
+  <router-outlet></router-outlet>
+</main>
