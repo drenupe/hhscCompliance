@@ -1,0 +1,25 @@
+{
+  "name": "ui-kit",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui-kit/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:ui", "surface:web"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{workspaceRoot}/dist/libs/ui-kit"],
+      "options": {
+        "tsConfig": "libs/ui-kit/tsconfig.lib.json",
+        "main": "libs/ui-kit/src/index.ts",
+        "outputPath": "dist/libs/ui-kit",
+        "assets": []
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui-kit"],
+      "options": { "passWithNoTests": true }
+    },
+    "lint": { "executor": "@nx/eslint:lint" }
+  }
+}

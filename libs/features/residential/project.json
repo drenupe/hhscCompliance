@@ -1,0 +1,20 @@
+{
+  "name": "residential",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/residential/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:feature", "feature:residential", "surface:web"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/libs/features/residential"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

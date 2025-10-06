@@ -80,6 +80,8 @@
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "helmet": "^8.1.0",
+    "lucide": "^0.544.0",
+    "lucide-angular": "^0.544.0",
     "pg": "^8.16.3",
     "reflect-metadata": "^0.1.14",
     "rxjs": "~7.8.0",

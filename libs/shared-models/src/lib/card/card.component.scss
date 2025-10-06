@@ -1,0 +1,50 @@
+@import '../../../theme.scss';
+@import '../../../material-card';
+
+.material-card {
+  
+  @include card-surface;
+  border: 1px solid var(--clr-line);
+  padding: 1.5rem;
+  border-left-width: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  @include card-hover;
+
+  &.ok       { border-left-color: var(--clr-success); }
+  &.warning  { border-left-color: var(--clr-accent); }
+  &.critical { border-left-color: var(--clr-error); }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .icon {
+      @include card-icon;
+    }
+
+    .title {
+      @include card-title;
+    }
+  }
+
+  .body {
+    @include card-body;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+

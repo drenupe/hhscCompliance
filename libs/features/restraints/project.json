@@ -1,0 +1,20 @@
+{
+  "name": "restraints",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/restraints/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:feature", "feature:restraints", "surface:web"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/libs/features/restraints"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
