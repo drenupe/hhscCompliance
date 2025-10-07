@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ProtectiveDevices } from './protective-devices';
+import { EnclosedBeds } from './enclosed-beds.service';
 
-describe('ProtectiveDevices', () => {
-  let service: ProtectiveDevices;
+describe('EnclosedBeds', () => {
+  let service: EnclosedBeds;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ProtectiveDevices);
+    service = TestBed.inject(EnclosedBeds);
   });
 
   it('should be created', () => {

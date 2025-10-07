@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EnclosedBeds } from './enclosed-beds';
+import { Programmatic } from './programmatic.service';
 
-describe('EnclosedBeds', () => {
-  let service: EnclosedBeds;
+describe('Programmatic', () => {
+  let service: Programmatic;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(EnclosedBeds);
+    service = TestBed.inject(Programmatic);
   });
 
   it('should be created', () => {
