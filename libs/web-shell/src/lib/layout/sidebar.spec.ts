@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LocationSelector } from './lib';
+import { Sidebar } from './sidebar';
 
-describe('LocationSelector', () => {
-  let component: LocationSelector;
-  let fixture: ComponentFixture<LocationSelector>;
+describe('Sidebar', () => {
+  let component: Sidebar;
+  let fixture: ComponentFixture<Sidebar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LocationSelector]
+      imports: [Sidebar]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LocationSelector);
+    fixture = TestBed.createComponent(Sidebar);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

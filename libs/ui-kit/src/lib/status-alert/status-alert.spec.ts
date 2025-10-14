@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LocationSelector } from './lib';
 
-describe('LocationSelector', () => {
-  let component: LocationSelector;
-  let fixture: ComponentFixture<LocationSelector>;
+import { StatusAlert } from './status-alert';
+
+describe('StatusAlert', () => {
+  let component: StatusAlert;
+  let fixture: ComponentFixture<StatusAlert>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LocationSelector]
-    }).compileComponents();
+      imports: [StatusAlert]
+    })
+    .compileComponents();
 
-    fixture = TestBed.createComponent(LocationSelector);
+    fixture = TestBed.createComponent(StatusAlert);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

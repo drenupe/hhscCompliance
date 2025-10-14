@@ -1,0 +1,22 @@
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1099;
+
+  /* reset button look */
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background-clip: padding-box;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+
+  /* keep a visible focus style for accessibility */
+  &:focus-visible {
+    outline: 2px solid #2563eb; /* adjust to your theme */
+    outline-offset: 2px;
+  }
+}

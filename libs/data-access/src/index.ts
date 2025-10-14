@@ -7,3 +7,4 @@ export * from './lib/restraints/restraints.service';
 export * from './lib/enclosed-beds/enclosed-beds.service';
 export * from './lib/protective-devices/protective-devices.service';
 export * from './lib/prohibitions/prohibitions.service';
+export * from './lib/dashboard/compliance-dashboard.service';

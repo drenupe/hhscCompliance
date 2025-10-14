@@ -1,0 +1,19 @@
+<section class="chart" role="img" aria-label="Compliance status distribution">
+  <div class="chart__bars">
+    <div
+      class="bar"
+      *ngFor="let d of data; trackBy: trackByLabel"
+      [attr.data-label]="d.label"
+    >
+      <div
+        class="bar__fill"
+        [style.height.%]="(d.value / max) * 100"
+        [attr.aria-label]="d.label + ' ' + d.value"
+        aria-hidden="true"
+      ></div>
+
+      <div class="bar__value">{{ d.value }}</div>
+      <div class="bar__label">{{ d.label }}</div>
+    </div>
+  </div>
+</section>

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LocationSelector } from './lib';
+
+import { LocationSelector } from './location-selector';
 
 describe('LocationSelector', () => {
   let component: LocationSelector;
@@ -8,7 +9,8 @@ describe('LocationSelector', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LocationSelector]
-    }).compileComponents();
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(LocationSelector);
     component = fixture.componentInstance;

@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'location-selector',
+  selector: 'lib-sidebar',
   imports: [CommonModule],
-  templateUrl: './lib.html',
-  styleUrl: './lib.scss'
+  templateUrl: './sidebar.html',
+  styleUrl: './sidebar.scss'
 })
-export class LocationSelector {}
+export class Sidebar {}

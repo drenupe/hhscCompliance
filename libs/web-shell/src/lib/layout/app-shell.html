@@ -1,0 +1,30 @@
+<header class="app-header">
+  <button
+    class="hamburger-btn"
+    *ngIf="layout.isMobile$ | async"
+    (click)="toggleSidebar()"
+    type="button"
+    aria-label="Open menu"
+  >
+    <!-- Replace with your real icon component if available -->
+    <span class="hamburger-icon">☰</span>
+  </button>
+  <h1 class="app-title">HHSC Compliance</h1>
+</header>
+
+<!-- mobile overlay -->
+<button
+  type="button"
+  class="sidebar-overlay"
+  *ngIf="(layout.isMobile$ | async) && (layout.sidebarOpen$ | async)"
+  aria-label="Close sidebar"
+  (click)="closeSidebar()"
+  (keydown.enter)="closeSidebar()"
+  (keydown.space)="closeSidebar()"
+></button>
+
+
+<div class="app-shell" [class.collapsed]="(layout.isCollapsed$ | async)">
+  <lib-sidebar></lib-sidebar>
+  <lib-main-content></lib-main-content>
+</div>

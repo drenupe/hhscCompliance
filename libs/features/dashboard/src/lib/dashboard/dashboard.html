@@ -1,1 +1,33 @@
-<p>Dashboard works!</p>
+<section class="dash">
+  <header class="dash__header">
+    <h2>Compliance Dashboard</h2>
+
+    <label class="dash__loc">
+      <span>Location</span>
+      <select [(ngModel)]="selectedLocation" (ngModelChange)="onLocationChange($event)">
+        <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+      </select>
+    </label>
+  </header>
+
+  <section class="dash__grid">
+    <lib-compliance-summary-card
+      *ngFor="let s of summaryData"
+      [summary]="s"
+      (viewDetails)="navigateTo($event)"
+    ></lib-compliance-summary-card>
+  </section>
+
+  <section class="dash__alert" *ngIf="hasUrgentAlerts">
+    <div class="alert">
+      <strong>Critical issues:</strong>
+      <ul>
+        <li *ngFor="let a of alerts">⚠️ {{ a }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="dash__chart">
+    <lib-compliance-chart [data]="chartData"></lib-compliance-chart>
+  </section>
+</section>

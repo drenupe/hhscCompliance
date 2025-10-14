@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LocationSelector } from './lib';
+import { MainContent } from './main-content';
 
-describe('LocationSelector', () => {
-  let component: LocationSelector;
-  let fixture: ComponentFixture<LocationSelector>;
+describe('MainContent', () => {
+  let component: MainContent;
+  let fixture: ComponentFixture<MainContent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LocationSelector]
+      imports: [MainContent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LocationSelector);
+    fixture = TestBed.createComponent(MainContent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
