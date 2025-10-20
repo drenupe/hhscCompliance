@@ -1,1 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==== Design Tokens (Dark theme) ==== */
+:root {
+  /* surfaces */
+  --bg-page:         radial-gradient(1200px 800px at 20% -10%, #0f1b34 0%, #0b1220 60%);
+  --surface-card:    #121a2f;         /* cards / panels */
+  --surface-muted:   #0e1630;         /* headers / sub-panels */
+  --glass-line:      rgba(255,255,255,0.06); /* hairline borders */
+
+  /* text */
+  --text-strong:     #f7f9ff;
+  --text:            #e6ebf7;
+  --text-muted:      #9fb0cf;
+
+  /* brand & states */
+  --brand:           #8ab4ff; /* accent */
+  --brand-2:         #7aa5ff;
+  --success:         #10b981;
+  --warn:            #f59e0b;
+  --danger:          #ef4444;
+
+  /* focus */
+  --ring:            2px solid rgba(138, 180, 255, 0.7);
+
+  /* spacing scale */
+  --sp-1: 6px;  --sp-2: 10px; --sp-3: 14px; --sp-4: 18px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+}
+
+/* page baseline */
+html, body { height: 100%; margin: 0; background: var(--bg-page); color: var(--text); }
+body { overflow: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* modern typography */
+:root {
+  --font-ui: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+body { font-family: var(--font-ui); font-size: 15px; letter-spacing: 0.01em; }
+
+/* motion-respectful micro-animations */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

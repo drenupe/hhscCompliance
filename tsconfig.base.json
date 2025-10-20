@@ -24,6 +24,9 @@
       "@hhsc-compliance/behavior": [
         "libs/features/behavior/src/index.ts"
       ],
+      "@hhsc-compliance/cost-report": [
+        "libs/features/admin/src/index.ts"
+      ],
       "@hhsc-compliance/dashboard": [
         "libs/features/dashboard/src/index.ts"
       ],
@@ -54,6 +57,9 @@
       "@hhsc-compliance/restraints": [
         "libs/features/restraints/src/index.ts"
       ],
+      "@hhsc-compliance/shared": [
+        "libs/shared/src/index.ts"
+      ],
       "@hhsc-compliance/shared-models": [
         "libs/shared-models/src/index.ts"
       ],
@@ -62,10 +68,7 @@
       ],
       "@hhsc-compliance/web-shell": [
         "libs/web-shell/src/index.ts"
-      ], 
-      "@hhsc-compliance/shared":[
-        "libs/shared/src/index.ts"],
- 
+      ]
     }
   },
   "exclude": [

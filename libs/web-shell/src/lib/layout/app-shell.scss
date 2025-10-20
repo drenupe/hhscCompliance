@@ -1,22 +1,26 @@
+:host {
+  display: block;
+  /* set your header height here (must match the actual header) */
+  --header-h: 56px;
+}
 
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1099;
+/* header sits above the grid; grid fills the rest of the viewport */
+.app-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  column-gap: 12px;
+  height: calc(100dvh - var(--header-h));
+  min-height: 0;            /* let children control their own scroll */
+}
 
-  /* reset button look */
-  border: 0;
-  padding: 0;
-  margin: 0;
-  background-clip: padding-box;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
+/* collapsed */
+.app-shell.collapsed {
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 12px;
+}
 
-  /* keep a visible focus style for accessibility */
-  &:focus-visible {
-    outline: 2px solid #2563eb; /* adjust to your theme */
-    outline-offset: 2px;
-  }
+/* ensure children can shrink/scroll inside the grid tracks */
+.app-shell > * {
+  min-width: 0;
+  min-height: 0;
 }

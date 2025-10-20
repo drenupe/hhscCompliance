@@ -1,0 +1,19 @@
+:host { display: inline-block; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 10px; font-weight: 600;
+  color: #0b1220; background: var(--brand);
+  border: 1px solid color-mix(in srgb, var(--brand) 40%, #fff 0%);
+  box-shadow: 0 6px 16px rgba(138,180,255,.35);
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(138,180,255,.42); }
+  &:active { transform: translateY(0); box-shadow: 0 6px 14px rgba(138,180,255,.30); }
+}
+.btn.ghost {
+  background: transparent; color: var(--text-strong);
+  border: 1px solid var(--glass-line);
+  box-shadow: none;
+  &:hover { background: rgba(255,255,255,0.06); }
+}
+.btn.icon { padding: 8px; border-radius: 10px; }
