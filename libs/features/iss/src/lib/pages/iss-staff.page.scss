@@ -13,12 +13,12 @@
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   color: #111827;
-  font-size: 0.78rem; /* slightly smaller overall text */
+  font-size: 0.78rem;
 }
 
 .iss-right {
   width: 100%;
-  max-width: 700px; /* sheet-like width */
+  max-width: 900px; /* a bit wider to fit multiple day columns */
   box-sizing: border-box;
 }
 
@@ -59,9 +59,9 @@
 .in {
   border-radius: 0.25rem;
   border: 1px solid #d1d5db;
-  padding: 0.16rem 0.3rem; /* smaller / tighter text boxes */
+  padding: 0.16rem 0.3rem;
   font-size: 0.76rem;
-  width: 70%;             /* ~30% narrower than full cell */
+  width: 70%;             /* smaller than full cell */
   max-width: 100%;
   box-sizing: border-box;
   background-color: #ffffff;
@@ -104,113 +104,49 @@ textarea.in {
 }
 
 /* ===========================
-   SERVICE SECTION (M–F ROWS)
+   SERVICE SECTION
+   Treat each iss-service-row as one DAY COLUMN
+   All days sit in one horizontal row
    =========================== */
 
-/* Desktop header above the rows */
+/* We don’t really need the desktop header anymore; keep it off */
 .iss-service-header {
   display: none;
 }
 
-/* percentages here MUST match the row cell percentages below
-   so the text boxes line up under these headers */
-@media (min-width: 900px) {
-  .iss-service-header {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 2px;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #3b82f6;
-    margin-bottom: 0.4rem;
-
-    > div {
-      font-weight: 600;
-      text-align: left;
-      padding: 0 2px;
-      box-sizing: border-box;
-      flex: 0 0 auto;
-    }
-
-    /* 11 columns = 100% total */
-    > div:nth-child(1) {
-      flex-basis: 6%;
-      max-width: 6%;
-    } /* Day */
-    > div:nth-child(2) {
-      flex-basis: 9%;
-      max-width: 9%;
-    } /* Date */
-    > div:nth-child(3) {
-      flex-basis: 18%;
-      max-width: 18%;
-    } /* Provider Name */
-    > div:nth-child(4) {
-      flex-basis: 16%;
-      max-width: 16%;
-    } /* Signature */
-    > div:nth-child(5) {
-      flex-basis: 7%;
-      max-width: 7%;
-    } /* Start */
-    > div:nth-child(6) {
-      flex-basis: 7%;
-      max-width: 7%;
-    } /* End */
-    > div:nth-child(7) {
-      flex-basis: 7%;
-      max-width: 7%;
-    } /* Minutes */
-    > div:nth-child(8) {
-      flex-basis: 11%;
-      max-width: 11%;
-    } /* Setting */
-    > div:nth-child(9) {
-      flex-basis: 8%;
-      max-width: 8%;
-    } /* # Individuals */
-    > div:nth-child(10) {
-      flex-basis: 5%;
-      max-width: 5%;
-    } /* # Staff */
-    > div:nth-child(11) {
-      flex-basis: 6%;
-      max-width: 6%;
-    } /* Ratio */
-  }
-}
-
-/* rows container */
+/* Container: horizontal row of day-columns */
 .iss-service-week {
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+  flex-direction: row;   /* DAYS laid out left→right */
+  flex-wrap: nowrap;     /* keep them on one row */
+  gap: 0.75rem;
+  overflow-x: auto;      /* scroll horizontally if they don’t fit */
+  padding-bottom: 0.25rem;
 }
 
-/* each day row: responsive flex */
+/* Each day = vertical column card */
 .iss-service-row {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap; /* wrap on small screens */
-  gap: 0.4rem 0.6rem;
-  padding: 0.4rem;
+  flex-direction: column;   /* FIELDS stacked top→bottom */
+  gap: 0.35rem;
+  padding: 0.5rem 0.6rem;
   border-radius: 0.5rem;
   background: #f9fbff;
   border: 1px solid #e0e7ff;
   box-sizing: border-box;
-  width: 100%;
+  flex: 0 0 180px;          /* width of each day column */
+  max-width: 220px;
 }
 
-/* cells inside row (mobile / small screens) */
+/* Cells inside a day card */
 .iss-service-row .cell {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-  flex: 1 1 130px;
-  min-width: 110px;
+  align-items: flex-start;  /* inputs hug LEFT edge of column */
 }
 
+/* Labels above inputs */
 .cell-label {
   font-size: 0.68rem;
   font-weight: 600;
@@ -218,81 +154,21 @@ textarea.in {
   color: #4b5563;
 }
 
-/* Desktop: lock columns to same percentages as header so they line up */
-@media (min-width: 900px) {
+/* Make selects visually match inputs */
+.iss-service-row select.in {
+  width: 70%;
+}
+
+/* On narrow screens, allow the cards to shrink slightly and scroll */
+@media (max-width: 640px) {
   .iss-service-row {
-    flex-wrap: nowrap;
-    gap: 0.3rem; /* small gap to reduce overflow */
-  }
-
-  .iss-service-row .cell {
-    flex: 0 0 auto;
-  }
-
-  .iss-service-row .cell-day {
-    flex-basis: 6%;
-    max-width: 6%;
-  }
-  .iss-service-row .cell-date {
-    flex-basis: 9%;
-    max-width: 9%;
-  }
-  .iss-service-row .cell-provider-name {
-    flex-basis: 18%;
-    max-width: 18%;
-  }
-  .iss-service-row .cell-provider-signature {
-    flex-basis: 16%;
-    max-width: 16%;
-  }
-  .iss-service-row .cell-start {
-    flex-basis: 7%;
-    max-width: 7%;
-  }
-  .iss-service-row .cell-end {
-    flex-basis: 7%;
-    max-width: 7%;
-  }
-  .iss-service-row .cell-minutes {
-    flex-basis: 7%;
-    max-width: 7%;
-  }
-  .iss-service-row .cell-setting {
-    flex-basis: 11%;
-    max-width: 11%;
-  }
-  .iss-service-row .cell-individuals {
-    flex-basis: 8%;
-    max-width: 8%;
-  }
-  .iss-service-row .cell-staff {
-    flex-basis: 5%;
-    max-width: 5%;
-  }
-  .iss-service-row .cell-ratio {
-    flex-basis: 6%;
-    max-width: 6%;
-  }
-
-  /* Hide inline labels on desktop; header row shows them */
-  .cell-day .cell-label,
-  .cell-date .cell-label,
-  .cell-provider-name .cell-label,
-  .cell-provider-signature .cell-label,
-  .cell-start .cell-label,
-  .cell-end .cell-label,
-  .cell-minutes .cell-label,
-  .cell-setting .cell-label,
-  .cell-individuals .cell-label,
-  .cell-staff .cell-label,
-  .cell-ratio .cell-label {
-    display: none;
+    flex: 0 0 160px;
   }
 }
 
 /* ===========================
    WEEKLY INITIALS SECTION
-   (Area | Mon | Tue | Wed | Thu | Fri – flex)
+   (Area | Mon | Tue | Wed | Thu | Fri – keep row layout)
    =========================== */
 
 .iss-weekly {
@@ -301,41 +177,43 @@ textarea.in {
   font-size: 0.76rem;
   width: 100%;
   box-sizing: border-box;
+  overflow-x: auto;
 }
 
-/* header + rows share same horizontal layout */
 .iss-weekly-header,
 .iss-weekly-row {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; /* wrap on small screens */
+  flex-wrap: nowrap;
   align-items: stretch;
+  min-width: 560px;
 }
 
-/* cells */
 .iss-weekly .cell {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   padding: 0.12rem 0.25rem;
   border-right: 1px solid #000;
   box-sizing: border-box;
 }
 
-/* last cell in row: no extra right border */
+.iss-weekly-header .cell {
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
 .iss-weekly-header .cell:last-child,
 .iss-weekly-row .cell:last-child {
   border-right: none;
 }
 
-/* header row */
 .iss-weekly-header {
   border-bottom: 1px solid #000;
-  background: #e5e7eb; /* change to #fff if you want white */
-  font-weight: 600;
+  background: #e5e7eb;
 }
 
-/* data rows */
 .iss-weekly-row {
   border-bottom: 1px solid #000;
   background: #ffffff;
@@ -345,37 +223,19 @@ textarea.in {
   border-bottom: none;
 }
 
-/* column proportions: wide Area, narrow days */
 .iss-weekly .cell.area {
-  flex: 2 1 200px;
-  justify-content: flex-start;
+  flex: 0 0 40%;
   text-align: left;
 }
 
 .iss-weekly .cell.day {
-  flex: 1 1 50px;
+  flex: 0 0 12%;
   text-align: center;
-}
-
-/* on wider screens, keep them on one line and fix proportions */
-@media (min-width: 900px) {
-  .iss-weekly-header,
-  .iss-weekly-row {
-    flex-wrap: nowrap;
-  }
-
-  .iss-weekly .cell.area {
-    flex: 0 0 42%;
-  }
-
-  .iss-weekly .cell.day {
-    flex: 0 0 11%;
-  }
 }
 
 /* Area label input (left column) */
 .label-in {
-  width: 70%; /* shrink like other inputs */
+  width: 70%;
   max-width: 100%;
   border-radius: 0;
   border: none;
