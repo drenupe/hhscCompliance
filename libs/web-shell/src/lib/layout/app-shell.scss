@@ -4,13 +4,19 @@
   --header-h: 56px;
 }
 
-/* header sits above the grid; grid fills the rest of the viewport */
-.app-shell {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  column-gap: 12px;
-  height: calc(100dvh - var(--header-h));
-  min-height: 0;            /* let children control their own scroll */
+/* libs/web-shell/src/lib/layout/app-shell/app-shell.scss */
+.app-shell{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  min-height:100dvh;
+  background:var(--clr-bg);
+}
+
+.sidebar-pane{ border-right:1px solid var(--clr-line); }
+.content-pane{
+  min-width:0;
+  padding:16px;
+  overflow:auto;
 }
 
 /* collapsed */

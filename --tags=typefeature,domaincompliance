@@ -1,0 +1,32 @@
+
+ NX  Generating @nx/angular:library
+
+Fetching prettier...
+CREATE protective-devices/project.json
+CREATE protective-devices/README.md
+CREATE protective-devices/tsconfig.json
+CREATE protective-devices/tsconfig.lib.json
+CREATE protective-devices/src/index.ts
+CREATE protective-devices/src/test-setup.ts
+CREATE protective-devices/vite.config.mts
+CREATE protective-devices/tsconfig.spec.json
+UPDATE tsconfig.base.json
+CREATE protective-devices/src/lib/protective-devices/protective-devices.spec.ts
+CREATE protective-devices/src/lib/protective-devices/protective-devices.ts
+CREATE protective-devices/src/lib/protective-devices/protective-devices.css
+CREATE protective-devices/src/lib/protective-devices/protective-devices.html
+CREATE protective-devices/eslint.config.mjs
+
+ NX   👀 View Details of protective-devices
+
+Run "nx show project protective-devices" to view details about this project.
+
+
+ NX  Generating @nx/angular:library
+
+Fetching prettier...
+
+ NX   Cannot create a new project protective-devices at protective-devices. A project already exists in this directory.
+
+Pass --verbose to see the stacktrace.
+

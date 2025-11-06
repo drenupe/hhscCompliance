@@ -1,0 +1,20 @@
+{
+  "name": "iss",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/iss/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:feature", "surface:web"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/libs/features/iss"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

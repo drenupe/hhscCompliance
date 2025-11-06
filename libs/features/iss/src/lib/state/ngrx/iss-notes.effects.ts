@@ -1,0 +1,25 @@
+import { Injectable, inject } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { IssNotesActions } from './iss-notes.actions';
+import { NotesApi } from '../../services/notes.api';
+import { catchError, map, of, switchMap } from 'rxjs';
+
+@Injectable()
+export class IssNotesEffects {
+  private actions$ = inject(Actions);
+  private api = inject(NotesApi);
+
+  loadWeek$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(IssNotesActions.loadWeekRequested),
+      switchMap(({ start, end, consumer, location, q }) =>
+        this.api.list({ start, end, consumer, location, q }).pipe(
+          map(notes => IssNotesActions.loadWeekSucceeded({ notes })),
+          catchError(error => of(IssNotesActions.loadWeekFailed({ error })))
+        )
+      )
+    )
+  );
+
+  // add create/update/remove when ready, following the same pattern
+}

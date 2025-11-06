@@ -1,78 +1,144 @@
+/* ===== Dashboard Layout ===== */
 .dash {
   display: grid;
-  gap: 1.5rem;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
+/* Header: title + location selector */
 .dash__header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid var(--clr-line, #e5e7eb);
   padding-bottom: 1rem;
+  margin-bottom: .25rem;
+  border-bottom: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
 
   h2 {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: clamp(1.1rem, 1.2rem + .2vw, 1.35rem);
+    font-weight: 800;
+    color: var(--text-strong, var(--clr-text, #111827));
+    letter-spacing: .2px;
   }
 }
 
+/* Location picker (right aligned) */
 .dash__loc {
   margin-left: auto;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: .5rem;
+  white-space: nowrap;
 
   span {
-    color: var(--clr-muted, #6b7280);
+    color: var(--text-muted, var(--clr-muted, #6b7280));
+    font-size: .9rem;
   }
 
   select {
-    border: 1px solid var(--clr-line, #e5e7eb);
-    border-radius: 8px;
-    padding: 0.35rem 0.5rem;
-    background: var(--clr-card, #fff);
+    appearance: none;
+    background: var(--surface-muted, var(--clr-card, #fff));
+    color: var(--text, var(--clr-text, #111827));
+    border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
+    border-radius: 10px;
+    padding: .45rem .75rem;
+    line-height: 1.2;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgba(138,180,255,.25);
+      border-color: color-mix(in srgb, var(--brand, #8ab4ff) 50%, var(--glass-line, #93c5fd));
+    }
   }
 }
 
+/* Responsive grid for summary cards */
 .dash__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  gap: clamp(.85rem, 2vw, 1.25rem);
 }
 
+/* Alerts row (uses your tokens, good contrast in dark) */
 .dash__alert .alert {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
+  background: color-mix(in srgb, var(--danger, #ef4444) 18%, var(--surface-card, #fff));
+  border: 1px solid color-mix(in srgb, var(--danger, #ef4444) 35%, var(--glass-line, #fecaca));
+  color: var(--text, #991b1b);
+  padding: .85rem 1rem;
+  border-radius: 10px;
 }
 
+/* Chart wrapper spacing (works for any chart lib) */
 .dash__chart {
-  /* wrapper spacing */
+  margin-top: clamp(.5rem, 1.5vw, 1rem);
+  background: var(--surface-card, var(--clr-card, #fff));
+  border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
+  border-radius: 14px;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
 }
 
-
+/* ===== Card ===== */
 .card {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
-  gap: 0.5rem;
-  padding: 1rem;
-  border: 1px solid var(--clr-line, #e5e7eb);
+  gap: .6rem;
+  padding: clamp(.9rem, 2.2vw, 1.1rem);
+  background: var(--surface-card, var(--clr-card, #fff));
+  color: var(--text, var(--clr-text, #111827));
+  border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
   border-radius: 12px;
-  background: var(--clr-card, #fff);
-  min-height: 160px;
-  transition: background-color 150ms ease, box-shadow 150ms ease;
+  min-height: 168px;
+  transition: background-color .15s ease, box-shadow .15s ease, transform .05s ease;
+
+  /* headings inside card */
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-strong, var(--clr-text, #111827));
+  }
+
+  /* small meta row */
+  .meta {
+    color: var(--text-muted, var(--clr-muted, #6b7280));
+    font-size: .85rem;
+  }
+
+  /* action row */
+  .actions {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+  }
 
   &:hover {
-    background: var(--clr-hover, #fafafa);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    background: color-mix(in srgb, var(--surface-card, #fff) 92%, var(--brand, #8ab4ff) 8%);
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    transform: translateY(-1px);
+  }
+
+  &:focus-within {
+    box-shadow: 0 0 0 3px rgba(138,180,255,.25);
   }
 }
 
-/* … keep the rest … */
+/* Status rails (keep your existing class names) */
+.card.is-ok       { border-left: 4px solid var(--clr-success, var(--success, #16a34a)); }
+.card.is-warning  { border-left: 4px solid var(--clr-warn,    var(--warn,    #f59e0b)); }
+.card.is-critical { border-left: 4px solid var(--clr-error,   var(--danger,  #dc2626)); }
 
-.card.is-ok      { border-left: 4px solid var(--clr-success, #16a34a); }
-.card.is-warning { border-left: 4px solid var(--clr-warn,    #f59e0b); }
-.card.is-critical{ border-left: 4px solid var(--clr-error,   #dc2626); }
+/* Make interactive areas clearly focusable */
+.card a, .card button, .dash__loc select {
+  outline: none;
+}
+.card a:focus-visible, .card button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(138,180,255,.25);
+  border-radius: 10px;
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .dash__header { flex-wrap: wrap; gap: .75rem; }
+  .dash__loc { width: 100%; justify-content: flex-start; }
+}

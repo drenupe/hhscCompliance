@@ -1,0 +1,50 @@
+<!-- Week toolbar (safe for AOT: no async pipe inside event handlers) -->
+<ng-container *ngIf="weekAnchor$ | async as anchor">
+  <div class="toolbar">
+    <div class="controls">
+      <button type="button" (click)="setPrevWeek(anchor)">◀ Prev</button>
+
+      <input
+        type="date"
+        [ngModel]="anchor || ''"
+        (ngModelChange)="setAnchor($event)" />
+
+      <button type="button" (click)="setNextWeek(anchor)">Next ▶</button>
+      <button type="button" (click)="setTodayWeek()">This Week</button>
+    </div>
+  </div>
+</ng-container>
+
+
+
+<div class="filters">
+<label>Consumer
+<input type="text" [ngModel]="(filterConsumer$ | async) || ''" (ngModelChange)="setFilterConsumer($event)">
+</label>
+<label>Location
+<input type="text" [ngModel]="(filterLocation$ | async) || ''" (ngModelChange)="setFilterLocation($event)">
+</label>
+<label class="grow">Search
+<input type="search" [ngModel]="(filterQuery$ | async) || ''" (ngModelChange)="setFilterQuery($event)">
+</label>
+</div>
+
+
+<div class="grid">
+<article class="card" *ngFor="let n of (weekNotes$ | async)" (click)="open(n)">
+<header>
+<div class="date">{{ n.date | date:'EEE, MMM d' }}</div>
+<div class="consumer">{{ n.consumer }}</div>
+</header>
+<div class="meta">
+<span class="badge" *ngIf="n.location">{{ n.location }}</span>
+<span class="badge" *ngIf="n.activity">{{ n.activity }}</span>
+<span class="badge" *ngIf="n.initials">Staff: {{ n.initials }}</span>
+</div>
+<p class="comment" [title]="n.comment">{{ n.comment }}</p>
+<footer>
+<button type="button" (click)="$event.stopPropagation(); copy(n.comment)">Copy</button>
+<button type="button" (click)="$event.stopPropagation(); open(n)">Open</button>
+</footer>
+</article>
+</div>

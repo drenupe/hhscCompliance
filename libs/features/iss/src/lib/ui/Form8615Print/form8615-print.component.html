@@ -1,0 +1,92 @@
+<form [formGroup]="form" class="sheet">
+  <fieldset>
+    <legend>ISS Daily Log — Header</legend>
+    <div class="row" formGroupName="header">
+      <label>
+        Individual Name
+        <input type="text" formControlName="individualName" />
+      </label>
+      <label>
+        Date of Service
+        <input type="date" formControlName="date" />
+      </label>
+      <label>
+        LON
+        <input type="text" formControlName="lon" />
+      </label>
+    </div>
+    <div class="row" formGroupName="header">
+      <label>
+        ISS Provider
+        <input type="text" formControlName="provider" />
+      </label>
+      <label>
+        License #
+        <input type="text" formControlName="license" />
+      </label>
+      <label>
+        Staff (Printed Name &amp; Title)
+        <input type="text" formControlName="staffNameTitle" />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Service Time</legend>
+    <div class="row" formGroupName="header">
+      <label>
+        Start
+        <input type="time" formControlName="startTime" />
+      </label>
+      <label>
+        End
+        <input type="time" formControlName="endTime" />
+      </label>
+      <label>
+        Total Minutes
+        <input type="number" formControlName="totalMinutes" />
+      </label>
+    </div>
+    <div class="row" formGroupName="header">
+      <label>
+        Setting
+        <select formControlName="setting">
+          <option value="on_site">On-Site</option>
+          <option value="off_site">Off-Site</option>
+        </select>
+      </label>
+      <label>
+        # Individuals
+        <input type="number" formControlName="individualsCount" />
+      </label>
+      <label>
+        # Staff
+        <input type="number" formControlName="staffCount" />
+      </label>
+      <label>
+        Calculated Ratio
+        <input type="text" [value]="ratio()" readonly />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Community Locations Visited &amp; Special Events or Occurrences</legend>
+    <table formArrayName="rows">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Staff Initials</th>
+          <th>Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let g of rowsArray.controls; let idx = index" [formGroupName]="idx">
+          <td><input type="date" formControlName="date" /></td>
+          <td><input type="text" formControlName="initials" /></td>
+          <td><textarea rows="1" formControlName="comment"></textarea></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+</form>

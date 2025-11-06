@@ -24,7 +24,10 @@
 ></button>
 
 
-<div class="app-shell" [class.collapsed]="(layout.isCollapsed$ | async)">
-  <lib-sidebar></lib-sidebar>
-  <lib-main-content></lib-main-content>
+<!-- libs/web-shell/src/lib/layout/app-shell/app-shell.html -->
+<div class="app-shell">
+  <lib-sidebar class="sidebar-pane"></lib-sidebar>
+  <main class="content-pane">
+    <router-outlet></router-outlet>
+  </main>
 </div>

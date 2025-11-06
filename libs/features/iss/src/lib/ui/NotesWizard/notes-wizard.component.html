@@ -1,0 +1,79 @@
+<form class="wizard box" [formGroup]="form" (ngSubmit)="saveFor(defaultConsumer)">
+  <h3>Compliance Comment Wizard</h3>
+
+  <!-- Setting -->
+  <label>Setting</label>
+  <select formControlName="setting">
+    <option value="on_site">On-Site</option>
+    <option value="off_site">Off-Site</option>
+  </select>
+
+  <!-- Location / Activity -->
+  <div class="row" style="margin-top:8px">
+    <div class="col" style="grid-column: span 6">
+      <label>Location</label>
+      <input type="text" formControlName="location" placeholder="e.g., Sports Bar, Park, Bowling Alley" />
+    </div>
+    <div class="col" style="grid-column: span 6">
+      <label>Activity</label>
+      <input type="text" formControlName="activity" placeholder="e.g., Pro sports viewing" />
+    </div>
+  </div>
+
+  <!-- Prompts / Behavior -->
+  <div class="row" style="margin-top:8px">
+    <div class="col" style="grid-column: span 6">
+      <label>Prompts Required</label>
+      <select formControlName="prompts">
+        <option value="independent">Independent</option>
+        <option value="minimal">Minimal</option>
+        <option value="moderate">Moderate</option>
+        <option value="maximal">Maximal</option>
+      </select>
+    </div>
+    <div class="col" style="grid-column: span 6">
+      <label>Behavior Observed</label>
+      <select formControlName="behavior">
+        <option value="appropriate">Appropriate</option>
+        <option value="redirected">Redirected</option>
+        <option value="escalated">Escalated</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Goals -->
+  <div class="row" style="margin-top:8px" formGroupName="goals">
+    <div class="col" style="grid-column: span 12">
+      <label>Goals Addressed</label>
+      <div class="grid" style="grid-template-columns: repeat(2, 1fr)">
+        <label><input type="checkbox" formControlName="communityIntegration" /> Community Integration</label>
+        <label><input type="checkbox" formControlName="peerEngagement" /> Peer Engagement</label>
+        <label><input type="checkbox" formControlName="communication" /> Communication</label>
+        <label><input type="checkbox" formControlName="safety" /> Safety</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Time -->
+  <div class="row" style="margin-top:8px">
+    <div class="col" style="grid-column: span 6">
+      <label>Start Time</label>
+      <input type="time" formControlName="start" />
+    </div>
+    <div class="col" style="grid-column: span 6">
+      <label>End Time</label>
+      <input type="time" formControlName="end" />
+    </div>
+  </div>
+
+  <!-- Preview comment -->
+  <h4 style="margin-top:12px">Generated Narrative</h4>
+  <textarea readonly rows="6">{{ comment() }}</textarea>
+
+  <!-- Buttons -->
+  <div class="row" style="margin-top:8px; gap:8px">
+    <button type="button" (click)="copyNarrative()">Copy Narrative</button>
+    <button type="submit">Save Note</button>
+  </div>
+</form>

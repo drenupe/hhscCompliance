@@ -16,7 +16,10 @@
         "tsConfig": "web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          { "glob": "**/*", "input": "web/public" }
+          {
+            "glob": "**/*",
+            "input": "web/public"
+          }
         ],
         "styles": ["web/src/styles.scss"]
       },
@@ -28,6 +31,24 @@
         },
         "production": {
           "outputHashing": "all",
+          "budgets": [
+            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
+            { "type": "anyComponentStyle", "maximumWarning": "4kb", "maximumError": "8kb" }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "web/src/environments/environment.ts",
+              "with": "web/src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "staging": {
+          "fileReplacements": [
+            {
+              "replace": "web/src/environments/environment.ts",
+              "with": "web/src/environments/environment.staging.ts"
+            }
+          ],
           "budgets": [
             { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
             { "type": "anyComponentStyle", "maximumWarning": "4kb", "maximumError": "8kb" }
@@ -43,8 +64,15 @@
         "development": {
           "buildTarget": "web:build:development",
           "proxyConfig": "web/proxy.conf.json",
+          "host": "localhost",
           "port": 4200,
-          "host": "localhost"
+          "open": true
+        },
+        "staging": {
+          "buildTarget": "web:build:staging",
+          "host": "localhost",
+          "port": 4200,
+          "open": true
         },
         "production": {
           "buildTarget": "web:build:production",
@@ -56,15 +84,21 @@
 
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n",
-      "options": { "buildTarget": "web:build" }
+      "options": {
+        "buildTarget": "web:build"
+      }
     },
 
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
 
     "test": {
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
-      "options": { "reportsDirectory": "../coverage/web" }
+      "options": {
+        "reportsDirectory": "../coverage/web"
+      }
     },
 
     "serve-static": {

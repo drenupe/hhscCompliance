@@ -14,6 +14,7 @@ import { typeOrmAsyncConfig } from '../configuration/typeorm/async.config';
  import { HttpErrorFilter } from './common/filters/http-exception.filter';
  import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
 import { MetricsInterceptor } from './observability/metrics/metrics.interceptor';
+import { RaciModule } from './raci/raci.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MetricsInterceptor } from './observability/metrics/metrics.interceptor'
 
     // Your feature modules
      AuthModule,
+     RaciModule,
    //  UsersModule,
    //  MetricsModule,
   ],
