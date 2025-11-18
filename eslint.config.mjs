@@ -1,51 +1,10 @@
+// eslint.config.mjs
 import nx from '@nx/eslint-plugin';
 
-export default [
-  ...nx.configs['flat/base'],
-  ...nx.configs['flat/typescript'],
-  ...nx.configs['flat/javascript'],
-  {
-    ignores: [
-      '**/dist',
-      '**/vite.config.*.timestamp*',
-      '**/vitest.config.*.timestamp*',
-    ],
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {
-      '@nx/enforce-module-boundaries': [
-        'error',
-        {
-          enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
-          depConstraints: [
-            {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.cts',
-      '**/*.mts',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
-    ],
-    // Override or add rules here
-    rules: {},
-  },
-];
-
-// eslint.config.mjs (or project .eslintrc)
+/**
+ * Dependency constraints for @nx/enforce-module-boundaries
+ * using your scope/type tagging strategy.
+ */
 const depConstraints = [
   { sourceTag: 'type:app', onlyDependOnLibsWithTags: [] },
   {
@@ -74,4 +33,53 @@ const depConstraints = [
   { sourceTag: 'scope:ui', onlyDependOnLibsWithTags: ['scope:shared'] },
   { sourceTag: 'scope:shared', onlyDependOnLibsWithTags: [] },
   { sourceTag: 'scope:models', onlyDependOnLibsWithTags: [] },
+];
+
+export default [
+  // Nx base presets
+  ...nx.configs['flat/base'],
+  ...nx.configs['flat/typescript'],
+  ...nx.configs['flat/javascript'],
+
+  // Global ignores
+  {
+    ignores: [
+      '**/dist',
+      '**/vite.config.*.timestamp*',
+      '**/vitest.config.*.timestamp*',
+    ],
+  },
+
+  // Global Nx module boundaries (with your depConstraints)
+  {
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.cts',
+      '**/*.mts',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.cjs',
+      '**/*.mjs',
+    ],
+    rules: {
+      '@nx/enforce-module-boundaries': [
+        'error',
+        {
+          enforceBuildableLibDependency: true,
+          // Keep eslint configs allowed as you had
+          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          depConstraints,
+        },
+      ],
+    },
+  },
+
+  // 🔓 Allow migrations to import via relative paths (e.g. libs/shared-models)
+  {
+    files: ['api/migrations/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
+    rules: {
+      '@nx/enforce-module-boundaries': 'off',
+    },
+  },
 ];

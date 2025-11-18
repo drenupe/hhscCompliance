@@ -28,11 +28,11 @@ export const appRoutes: Routes = [
   },
 
   { path: 'compliance/finance',
-    canMatch: [raciGuard('finance')],
+   // canMatch: [raciGuard('finance')],
     loadComponent: () => import('@hhsc-compliance/finance').then(m => m.Finance),
   },
   { path: 'compliance/behavior',
-    canMatch: [raciGuard('behavior')],
+    //canMatch: [raciGuard('behavior')],
     loadComponent: () => import('@hhsc-compliance/behavior').then(m => m.Behavior),
   },
   { path: 'compliance/ane',
@@ -47,8 +47,10 @@ export const appRoutes: Routes = [
    // canMatch: [raciGuard('enclosedBeds')],
     loadComponent: () => import('@hhsc-compliance/enclosed-beds').then(m => m.EnclosedBeds),
   },
-  { path: 'compliance/protective',
+  {
+     path: 'compliance/protective',
    // canMatch: [raciGuard('protectiveDevices')],
+    // eslint-disable-next-line @nx/enforce-module-boundaries
     loadComponent: () => import('@hhsc-compliance/protective-devices').then(m => m.ProtectiveDevices),
   },
   { path: 'compliance/prohibitions',

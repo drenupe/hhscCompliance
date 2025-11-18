@@ -7,18 +7,18 @@
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
-  justify-content: flex-start; /* LEFT align content */
+  justify-content: center;
   padding: 1.25rem 0.75rem 1.75rem;
   background: #f3f4f6;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   color: #111827;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
 }
 
 .iss-right {
   width: 100%;
-  max-width: 900px; /* a bit wider to fit multiple day columns */
+  max-width: 900px; /* uniform "sheet" width */
   box-sizing: border-box;
 }
 
@@ -36,20 +36,20 @@
   border-radius: 0.4rem;
   border: 1px solid #e5e7eb;
   background: #ffffff;
-  padding: 0.75rem 0.9rem;
-  margin-bottom: 0.25rem;
+  padding: 0.8rem 0.9rem;
+  margin-bottom: 0.35rem;
   box-sizing: border-box;
 }
 
 .iss-fieldset > legend {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   padding: 0 0.4rem;
   margin-left: 0.2rem;
-  margin-bottom: 0.2rem;
-  color: #4b5563;
+  margin-bottom: 0.25rem;
+  color: #374151;
 }
 
 /* ===========================
@@ -58,13 +58,14 @@
 
 .in {
   border-radius: 0.25rem;
-  border: 1px solid #d1d5db;
-  padding: 0.16rem 0.3rem;
-  font-size: 0.76rem;
-  width: 70%;             /* smaller than full cell */
+  border: 1px solid #4b5563;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.85rem;
+  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   background-color: #ffffff;
+  color: #111827;
 }
 
 textarea.in {
@@ -72,14 +73,14 @@ textarea.in {
 }
 
 .muted {
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   color: #9ca3af;
 }
 
 .form-control {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.12rem;
 }
 
 /* ===========================
@@ -89,203 +90,169 @@ textarea.in {
 .iss-grid-3 {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-bottom: 0.35rem;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
 }
 
 .iss-grid-3 .form-control {
-  flex: 1 1 190px;
+  flex: 1 1 210px;
   min-width: 0;
 }
 
 .iss-grid-3 .form-control > span {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
 /* ===========================
-   SERVICE SECTION
-   Treat each iss-service-row as one DAY COLUMN
-   All days sit in one horizontal row
+   SERVICE TIME & SETTING / STAFFING
+   FLEX + RESPONSIVE
    =========================== */
 
-/* We don’t really need the desktop header anymore; keep it off */
+/* We won't use a rigid table header; the per-field labels handle clarity.
+   If you still want the header text, we keep it but make it wrap and never overflow. */
+
 .iss-service-header {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4b5563;
 }
 
-/* Container: horizontal row of day-columns */
+.iss-service-header > div {
+  flex: 1 1 120px;
+  min-width: 100px;
+}
+
+/* Container for the week: row of cards that wrap */
 .iss-service-week {
   display: flex;
-  flex-direction: row;   /* DAYS laid out left→right */
-  flex-wrap: nowrap;     /* keep them on one row */
+  flex-wrap: wrap;
   gap: 0.75rem;
-  overflow-x: auto;      /* scroll horizontally if they don’t fit */
-  padding-bottom: 0.25rem;
 }
 
-/* Each day = vertical column card */
+/* Each day row as a card */
 .iss-service-row {
   display: flex;
-  flex-direction: column;   /* FIELDS stacked top→bottom */
-  gap: 0.35rem;
-  padding: 0.5rem 0.6rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
   border-radius: 0.5rem;
   background: #f9fbff;
   border: 1px solid #e0e7ff;
   box-sizing: border-box;
-  flex: 0 0 180px;          /* width of each day column */
-  max-width: 220px;
+
+  /* Responsive card width:
+     - On mobile: full-width
+     - On wider screens: 2–3 cards per row, but NEVER overflow container
+  */
+  flex: 1 1 260px;
+  max-width: 280px;
 }
 
-/* Cells inside a day card */
+/* Each field cell inside card */
 .iss-service-row .cell {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  align-items: flex-start;  /* inputs hug LEFT edge of column */
+  gap: 0.15rem;
 }
 
-/* Labels above inputs */
 .cell-label {
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   color: #4b5563;
 }
 
-/* Make selects visually match inputs */
+/* Make selects align with inputs */
 .iss-service-row select.in {
-  width: 70%;
+  width: 100%;
 }
 
-/* On narrow screens, allow the cards to shrink slightly and scroll */
+/* Slight tweaks for very small screens */
 @media (max-width: 640px) {
   .iss-service-row {
-    flex: 0 0 160px;
+    flex: 1 1 100%;
+    max-width: 100%;
   }
 }
 
 /* ===========================
-   WEEKLY INITIALS SECTION
-   (Area | Mon | Tue | Wed | Thu | Fri – keep row layout)
+   WEEKLY INITIALS CONTAINER
+   (component inner styles live in the component)
    =========================== */
 
 .iss-weekly {
-  border: 1px solid #000;
-  background: #fff;
-  font-size: 0.76rem;
   width: 100%;
   box-sizing: border-box;
   overflow-x: auto;
 }
 
-.iss-weekly-header,
-.iss-weekly-row {
+/* ===========================
+   NOTES FLEX SECTION
+   =========================== */
+
+.iss-notes {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  min-width: 560px;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.iss-weekly .cell {
+/* Header row for notes */
+.iss-notes-header {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 0.12rem 0.25rem;
-  border-right: 1px solid #000;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #4b5563;
+}
+
+.iss-notes-header .col {
+  font-weight: 600;
+}
+
+/* Each note row */
+.iss-note-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 0.4rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
   box-sizing: border-box;
 }
 
-.iss-weekly-header .cell {
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
+/* Columns inside each note row */
+.iss-note-row .col {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 150px;
+  min-width: 0;
 }
 
-.iss-weekly-header .cell:last-child,
-.iss-weekly-row .cell:last-child {
-  border-right: none;
-}
+/* Desktop note column widths */
+@media (min-width: 900px) {
+  .iss-note-row .col-date {
+    flex: 0 0 18%;
+    max-width: 18%;
+  }
 
-.iss-weekly-header {
-  border-bottom: 1px solid #000;
-  background: #e5e7eb;
-}
+  .iss-note-row .col-initials {
+    flex: 0 0 18%;
+    max-width: 18%;
+  }
 
-.iss-weekly-row {
-  border-bottom: 1px solid #000;
-  background: #ffffff;
-}
-
-.iss-weekly-row:last-child {
-  border-bottom: none;
-}
-
-.iss-weekly .cell.area {
-  flex: 0 0 40%;
-  text-align: left;
-}
-
-.iss-weekly .cell.day {
-  flex: 0 0 12%;
-  text-align: center;
-}
-
-/* Area label input (left column) */
-.label-in {
-  width: 70%;
-  max-width: 100%;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid #9ca3af;
-  padding: 0.06rem 0.16rem;
-  font-size: 0.76rem;
-  background: #f9fafb;
-}
-
-/* day initials inputs in weekly section */
-.iss-weekly-row .in {
-  width: 70%;
-  max-width: 100%;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid #9ca3af;
-  padding: 0.06rem 0.16rem;
-  font-size: 0.76rem;
-  background: #ffffff;
-}
-
-.center {
-  text-align: center;
-}
-
-/* ===========================
-   NOTES TABLE
-   =========================== */
-
-.iss-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.76rem;
-  margin-top: 0.2rem;
-}
-
-.iss-table th,
-.iss-table td {
-  border: 1px solid #e5e7eb;
-  padding: 0.25rem 0.35rem;
-  text-align: left;
-}
-
-.iss-table th {
-  background: #f3f4f6;
-  font-weight: 600;
-}
-
-.w-12 {
-  width: 9rem;
+  .iss-note-row .col-comment {
+    flex: 1 1 auto;
+  }
 }
 
 /* ===========================
@@ -303,8 +270,8 @@ textarea.in {
   border: 1px solid #111827;
   background: #111827;
   color: #f9fafb;
-  padding: 0.3rem 0.85rem;
-  font-size: 0.76rem;
+  padding: 0.35rem 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
 }
 
@@ -314,6 +281,10 @@ textarea.in {
 
 @media (max-width: 640px) {
   .iss-fieldset {
-    padding: 0.6rem 0.7rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .iss-grid-3 {
+    gap: 0.6rem;
   }
 }

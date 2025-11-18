@@ -74,11 +74,10 @@ export class IssStaffPage {
       this.buildWeeklyRow('Community Activity 3'),
     ]),
 
-    notes: this.fb.array([
-      this.buildNoteRow(),
-      this.buildNoteRow(),
-      this.buildNoteRow(),
-    ]),
+    // Notes rows: minimum 5 (one for each day of service)
+    notes: this.fb.array(
+      Array.from({ length: 5 }, () => this.buildNoteRow())
+    ),
   });
 
   // ------- builders -------
@@ -171,7 +170,7 @@ export class IssStaffPage {
     return `${individuals}:${staff}`;
   }
 
-  submit() {
+  submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

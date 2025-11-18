@@ -1,4 +1,5 @@
-export * from './lib/iss/iss';export * from './lib/iss.routes';
+
+export * from './lib/iss.routes';
 
 // optional exports if you want direct component access:
 export * from './lib/pages/iss-daily-log.page';

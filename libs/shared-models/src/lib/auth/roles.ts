@@ -1,4 +1,9 @@
 // libs/shared-models/src/lib/auth/roles.ts
+
+/**
+ * Application-wide role identifiers (used in JWTs, ACL, etc.)
+ * Keep these values consistent across API + Web.
+ */
 export type AppRole =
   | 'Admin'
   | 'CaseManager'
@@ -6,4 +11,24 @@ export type AppRole =
   | 'DirectCareStaff'
   | 'ISSManager'
   | 'ISSStaff'
-  | 'Finance';
+  | 'Finance'
+  | 'ProgramDirector'
+  | 'ComplianceOfficer'
+  | 'BehaviorSupportLead'
+  | 'FinanceOfficer'
+  | 'MedicalDirector';
+
+export const ALL_ROLES: AppRole[] = [
+  'Admin',
+  'CaseManager',
+  'Nurse',
+  'DirectCareStaff',
+  'ISSManager',
+  'ISSStaff',
+  'Finance',
+  'ProgramDirector',
+  'ComplianceOfficer',
+  'BehaviorSupportLead',
+  'FinanceOfficer',
+  'MedicalDirector',
+];

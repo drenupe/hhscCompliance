@@ -1,37 +1,41 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import type { ModuleKey, Role } from '@hhsc-compliance/shared-models';
+import type { ModuleKey, AppRole } from '@hhsc-compliance/shared-models';
 
 export type RaciLevel = 'R' | 'A' | 'C' | 'I';
 
-@Entity('roles_catalog')
+// Example lookups (adjust to your schema)
+@Entity('role_catalog')
 @Unique(['name'])
 export class RoleCatalog {
   @PrimaryGeneratedColumn('uuid') id!: string;
-  @Column({ type: 'varchar', length: 64 }) name!: Role;
+  @Index() @Column({ type: 'text' }) name!: AppRole;
 }
 
-@Entity('modules_catalog')
+@Entity('module_catalog')
 @Unique(['key'])
 export class ModuleCatalog {
   @PrimaryGeneratedColumn('uuid') id!: string;
-  @Column({ type: 'varchar', length: 64 }) key!: ModuleKey;
-  @Column({ type: 'varchar', length: 128, default: '' }) label!: string;
-  @Column({ type: 'varchar', length: 64, default: '' }) icon!: string;   // lucide icon name
-  @Column({ type: 'varchar', length: 256, default: '' }) path!: string;   // route path
+  @Index() @Column({ type: 'text' }) key!: ModuleKey;
+  @Column({ type: 'text' }) label!: string;
+  @Column({ type: 'text' }) icon!: string;
+  @Column({ type: 'text' }) path!: string;
 }
 
-@Entity('raci_assignments')
-@Index(['moduleId', 'roleId', 'level'], { unique: true })
+@Entity('raci_assignment')
+@Unique(['moduleId', 'roleId', 'level'])
 export class RaciAssignment {
   @PrimaryGeneratedColumn('uuid') id!: string;
 
-  @ManyToOne(() => ModuleCatalog, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'moduleId' }) module!: ModuleCatalog;
-  @Column() moduleId!: string;
+  @ManyToOne(() => ModuleCatalog, { eager: true })
+  @JoinColumn({ name: 'moduleId' })
+  module!: ModuleCatalog;
 
-  @ManyToOne(() => RoleCatalog, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'roleId' }) role!: RoleCatalog;
-  @Column() roleId!: string;
+  @ManyToOne(() => RoleCatalog, { eager: true })
+  @JoinColumn({ name: 'roleId' })
+  role!: RoleCatalog;
 
-  @Column({ type: 'varchar', length: 1 }) level!: RaciLevel; // 'R'|'A'|'C'|'I'
+  @Index() @Column({ type: 'uuid' }) moduleId!: string;
+  @Index() @Column({ type: 'uuid' }) roleId!: string;
+
+  @Column({ type: 'text' }) level!: RaciLevel; // R/A/C/I
 }

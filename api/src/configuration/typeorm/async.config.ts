@@ -1,53 +1,70 @@
-// api/src/configuration/typeorm/async.config.ts
+// apps/api/src/config/typeorm/async.config.ts
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { TlsOptions } from 'node:tls';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: async (cfg: ConfigService): Promise<TypeOrmModuleOptions> => {
-    const nodeEnv = String(cfg.get('NODE_ENV') ?? 'development').toLowerCase();
+    const nodeEnv = String(cfg.get('env') ?? cfg.get('NODE_ENV') ?? 'development').toLowerCase();
+    const isDev = nodeEnv === 'development';
+    // Prefer the normalized config.database.url, fall back to raw env
+    const url =
+      cfg.get<string>('database.url') ??
+      cfg.get<string>('DATABASE_URL') ??
+      '';
 
-    // Prefer DATABASE_URL, with fallback to discrete params
-    const url = cfg.get<string>('database.url') ?? cfg.get<string>('DATABASE_URL') ?? '';
     const useUrl = url.length > 0;
 
-    // SSL logic: DB_SSL=true or URL contains sslmode=require
-    const sslFlag =
-      String(cfg.get('DB_SSL') ?? '').toLowerCase() === 'true' ||
-      (useUrl && url.toLowerCase().includes('sslmode=require'));
+    // SSL on if either:
+    // - configuration() says database.ssl = true
+    // - DB_SSL env is "true"
+    // - url has sslmode=require
+    const dbSslFlag =
+      (cfg.get<boolean>('database.ssl') as boolean | undefined) ??
+      /^true$/i.test(String(cfg.get('DB_SSL') ?? ''));
+    const sslFromUrl = /[?&]sslmode=require/i.test(url);
+    const sslOn = Boolean(dbSslFlag || sslFromUrl);
 
-    // CA certificate: PG_CA_CERT (inline content) or api/ca.pem
-    let ca: string | undefined = cfg.get('PG_CA_CERT') ?? undefined;
-    if (!ca) {
-      const caPath = resolve(process.cwd(), 'api/ca.pem');
-      if (existsSync(caPath)) {
-        ca = readFileSync(caPath, 'utf8');
-      }
+    // CA: support inline PEM from config.database.caCert or PG_CA_CERT or path
+    const caInline =
+      cfg.get<string>('database.caCert') ??
+      cfg.get<string>('PG_CA_CERT');
+    const caPath =
+      cfg.get<string>('database.caCertPath') ??
+      cfg.get<string>('PG_CA_CERT_PATH');
+
+    let caPem: string | undefined;
+    if (caInline) {
+      caPem = caInline.replace(/\\n/g, '\n').trim();
+    } else if (caPath && existsSync(caPath)) {
+      caPem = readFileSync(caPath, 'utf8');
     }
-    const baseSsl =
-      ca && ca.trim().length > 0
-        ? { ca: ca.replace(/\\n/g, '\n') }
-        : { rejectUnauthorized: false }; // render/vercel often need this
 
-    const base: Partial<TypeOrmModuleOptions> = {
+    const sslConfig: boolean | TlsOptions = sslOn
+      ? caPem
+        ? { rejectUnauthorized: true, ca: caPem }
+        : { rejectUnauthorized: false }
+      : false;
+
+    const base: TypeOrmModuleOptions = {
       type: 'postgres',
       autoLoadEntities: true,
-      // safe default: sync in dev only
-      synchronize: nodeEnv === 'development',
-      // logging level by env
-      logging: nodeEnv === 'production' ? ['error'] : ['error', 'warn'],
-      // Node pg extras
+      // Only auto-sync for *local dev* when not using a URL (use migrations elsewhere)
+      //synchronize: nodeEnv === 'development' && !useUrl,
+      synchronize: isDev,  
+      ssl: sslConfig,
       extra: {
-        ...(sslFlag ? { ssl: baseSsl } : {}),
+        ...(sslOn ? { ssl: sslConfig } : {}),
         keepAlive: true,
         connectionTimeoutMillis: 10_000,
-        idle_in_transaction_session_timeout: 30_000,
+        statement_timeout: 30_000,
+        query_timeout: 30_000,
       },
-      // Migrations (when compiled)
-      migrations: ['dist/api/migrations/*.js'],
-      migrationsTableName: 'typeorm_migrations',
+      // This is ONLY for Nest's runtime migrations (if you ever call dataSource.runMigrations from code)
+      migrations: [resolve(process.cwd(), 'dist/api/migrations/*.js')],
     };
 
     const discrete = {
@@ -61,7 +78,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     return {
       ...base,
       ...(useUrl ? { url } : discrete),
-      ssl: sslFlag ? baseSsl : false,
-    } as TypeOrmModuleOptions;
+    };
   },
 };

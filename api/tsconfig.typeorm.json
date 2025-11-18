@@ -1,0 +1,25 @@
+// api/tsconfig.typeorm.json
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "resolveJsonModule": true,
+    "outDir": "../dist/tmp-typeorm",
+    "baseUrl": "..", 
+    "paths": {
+      "@hhsc-compliance/*": ["libs/*/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "migrations/**/*.ts",
+    "../libs/**/*.ts"
+  ]
+}
