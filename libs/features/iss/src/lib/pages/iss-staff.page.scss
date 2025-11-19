@@ -83,6 +83,20 @@ textarea.in {
   gap: 0.12rem;
 }
 
+/* A generic "cell" wrapper, works for div or label */
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.cell-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #4b5563;
+}
+
 /* ===========================
    HEADER GRID (3-COLUMN FLEX)
    =========================== */
@@ -106,12 +120,10 @@ textarea.in {
 
 /* ===========================
    SERVICE TIME & SETTING / STAFFING
-   FLEX + RESPONSIVE
+   ONE ROW OF 5 DAYS
    =========================== */
 
-/* We won't use a rigid table header; the per-field labels handle clarity.
-   If you still want the header text, we keep it but make it wrap and never overflow. */
-
+/* Header row (labels only, not rigid table) */
 .iss-service-header {
   display: flex;
   flex-wrap: wrap;
@@ -128,57 +140,60 @@ textarea.in {
   min-width: 100px;
 }
 
-/* Container for the week: row of cards that wrap */
+/* Week container: single horizontal row of 5 cards */
 .iss-service-week {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  flex-wrap: nowrap;      /* 👈 force one row */
+  gap: 0.5rem;
+  overflow-x: auto;       /* 👈 scroll horizontally on narrow screens */
+  padding-bottom: 0.25rem;
 }
 
-/* Each day row as a card */
+/* Each day as a vertical card */
 .iss-service-row {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  gap: 0.4rem;
+  padding: 0.55rem 0.6rem;
+  border-radius: 0.45rem;
   background: #f9fbff;
   border: 1px solid #e0e7ff;
   box-sizing: border-box;
 
-  /* Responsive card width:
-     - On mobile: full-width
-     - On wider screens: 2–3 cards per row, but NEVER overflow container
-  */
-  flex: 1 1 260px;
-  max-width: 280px;
+  /* 👇 narrow fixed width so 5 fit visually in a row on desktop */
+  flex: 0 0 180px;
+  max-width: 180px;
 }
 
-/* Each field cell inside card */
-.iss-service-row .cell {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.cell-label {
-  font-size: 0.75rem;
+/* Tighter controls inside service cards only */
+.iss-service-row .cell-label {
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   color: #4b5563;
 }
 
+.iss-service-row .in {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.3rem;
+}
+
+/* Optional: even shorter widths for tiny numeric/time inputs */
+.iss-service-row .cell-start .in,
+.iss-service-row .cell-end .in,
+.iss-service-row .cell-minutes .in {
+  max-width: 5.5rem;
+}
+
+.iss-service-row .cell-setting .in,
+.iss-service-row .cell-individuals .in,
+.iss-service-row .cell-staff .in {
+  max-width: 6rem;
+}
+
 /* Make selects align with inputs */
 .iss-service-row select.in {
   width: 100%;
-}
-
-/* Slight tweaks for very small screens */
-@media (max-width: 640px) {
-  .iss-service-row {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
 }
 
 /* ===========================
@@ -191,7 +206,6 @@ textarea.in {
   box-sizing: border-box;
   overflow-x: auto;
 }
-
 /* ===========================
    NOTES FLEX SECTION
    =========================== */
@@ -205,7 +219,7 @@ textarea.in {
 /* Header row for notes */
 .iss-notes-header {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
   font-size: 0.78rem;
@@ -218,10 +232,10 @@ textarea.in {
   font-weight: 600;
 }
 
-/* Each note row */
+/* Each note row = one row: Date | Initials | Comments */
 .iss-note-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* stack on small screens, one row on larger */
   gap: 0.5rem;
   padding: 0.5rem 0.55rem;
   border-radius: 0.4rem;
@@ -234,12 +248,16 @@ textarea.in {
 .iss-note-row .col {
   display: flex;
   flex-direction: column;
-  flex: 1 1 150px;
+  flex: 1 1 140px;
   min-width: 0;
 }
 
-/* Desktop note column widths */
-@media (min-width: 900px) {
+/* Date + Initials narrower, Comments grows */
+@media (min-width: 768px) {
+  .iss-note-row {
+    flex-wrap: nowrap; /* 👈 force true single row on medium+ screens */
+  }
+
   .iss-note-row .col-date {
     flex: 0 0 18%;
     max-width: 18%;
@@ -251,9 +269,16 @@ textarea.in {
   }
 
   .iss-note-row .col-comment {
-    flex: 1 1 auto;
+    flex: 1 1 auto; /* take remaining space */
   }
 }
+
+/* Make inputs a bit tighter here to match compact layout */
+.iss-note-row .in {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.35rem;
+}
+
 
 /* ===========================
    ACTIONS / BUTTONS
@@ -286,5 +311,11 @@ textarea.in {
 
   .iss-grid-3 {
     gap: 0.6rem;
+  }
+
+  /* keep cards scrollable horizontally on very small screens */
+  .iss-service-row {
+    flex: 0 0 160px;
+    max-width: 160px;
   }
 }

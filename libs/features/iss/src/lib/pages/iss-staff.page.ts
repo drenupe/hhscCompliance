@@ -59,19 +59,17 @@ export class IssStaffPage {
       this.buildWeeklyRow('Assistance with Medication'),
     ]),
     adaptive: this.fb.array([
-      this.buildWeeklyRow('Money Management'),
-      this.buildWeeklyRow('Time Management'),
-      this.buildWeeklyRow('Household Skills'),
+      this.buildWeeklyRow('Ambulation and Mobility'),
+      this.buildWeeklyRow('Reinforce Lessons'),
+      
     ]),
     implementation: this.fb.array([
-      this.buildWeeklyRow('IP Skill 1'),
-      this.buildWeeklyRow('IP Skill 2'),
-      this.buildWeeklyRow('IP Skill 3'),
+      this.buildWeeklyRow('Other:'),
+      this.buildWeeklyRow('Other:'),
     ]),
     community: this.fb.array([
-      this.buildWeeklyRow('Community Activity 1'),
-      this.buildWeeklyRow('Community Activity 2'),
-      this.buildWeeklyRow('Community Activity 3'),
+      this.buildWeeklyRow('Community Location (describe location(s) in the comments)'),
+      this.buildWeeklyRow('Transportation'),
     ]),
 
     // Notes rows: minimum 5 (one for each day of service)
@@ -79,6 +77,7 @@ export class IssStaffPage {
       Array.from({ length: 5 }, () => this.buildNoteRow())
     ),
   });
+
 
   // ------- builders -------
 

@@ -57,20 +57,7 @@
       <fieldset class="iss-fieldset">
         <legend>Service Time &amp; Setting / Staffing</legend>
 
-        <!-- Header row (desktop only) -->
-        <div class="iss-service-header">
-          <div>Day</div>
-          <div>Date</div>
-          <div>Name of Service Provider</div>
-          <div>Signature</div>
-          <div>Start</div>
-          <div>End</div>
-          <div>Minutes</div>
-          <div>Setting</div>
-          <div># Individuals</div>
-          <div># Staff</div>
-          <div>Calculated Ratio</div>
-        </div>
+       
 
         <!-- Rows -->
         <div class="iss-service-week" formArrayName="serviceWeek">
@@ -79,55 +66,55 @@
             *ngFor="let d of serviceWeek.controls; let i = index"
             [formGroupName]="i"
           >
-            <label class="cell cell-day">
+            <div class="cell form-control cell-day">
               <span class="cell-label">Day</span>
               <input class="in" formControlName="day" readonly />
-            </label>
+            </div>
 
-            <label class="cell cell-date">
+            <div class="cell form-control cell-date">
               <span class="cell-label">Date</span>
               <input class="in" type="date" formControlName="date" />
-            </label>
+            </div>
 
-            <label class="cell cell-provider-name">
+            <div class="cell form-control cell-provider-name">
               <span class="cell-label">Name of Service Provider</span>
               <input class="in" type="text" formControlName="providerName" />
-            </label>
+            </div>
 
-            <label class="cell cell-provider-signature">
+            <div class="cell form-control cell-provider-signature">
               <span class="cell-label">Signature</span>
               <input
                 class="in"
                 type="text"
                 formControlName="providerSignature"
               />
-            </label>
+            </div>
 
-            <label class="cell cell-start">
+            <div class="cell form-control cell-start">
               <span class="cell-label">Start</span>
               <input class="in" type="time" formControlName="start" />
-            </label>
+            </div>
 
-            <label class="cell cell-end">
+            <div class="cell form-control cell-end">
               <span class="cell-label">End</span>
               <input class="in" type="time" formControlName="end" />
-            </label>
+            </div>
 
-            <label class="cell cell-minutes">
+            <div class="cell form-control cell-minutes">
               <span class="cell-label">Minutes</span>
               <input class="in" type="number" formControlName="minutes" />
-            </label>
+            </div>
 
-            <label class="cell cell-setting">
+            <div class="cell form-control cell-setting">
               <span class="cell-label">Setting</span>
               <select class="in" formControlName="setting">
                 <option value="on_site">On-site</option>
                 <option value="off_site">Off-site</option>
               </select>
-            </label>
+            </div>
 
-            <!-- # Individuals: OFF-SITE ONLY (div, not label) -->
-            <div class="cell cell-individuals">
+            <!-- # Individuals: OFF-SITE ONLY -->
+            <div class="cell form-control cell-individuals">
               <span class="cell-label"># Individuals</span>
               <ng-container
                 *ngIf="d.get('setting')?.value === 'off_site'; else onsiteIndividuals"
@@ -143,8 +130,8 @@
               </ng-template>
             </div>
 
-            <!-- # Staff: OFF-SITE ONLY (div, not label) -->
-            <div class="cell cell-staff">
+            <!-- # Staff: OFF-SITE ONLY -->
+            <div class="cell form-control cell-staff">
               <span class="cell-label"># Staff</span>
               <ng-container
                 *ngIf="d.get('setting')?.value === 'off_site'; else onsiteStaff"
@@ -156,8 +143,8 @@
               </ng-template>
             </div>
 
-            <!-- Ratio: OFF-SITE ONLY (div, not label) -->
-            <div class="cell cell-ratio">
+            <!-- Ratio: OFF-SITE ONLY -->
+            <div class="cell form-control cell-ratio">
               <span class="cell-label">Calculated Ratio</span>
               <ng-container
                 *ngIf="d.get('setting')?.value === 'off_site'; else onsiteRatio"
@@ -198,35 +185,44 @@
         legend="Community Integration (for off-site only)"
       ></lib-iss-weekly-initials-section>
 
-      <!-- NOTES -->
+      <!-- NOTES (flex, no table) -->
       <fieldset class="iss-fieldset">
         <legend>Community Locations Visited &amp; Special Events or Occurrences</legend>
-        <table class="iss-table" formArrayName="notes">
-          <thead>
-            <tr>
-              <th class="w-12">Date</th>
-              <th class="w-12">Staff Initials</th>
-              <th>Comments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let n of notes.controls; let i = index" [formGroupName]="i">
-              <td>
-                <input class="in" type="date" formControlName="date" />
-              </td>
-              <td>
-                <input class="in" type="text" formControlName="initials" />
-              </td>
-              <td>
-                <textarea
-                  class="in"
-                  rows="1"
-                  formControlName="comment"
-                ></textarea>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div class="iss-notes" formArrayName="notes">
+          <!-- Header row -->
+          <div class="iss-notes-header">
+            <div class="col col-date">Date</div>
+            <div class="col col-initials">Staff Initials</div>
+            <div class="col col-comment">Comments</div>
+          </div>
+
+          <!-- Note rows -->
+          <div
+            class="iss-note-row"
+            *ngFor="let n of notes.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <div class="col col-date form-control">
+              <span class="cell-label">Date</span>
+              <input class="in" type="date" formControlName="date" />
+            </div>
+
+            <div class="col col-initials form-control">
+              <span class="cell-label">Staff Initials</span>
+              <input class="in" type="text" formControlName="initials" />
+            </div>
+
+            <div class="col col-comment form-control">
+              <span class="cell-label">Comments</span>
+              <textarea
+                class="in"
+                rows="1"
+                formControlName="comment"
+              ></textarea>
+            </div>
+          </div>
+        </div>
       </fieldset>
 
       <div class="iss-actions">
