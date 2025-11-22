@@ -1,0 +1,30 @@
+<section class="iss-home">
+  <header class="iss-home__header">
+    <h1>ISS Logs</h1>
+    <p>Choose a person to work on their weekly ISS log.</p>
+  </header>
+
+  <ng-container *ngIf="consumers$ | async as consumers; else loading">
+    <div class="iss-home__empty" *ngIf="!consumers.length">
+      <p>No consumers found for this provider yet.</p>
+    </div>
+
+    <div class="iss-home__grid" *ngIf="consumers.length">
+      <button
+        class="iss-home__card"
+        *ngFor="let c of consumers"
+        type="button"
+        (click)="openConsumer(c)"
+      >
+        <h2>{{ c.firstName }} {{ c.lastName }}</h2>
+        <p class="iss-home__card-sub">
+          Tap to see their ISS weeks.
+        </p>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <p>Loading ISS consumers…</p>
+  </ng-template>
+</section>

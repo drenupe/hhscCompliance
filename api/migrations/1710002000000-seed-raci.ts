@@ -4,7 +4,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 // Use a RELATIVE import so we don't depend on tsconfig path mapping here.
 // Adjust the path if your folder layout is slightly different.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { DEFAULT_RACI, type Raci } from '../../libs/shared-models/src/lib/raci';
+import { DEFAULT_RACI, ModuleKey, type Raci } from '../../libs/shared-models/src/lib/raci';
 
 // ---- seed data ----
 
@@ -92,12 +92,16 @@ export class SeedRaci1710002000000 implements MigrationInterface {
     // 5) Iterate DEFAULT_RACI with an explicit cast so TS knows the shape
     const entries = Object.entries(DEFAULT_RACI) as [string, Raci][];
 
-    for (const [key, raci] of entries) {
-      await push(key, 'R', raci.R);
-      await push(key, 'A', raci.A);
-      await push(key, 'C', raci.C);
-      await push(key, 'I', raci.I);
-    }
+    for (const key of Object.keys(DEFAULT_RACI) as ModuleKey[]) {
+         const raci = DEFAULT_RACI[key];
+       
+         // Raci now has lowercase props: r, a, c, i
+         await push(key, 'R', raci.r ?? []);
+         await push(key, 'A', raci.a ?? []);
+         await push(key, 'C', raci.c ?? []);
+         await push(key, 'I', raci.i ?? []);
+}
+
   }
 
   public async down(q: QueryRunner): Promise<void> {

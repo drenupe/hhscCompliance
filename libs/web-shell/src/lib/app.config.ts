@@ -9,16 +9,21 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { appRoutes } from './app.routes';
 
-import { IssNotesFeature } from '@hhsc-compliance/iss';       // re-exported in your index.ts
-import { IssNotesEffects } from '@hhsc-compliance/iss';
-
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 
+// ✅ Pull ENVIRONMENT + type + ISS feature from data-access (non-lazy lib)
+import {
+  ENVIRONMENT,
+  EnvironmentConfig,
+  ISS_FEATURE_KEY,
+  issReducer,
+  IssEffects,
+} from '@hhsc-compliance/data-access';
+
 import {
   LucideAngularModule,
-  // core / nav
   LayoutDashboard,
   Home,
   Users,
@@ -29,23 +34,27 @@ import {
   Menu,
   Activity,
   Stethoscope,
-  // newly required by your sidebar/menu
-  Shield,           // "shield"
-  ShieldCheck,      // "shield-check"
-  Ban,              // "ban"
-  Pill,             // "pill"
-  UserRound,        // "user-round"
-  UserCog,          // "user-cog"
-  FileSpreadsheet,  // "file-spreadsheet"
-
-  ListChecks,   // "list-checks"
-  Wallet,       // "wallet"
-  ShieldAlert,  // "shield-alert"
-  Hand,         // "hand"
-  Bed,          // "bed"
+  Shield,
+  ShieldCheck,
+  Ban,
+  Pill,
+  UserRound,
+  UserCog,
+  FileSpreadsheet,
+  ListChecks,
+  Wallet,
+  ShieldAlert,
+  Hand,
+  Bed,
   FileText,
   Images,
-  } from 'lucide-angular';
+} from 'lucide-angular';
+
+// 👇 Local environment config (no external/relative import, Nx is happy)
+const environment: EnvironmentConfig = {
+  apiBaseUrl: 'http://localhost:3000/api', // 🔧 set this to your Nest ISS API base URL
+  // add other fields if you put them on EnvironmentConfig
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -60,11 +69,19 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(),
 
-    provideStore({ [IssNotesFeature.name]: IssNotesFeature.reducer }),
-    provideEffects([IssNotesEffects]),
+    // 🧠 NgRx
+    provideStore({
+      [ISS_FEATURE_KEY]: issReducer,
+    }),
+    provideEffects([IssEffects]),
     provideRouterStore(),
 
-    // Register ONLY the icons you actually use (tree-shaken)
+    // 🌍 This fixes the ENVIRONMENT NullInjectorError without importing from src/
+    {
+      provide: ENVIRONMENT,
+      useValue: environment,
+    },
+
     importProvidersFrom(
       LucideAngularModule.pick({
         LayoutDashboard,
@@ -77,8 +94,6 @@ export const appConfig: ApplicationConfig = {
         Menu,
         Activity,
         Stethoscope,
-
-        // Additions for your errors
         Shield,
         ShieldCheck,
         Ban,
@@ -86,14 +101,13 @@ export const appConfig: ApplicationConfig = {
         UserRound,
         UserCog,
         FileSpreadsheet,
-
-         ListChecks,
-         Wallet,
-         ShieldAlert,
-         Hand,
-         Bed,
-         FileText,
-         Images,
+        ListChecks,
+        Wallet,
+        ShieldAlert,
+        Hand,
+        Bed,
+        FileText,
+        Images,
       })
     ),
   ],

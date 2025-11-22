@@ -1,7 +1,11 @@
 // libs/shared-models/src/lib/nav/role-menu.ts
 // Single source of truth for sidebar structure + icons to register
 
-import type { AppRole } from '../auth/roles';
+import { AppRole } from "@hhsc-compliance/shared-models";
+
+
+// libs/shared-models/src/lib/nav/role-menu.ts
+
 
 // ---- Types ----
 export type MenuItem = {
@@ -22,9 +26,9 @@ const CORE: MenuGroup = {
   id: 'core',
   label: 'Core',
   items: [
-    { label: 'Dashboard', path: '/dashboard',                icon: 'layout-dashboard' },
-    { label: 'Consumers', path: '/consumers',                icon: 'users' },
-    { label: 'Locations', path: '/residential/locations',    icon: 'home' },
+    { label: 'Dashboard', path: '/dashboard',             icon: 'layout-dashboard' },
+    { label: 'Consumers', path: '/consumers',             icon: 'users' },
+    { label: 'Locations', path: '/residential/locations', icon: 'home' },
   ],
 };
 
@@ -68,14 +72,13 @@ const ISS: MenuGroup = {
   id: 'iss',
   label: 'ISS (Day Habilitation)',
   items: [
-    { label: 'ISS Staff',   path: '/iss/staff',   icon: 'user-round' },
-    { label: 'ISS Manager', path: '/iss/manager', icon: 'user-cog' },
-    { label: 'Daily Log',     path: '/iss/daily-log',     icon: 'file-text' },
-    { label: 'Notes Review',  path: '/iss/notes-review',  icon: 'list-checks' },
-    { label: 'Notes Gallery', path: '/iss/notes-gallery', icon: 'images' },
+    { label: 'ISS Home',    path: '/iss',        icon: 'user-round' },
+    { label: 'ISS Manager',  path: '/iss/manager',      icon: 'user-cog' },
+    { label: 'Daily Log',    path: '/iss/daily-log',    icon: 'file-text' },
+    { label: 'Notes Review', path: '/iss/notes-review', icon: 'list-checks' },
+    { label: 'Notes Gallery',path: '/iss/notes-gallery',icon: 'images' },
   ],
 };
-
 
 const ADMIN: MenuGroup = {
   id: 'admin',
@@ -88,6 +91,7 @@ const ADMIN: MenuGroup = {
 
 // ---- Role → Menus ----
 const BY_ROLE: Record<AppRole, MenuGroup[]> = {
+  // Existing roles
   Admin:           [CORE, COMPLIANCE, MEDICAL, STAFF, ISS, ADMIN],
   CaseManager:     [CORE, COMPLIANCE, STAFF],
   Nurse:           [CORE, MEDICAL, COMPLIANCE],
@@ -95,6 +99,13 @@ const BY_ROLE: Record<AppRole, MenuGroup[]> = {
   ISSManager:      [CORE, ISS, COMPLIANCE],
   ISSStaff:        [CORE, ISS],
   Finance:         [CORE, COMPLIANCE, ADMIN],
+
+  // New roles from AppRole union
+  ProgramDirector:    [CORE, COMPLIANCE, STAFF, ISS, MEDICAL],
+  ComplianceOfficer:  [CORE, COMPLIANCE, STAFF],
+  BehaviorSupportLead:[CORE, COMPLIANCE],
+  FinanceOfficer:     [CORE, COMPLIANCE, ADMIN],
+  MedicalDirector:    [CORE, MEDICAL, COMPLIANCE],
 };
 
 // Pure, synchronous API expected by your Sidebar
@@ -109,7 +120,8 @@ export const MENU_ICON_NAMES = [
   'stethoscope', 'pill', 'briefcase', 'graduation-cap',
   'user-round', 'user-cog',
   'file-spreadsheet', 'shield-check',
-    'file-text',
+  'file-text',
   'images',
 ] as const;
-export type MenuIconName = typeof MENU_ICON_NAMES[number];
+
+export type MenuIconName = (typeof MENU_ICON_NAMES)[number];

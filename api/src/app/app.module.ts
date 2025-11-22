@@ -16,6 +16,8 @@ import { RaciModule } from './raci/raci.module';
 // import { UsersModule } from './users/users.module';
 // import { MetricsModule } from './observability/metrics/metrics.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { IssModule } from './iss/iss.module';
+import { ConsumersModule } from './consumers/consumers.module';
 // import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 // import { HttpErrorFilter } from './common/filters/http-exception.filter';
 // import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
@@ -44,6 +46,8 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
     // feature modules
     AuthModule,
     RaciModule,
+    IssModule,
+    ConsumersModule
     // UsersModule,
     // MetricsModule,
   ],

@@ -68,7 +68,7 @@ const ISS: MenuGroup = {
   id: 'iss',
   label: 'ISS (Day Habilitation)',
   items: [
-    { label: 'ISS Staff',    path: '/iss/staff',        icon: 'user-round' },
+    { label: 'ISS Home',    path: '/iss',        icon: 'user-round' },
     { label: 'ISS Manager',  path: '/iss/manager',      icon: 'user-cog' },
     { label: 'Daily Log',    path: '/iss/daily-log',    icon: 'file-text' },
     { label: 'Notes Review', path: '/iss/notes-review', icon: 'list-checks' },

@@ -1,0 +1,46 @@
+<section class="iss-week">
+  <header class="iss-week__header">
+    <div>
+      <h1>ISS Staff Log</h1>
+      <p>Week of {{ serviceDate | date: 'MMM d, y' }}</p>
+    </div>
+
+    <div class="iss-week__actions">
+      <button type="button" (click)="onSave()" [disabled]="saving$ | async">
+        {{ (saving$ | async) ? 'Saving…' : 'Save changes' }}
+      </button>
+      <!-- Future: Submit, Approve, Print/PDF -->
+    </div>
+  </header>
+
+  <ng-container *ngIf="loading$ | async; else formTpl">
+    <p>Loading log for this week…</p>
+  </ng-container>
+
+  <ng-template #formTpl>
+    <form class="iss-week__form" [formGroup]="form">
+      <section formGroupName="header" class="iss-week__section">
+        <h2>Header</h2>
+        <div class="field-row">
+          <label>
+            Location
+            <input type="text" formControlName="locationName" />
+          </label>
+          <label>
+            Staff initials
+            <input type="text" formControlName="staffInitials" />
+          </label>
+          <label>
+            Ratio
+            <input type="text" formControlName="ratio" />
+          </label>
+        </div>
+      </section>
+
+      <section class="iss-week__section iss-week__section--placeholder">
+        <h2>Times &amp; activities</h2>
+        <p>We’ll drop the full 8615 weekly grid here next.</p>
+      </section>
+    </form>
+  </ng-template>
+</section>

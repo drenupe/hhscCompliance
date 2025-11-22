@@ -8,9 +8,10 @@ import { TlsOptions } from 'node:tls';
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: async (cfg: ConfigService): Promise<TypeOrmModuleOptions> => {
-    const nodeEnv = String(cfg.get('env') ?? cfg.get('NODE_ENV') ?? 'development').toLowerCase();
-    const isDev = nodeEnv === 'development';
-    // Prefer the normalized config.database.url, fall back to raw env
+    const nodeEnv = String(
+      cfg.get('env') ?? cfg.get('NODE_ENV') ?? 'development',
+    ).toLowerCase();
+
     const url =
       cfg.get<string>('database.url') ??
       cfg.get<string>('DATABASE_URL') ??
@@ -18,17 +19,14 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
 
     const useUrl = url.length > 0;
 
-    // SSL on if either:
-    // - configuration() says database.ssl = true
-    // - DB_SSL env is "true"
-    // - url has sslmode=require
+    // SSL toggle from config/env or sslmode=require in the URL
     const dbSslFlag =
       (cfg.get<boolean>('database.ssl') as boolean | undefined) ??
       /^true$/i.test(String(cfg.get('DB_SSL') ?? ''));
     const sslFromUrl = /[?&]sslmode=require/i.test(url);
     const sslOn = Boolean(dbSslFlag || sslFromUrl);
 
-    // CA: support inline PEM from config.database.caCert or PG_CA_CERT or path
+    // CA: inline or file path
     const caInline =
       cfg.get<string>('database.caCert') ??
       cfg.get<string>('PG_CA_CERT');
@@ -52,9 +50,10 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     const base: TypeOrmModuleOptions = {
       type: 'postgres',
       autoLoadEntities: true,
-      // Only auto-sync for *local dev* when not using a URL (use migrations elsewhere)
-      //synchronize: nodeEnv === 'development' && !useUrl,
-      synchronize: isDev,  
+
+      // ✅ Important: use migrations only (no runtime schema sync)
+      synchronize: false,
+
       ssl: sslConfig,
       extra: {
         ...(sslOn ? { ssl: sslConfig } : {}),
@@ -63,13 +62,17 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         statement_timeout: 30_000,
         query_timeout: 30_000,
       },
-      // This is ONLY for Nest's runtime migrations (if you ever call dataSource.runMigrations from code)
+
+      // For programmatic migration runs (if you ever call dataSource.runMigrations())
       migrations: [resolve(process.cwd(), 'dist/api/migrations/*.js')],
     };
 
     const discrete = {
       host: cfg.get('database.host') ?? cfg.get('DB_HOST') ?? 'localhost',
-      port: parseInt(String(cfg.get('database.port') ?? cfg.get('DB_PORT') ?? '5432'), 10),
+      port: parseInt(
+        String(cfg.get('database.port') ?? cfg.get('DB_PORT') ?? '5432'),
+        10,
+      ),
       username: cfg.get('database.user') ?? cfg.get('DB_USER') ?? 'postgres',
       password: cfg.get('database.pass') ?? cfg.get('DB_PASS') ?? 'postgres',
       database: cfg.get('database.name') ?? cfg.get('DB_NAME') ?? 'postgres',
