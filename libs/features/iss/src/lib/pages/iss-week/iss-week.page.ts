@@ -1,3 +1,4 @@
+// libs/features/iss/src/lib/pages/iss-week/iss-week.page.ts
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,7 +6,7 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   CommonModule,
@@ -17,7 +18,12 @@ import {
   NgSwitchCase,
   NgSwitchDefault,
 } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 import { Subject, fromEvent } from 'rxjs';
 import {
@@ -29,7 +35,20 @@ import {
 } from 'rxjs/operators';
 
 import { IssFacade } from '@hhsc-compliance/data-access';
-import { StaffLog } from '@hhsc-compliance/shared-models';
+import {
+  StaffLog,
+  StaffLogHeader,
+  ServiceWeek,
+  ServiceDayEntry,
+  UpdateStaffLogDto,
+  WeeklyInitialRow,
+  WeeklyNote,
+  normalizeStaffLogFromApi,
+  buildStaffLogSavePayload,
+} from '@hhsc-compliance/shared-models';
+
+// Weekly initials child
+import { IssWeeklyInitialsSectionComponent } from '../../ui/weekly-initials/iss-weekly-initials-section.component';
 
 type AutoSaveStatus = 'idle' | 'saving' | 'saved' | 'queued' | 'error';
 type AutoSaveSource =
@@ -39,6 +58,8 @@ type AutoSaveSource =
   | 'online'
   | 'beforeunload'
   | 'manual';
+
+const WEEK_DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'] as const;
 
 @Component({
   standalone: true,
@@ -56,6 +77,8 @@ type AutoSaveSource =
     // Pipes
     AsyncPipe,
     DatePipe,
+    // Weekly initials child
+    IssWeeklyInitialsSectionComponent,
   ],
   templateUrl: './iss-week.page.html',
   styleUrls: ['./iss-week.page.scss'],
@@ -63,12 +86,12 @@ type AutoSaveSource =
 })
 export class IssWeekPageComponent implements OnInit, OnDestroy {
   form!: FormGroup;
-  providerId!: string;
-  consumerId!: string;
+
+  providerId!: number;
+  consumerId!: number;
   serviceDate!: string;
 
-  // ✅ string | null to match action / facade types
-  private currentLogId: string | null = null;
+  private currentLogId: number | null = null;
 
   autoSaveStatus: AutoSaveStatus = 'idle';
   lastSavedAt: Date | null = null;
@@ -76,10 +99,11 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly issFacade = inject(IssFacade);
 
-  // expose observables as getters so they're created lazily
+  // ----- store streams ----- //
   get currentLog$() {
     return this.issFacade.currentLog$;
   }
@@ -89,6 +113,38 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   get saving$() {
     return this.issFacade.currentLogSaving$;
   }
+
+  // ===== FormArray getters for template ===== //
+
+  get serviceWeek(): FormArray<FormGroup> {
+    return this.form.get('serviceWeek') as FormArray<FormGroup>;
+  }
+
+  get socializationArray(): FormArray<FormGroup> {
+    return this.form.get('socialization') as FormArray<FormGroup>;
+  }
+
+  get selfHelpArray(): FormArray<FormGroup> {
+    return this.form.get('selfHelp') as FormArray<FormGroup>;
+  }
+
+  get adaptiveArray(): FormArray<FormGroup> {
+    return this.form.get('adaptive') as FormArray<FormGroup>;
+  }
+
+  get implementationArray(): FormArray<FormGroup> {
+    return this.form.get('implementation') as FormArray<FormGroup>;
+  }
+
+  get communityArray(): FormArray<FormGroup> {
+    return this.form.get('community') as FormArray<FormGroup>;
+  }
+
+  get notes(): FormArray<FormGroup> {
+    return this.form.get('notes') as FormArray<FormGroup>;
+  }
+
+  // ===== Lifecycle ===== //
 
   ngOnInit(): void {
     this.buildForm();
@@ -103,29 +159,115 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ----- init helpers -----
+  // ===== Form building (ISS 8615-ish structure) ===== //
+
   private buildForm(): void {
     this.form = this.fb.group({
       header: this.fb.group({
-        locationName: [''],
-        staffInitials: [''],
-        ratio: [''],
+        individualName: [''],
+        date: [new Date().toISOString().slice(0, 10)],
+        lon: [''],
+        provider: [''],
+        license: [''],
+        staffNameTitle: [''],
       }),
-      // TODO: serviceWeek form group when we define full 8615 structure
+
+      // Monday–Friday line items (single row per day)
+      serviceWeek: this.fb.array([
+        this.buildServiceRow('Monday'),
+        this.buildServiceRow('Tuesday'),
+        this.buildServiceRow('Wednesday'),
+        this.buildServiceRow('Thursday'),
+        this.buildServiceRow('Friday'),
+      ]),
+
+      // Weekly initials sections
+      socialization: this.fb.array([
+        this.buildWeeklyRow('Communication'),
+        this.buildWeeklyRow('Socialization Skills Development'),
+        this.buildWeeklyRow('Group Activity'),
+        this.buildWeeklyRow('Volunteer or Employment Skills Development'),
+        this.buildWeeklyRow('Transportation'),
+      ]),
+      selfHelp: this.fb.array([
+        this.buildWeeklyRow('Personal Hygiene'),
+        this.buildWeeklyRow('Eating'),
+        this.buildWeeklyRow('Meal Preparation'),
+        this.buildWeeklyRow('Cleaning'),
+        this.buildWeeklyRow('Assistance with Medication'),
+      ]),
+      adaptive: this.fb.array([
+        this.buildWeeklyRow('Ambulation and Mobility'),
+        this.buildWeeklyRow('Reinforce Lessons'),
+      ]),
+      implementation: this.fb.array([
+        this.buildWeeklyRow('Other:'),
+        this.buildWeeklyRow('Other:'),
+      ]),
+      community: this.fb.array([
+        this.buildWeeklyRow(
+          'Community Location (describe location(s) in the comments)',
+        ),
+        this.buildWeeklyRow('Transportation'),
+      ]),
+
+      // Notes rows: minimum 5 (one for each day of service)
+      notes: this.fb.array(
+        Array.from({ length: 5 }, () => this.buildNoteRow()),
+      ),
     });
   }
+
+  private buildServiceRow(day: string): FormGroup {
+    return this.fb.group({
+      day: [day],
+      date: [''],
+      providerName: [''],
+      providerSignature: [''],
+      start: [''],
+      end: [''],
+      minutes: [0],
+      setting: ['on_site'], // 'on_site' | 'off_site'
+      individualsCount: [0],
+      staffCount: [1],
+    });
+  }
+
+  private buildWeeklyRow(label: string): FormGroup {
+    return this.fb.group({
+      label: [label],
+      mon: [''],
+      tue: [''],
+      wed: [''],
+      thu: [''],
+      fri: [''],
+    });
+  }
+
+  private buildNoteRow(): FormGroup {
+    return this.fb.group({
+      date: [''],
+      initials: [''],
+      comment: [''],
+    });
+  }
+
+  // ===== Route + NgRx wiring ===== //
 
   private bindRouteParams(): void {
     this.route.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
-        this.providerId = params.get('providerId') ?? '';
-        this.consumerId = params.get('consumerId') ?? '';
-        this.serviceDate = params.get('serviceDate') ?? '';
+        const providerId = Number(params.get('providerId'));
+        const consumerId = Number(params.get('consumerId'));
+        const serviceDate = params.get('serviceDate') ?? '';
+
+        this.providerId = providerId;
+        this.consumerId = consumerId;
+        this.serviceDate = serviceDate;
 
         if (this.consumerId && this.serviceDate) {
           this.issFacade.selectConsumer(this.consumerId);
-          // ✅ new signature: only serviceDate
           this.issFacade.selectWeek(this.serviceDate);
           this.issFacade.loadLogForWeek(this.consumerId, this.serviceDate);
         }
@@ -136,14 +278,20 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     this.currentLog$
       .pipe(
         filter((log): log is StaffLog => !!log),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((log) => {
-        // ✅ normalize ID to string for NgRx / actions
-        this.currentLogId =
-          log.id !== undefined && log.id !== null ? String(log.id) : null;
+        // Normalize dates from API → UI
+        const normalizedLog = normalizeStaffLogFromApi(log);
 
-        this.patchFormFromLog(log);
+        this.currentLogId = normalizedLog.id;
+
+        // If route didn’t specify a date, align with log’s serviceDate
+        if (normalizedLog.serviceDate && !this.serviceDate) {
+          this.serviceDate = normalizedLog.serviceDate;
+        }
+
+        this.patchFormFromLog(normalizedLog);
         this.form.markAsPristine();
         this.lastSavedAt = new Date();
 
@@ -156,18 +304,115 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       });
   }
 
+  // ======================================================================
+  //  PATCH LOG → FORM
+  // ======================================================================
+
   private patchFormFromLog(log: StaffLog): void {
+    const header: StaffLogHeader = log.header ?? {};
+
+    // ----- TOP HEADER ----- //
     this.form.patchValue({
       header: {
-        locationName: log.header?.locationName ?? '',
-        staffInitials: log.header?.staffInitials ?? '',
-        ratio: log.header?.ratio ?? '',
+        individualName: (header as any).individualName ?? '',
+        date: (header as any).date ?? this.serviceDate ?? '',
+        lon: (header as any).lon ?? '',
+        provider:
+          (header as any).provider ?? (header as any).issProviderName ?? '',
+        license:
+          (header as any).license ?? (header as any).issProviderLicense ?? '',
+        staffNameTitle: (header as any).staffNameTitle ?? '',
       },
-      // TODO: map serviceWeek -> form
+    });
+
+    // ----- SERVICE WEEK (MON–FRI CARDS) ----- //
+    const week: ServiceWeek | undefined = log.serviceWeek;
+
+    if (week) {
+      WEEK_DAYS.forEach((dayKey, idx) => {
+        const rowGroup = this.serviceWeek.at(idx) as FormGroup | undefined;
+        if (!rowGroup) return;
+
+        const entries = week[dayKey];
+        const first: ServiceDayEntry | undefined = entries?.[0];
+
+        if (first) {
+          rowGroup.patchValue({
+            date: first.date ?? '',
+            providerName: first.providerName ?? '',
+            providerSignature: first.providerSignature ?? '',
+            start: first.start ?? first.timeIn ?? '',
+            end: first.end ?? first.timeOut ?? '',
+            minutes: first.minutes ?? 0,
+            setting: first.setting ?? 'on_site',
+            individualsCount: first.individualsCount ?? 0,
+            staffCount: first.staffCount ?? 1,
+          });
+        }
+      });
+    }
+
+    // ----- WEEKLY INITIALS ----- //
+    this.patchWeeklyArrayFromHeader(this.socializationArray, header.socialization);
+    this.patchWeeklyArrayFromHeader(this.selfHelpArray, header.selfHelp);
+    this.patchWeeklyArrayFromHeader(this.adaptiveArray, header.adaptive);
+    this.patchWeeklyArrayFromHeader(
+      this.implementationArray,
+      header.implementation,
+    );
+    this.patchWeeklyArrayFromHeader(this.communityArray, header.community);
+
+    // ----- NOTES ----- //
+    this.patchNotesFromHeader(this.notes, header.notes);
+  }
+
+  // ======================================================================
+  //  HELPERS – WEEKLY + NOTES
+  // ======================================================================
+
+  /** Hydrate a weekly initials FormArray from header[property] arrays */
+  private patchWeeklyArrayFromHeader(
+    formArray: FormArray<FormGroup>,
+    savedRows?: WeeklyInitialRow[],
+  ): void {
+    if (!savedRows?.length) return;
+
+    savedRows.forEach((row, idx) => {
+      const group = formArray.at(idx) as FormGroup | undefined;
+      if (!group) return;
+
+      group.patchValue({
+        label: row.label ?? group.get('label')?.value ?? '',
+        mon: row.mon ?? '',
+        tue: row.tue ?? '',
+        wed: row.wed ?? '',
+        thu: row.thu ?? '',
+        fri: row.fri ?? '',
+      });
     });
   }
 
-  // ----- auto-save -----
+  /** Hydrate note rows from header.notes[] */
+  private patchNotesFromHeader(
+    formArray: FormArray<FormGroup>,
+    savedNotes?: WeeklyNote[],
+  ): void {
+    if (!savedNotes?.length) return;
+
+    savedNotes.forEach((row, idx) => {
+      const group = formArray.at(idx) as FormGroup | undefined;
+      if (!group) return;
+
+      group.patchValue({
+        date: row.date ?? '',
+        initials: row.initials ?? '',
+        comment: row.comment ?? '',
+      });
+    });
+  }
+
+  // ===== Auto-save engine ===== //
+
   private setupAutoSave(): void {
     if (!this.form) return;
 
@@ -175,8 +420,10 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       .pipe(
         skip(1),
         debounceTime(2000),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-        takeUntil(this.destroy$)
+        distinctUntilChanged(
+          (a, b) => JSON.stringify(a) === JSON.stringify(b),
+        ),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => this.queueSave('typing'));
   }
@@ -229,20 +476,61 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     this.triggerSave(source);
   }
 
+  // ======================================================================
+  //  SAVE → DTO (UI → API mapper)
+  // ======================================================================
+
   private triggerSave(_source: AutoSaveSource): void {
     if (!this.form) return;
 
-    const value = this.form.value;
-    const payload = {
-      header: value.header,
-      // TODO: include serviceWeek later
-    };
+    const raw = this.form.getRawValue() as any;
+
+    const { logId, payload } = buildStaffLogSavePayload({
+      currentLogId: this.currentLogId,
+      providerId: this.providerId,
+      consumerId: this.consumerId,
+      serviceDate: this.serviceDate,
+      rawForm: raw,
+    });
 
     this.autoSaveStatus = 'saving';
-    this.issFacade.saveLog(this.currentLogId, payload);
+    this.issFacade.saveLog(logId, payload);
   }
 
   onSave(): void {
     this.queueSave('manual');
+  }
+
+  // ===== Ratio helper ===== //
+
+  ratio(index: number): string {
+    const row = this.serviceWeek.at(index) as FormGroup;
+    const setting = row.get('setting')?.value as
+      | 'on_site'
+      | 'off_site'
+      | undefined;
+
+    if (setting !== 'off_site') {
+      return '';
+    }
+
+    const individuals = Number(row.get('individualsCount')?.value ?? 0);
+    const staff = Number(row.get('staffCount')?.value ?? 1);
+
+    if (!staff) return '';
+    return `${individuals}:${staff}`;
+  }
+
+  // ===== Back to year ===== //
+
+  backToYear(): void {
+    this.router.navigate([
+      '/iss',
+      'provider',
+      this.providerId,
+      'consumer',
+      this.consumerId,
+      'year',
+    ]);
   }
 }

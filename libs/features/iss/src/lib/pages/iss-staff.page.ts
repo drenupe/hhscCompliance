@@ -173,9 +173,14 @@ export class IssStaffPage {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
-    }
+    }   
 
     console.log('ISS Staff form value', this.form.value);
     // TODO: send to API/store
+  }
+
+  // 👇 add this
+  onSave(): void {
+    this.submit();
   }
 }

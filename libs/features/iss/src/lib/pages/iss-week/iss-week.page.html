@@ -1,79 +1,355 @@
 <section class="iss-week">
+  <!-- Top header: back + title + autosave status -->
   <header class="iss-week__header">
-    <div>
-      <h1>ISS Staff Log</h1>
-      <p class="iss-week__sub">Week of {{ serviceDate | date: 'MMM d, y' }}</p>
+    <button
+      type="button"
+      class="iss-week__back"
+      (click)="backToYear()"
+    >
+      ← Back to year view
+    </button>
 
-      <div
-        class="iss-week__status"
-        *ngIf="autoSaveStatus !== 'idle'"
-        [ngClass]="'iss-week__status--' + autoSaveStatus"
-      >
-        <span class="iss-week__status-dot"></span>
-        <span class="iss-week__status-text">
-          <ng-container [ngSwitch]="autoSaveStatus">
-            <span *ngSwitchCase="'saving'">Saving…</span>
-            <span *ngSwitchCase="'saved'">
-              Saved
-              <ng-container *ngIf="lastSavedAt">
-                · {{ lastSavedAt | date: 'shortTime' }}
-              </ng-container>
-            </span>
-            <span *ngSwitchCase="'queued'">
-              Offline &mdash; will sync when you’re back online
-            </span>
-            <span *ngSwitchCase="'error'">
-              Can’t auto-save &mdash; please fix required fields
-            </span>
-            <span *ngSwitchDefault>Unsaved changes</span>
-          </ng-container>
-        </span>
-      </div>
+    <div class="iss-week__titles">
+      <h1>ISS Staff Log – Week of {{ serviceDate | date: 'MMM d, y' }}</h1>
+      <p class="iss-week__sub">
+        Individualized Skills and Socialization – daily service, staffing, and weekly initials.      </p>
     </div>
 
-    <div class="iss-week__actions">
-      <button
-        type="button"
-        (click)="onSave()"
-        [disabled]="(saving$ | async) || !form?.dirty"
-      >
-        {{
-          (saving$ | async)
-            ? 'Saving…'
-            : (form?.dirty ? 'Save changes' : 'Saved')
-        }}
-      </button>
+    <!-- Auto-save status pill -->
+    <div
+      class="iss-week__status"
+      [ngClass]="{
+        'iss-week__status--saving': autoSaveStatus === 'saving',
+        'iss-week__status--saved': autoSaveStatus === 'saved',
+        'iss-week__status--queued': autoSaveStatus === 'queued',
+        'iss-week__status--error': autoSaveStatus === 'error'
+      }"
+    >
+      <span class="iss-week__status-dot"></span>
+      <span class="iss-week__status-text">
+        <ng-container [ngSwitch]="autoSaveStatus">
+          <span *ngSwitchCase="'saving'">Saving…</span>
+          <span *ngSwitchCase="'saved'">
+            Saved
+            <ng-container *ngIf="lastSavedAt">
+              · {{ lastSavedAt | date: 'shortTime' }}
+            </ng-container>
+          </span>
+          <span *ngSwitchCase="'queued'">Offline – save queued</span>
+          <span *ngSwitchCase="'error'">Check required – invalid entries</span>
+          <span *ngSwitchDefault>Idle</span>
+        </ng-container>
+      </span>
     </div>
   </header>
 
-  <ng-container *ngIf="loading$ | async; else formTpl">
-    <p class="iss-week__loading">Loading log for this week…</p>
-  </ng-container>
+  <!-- Show a simple loading state while log is being pulled -->
+  <p class="iss-week__loading" *ngIf="loading$ | async">
+    Loading weekly staff log…
+  </p>
 
-  <ng-template #formTpl>
-    <form class="iss-week__form" [formGroup]="form">
-      <section formGroupName="header" class="iss-week__section">
-        <h2>Header</h2>
-        <div class="iss-week__fields">
-          <label>
-            <span>Location</span>
-            <input type="text" formControlName="locationName" />
-          </label>
-          <label>
-            <span>Staff initials</span>
-            <input type="text" formControlName="staffInitials" />
-          </label>
-          <label>
-            <span>Ratio</span>
-            <input type="text" formControlName="ratio" />
-          </label>
+  <!-- Main staff form shell -->
+  <div class="iss-staff-shell" *ngIf="form">
+    <section class="iss-right">
+      <form
+        [formGroup]="form"
+        class="iss-entry"
+        (ngSubmit)="onSave()"
+      >
+        <!-- HEADER -->
+        <fieldset class="iss-fieldset">
+          <legend>Individual Information</legend>
+
+          <div formGroupName="header">
+            <div class="iss-grid-3">
+              <label class="form-control">
+                <span>Individual Name</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="individualName"
+                />
+              </label>
+
+              <label class="form-control">
+                <span>Date of Service</span>
+                <input
+                  class="in"
+                  type="date"
+                  formControlName="date"
+                />
+              </label>
+
+              <label class="form-control">
+                <span>LON</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="lon"
+                />
+              </label>
+            </div>
+
+            <div class="iss-grid-3">
+              <label class="form-control">
+                <span>
+                  Name of Individualized Skills and Socialization Provider
+                </span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="provider"
+                />
+              </label>
+
+              <label class="form-control">
+                <span>ISS Provider License No.</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="license"
+                />
+              </label>
+
+              <label class="form-control">
+                <span>Staff (Printed Name &amp; Title)</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="staffNameTitle"
+                />
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- SERVICE TIME & SETTING / STAFFING (M–F LINE ITEMS) -->
+        <fieldset class="iss-fieldset">
+          <legend>Service Time &amp; Setting / Staffing</legend>
+
+          <!-- Rows -->
+          <div class="iss-service-week" formArrayName="serviceWeek">
+            <div
+              class="iss-service-row"
+              *ngFor="let d of serviceWeek.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <div class="cell form-control cell-day">
+                <span class="cell-label">Day</span>
+                <input
+                  class="in"
+                  formControlName="day"
+                  readonly
+                />
+              </div>
+
+              <div class="cell form-control cell-date">
+                <span class="cell-label">Date</span>
+                <input
+                  class="in"
+                  type="date"
+                  formControlName="date"
+                />
+              </div>
+
+              <div class="cell form-control cell-provider-name">
+                <span class="cell-label">Name of Service Provider</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="providerName"
+                />
+              </div>
+
+              <div class="cell form-control cell-provider-signature">
+                <span class="cell-label">Signature</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="providerSignature"
+                />
+              </div>
+
+              <div class="cell form-control cell-start">
+                <span class="cell-label">Start</span>
+                <input
+                  class="in"
+                  type="time"
+                  formControlName="start"
+                />
+              </div>
+
+              <div class="cell form-control cell-end">
+                <span class="cell-label">End</span>
+                <input
+                  class="in"
+                  type="time"
+                  formControlName="end"
+                />
+              </div>
+
+              <div class="cell form-control cell-minutes">
+                <span class="cell-label">Minutes</span>
+                <input
+                  class="in"
+                  type="number"
+                  formControlName="minutes"
+                />
+              </div>
+
+              <div class="cell form-control cell-setting">
+                <span class="cell-label">Setting</span>
+                <select
+                  class="in"
+                  formControlName="setting"
+                >
+                  <option value="on_site">On-site</option>
+                  <option value="off_site">Off-site</option>
+                </select>
+              </div>
+
+              <!-- # Individuals: OFF-SITE ONLY -->
+              <div class="cell form-control cell-individuals">
+                <span class="cell-label"># Individuals</span>
+                <ng-container
+                  *ngIf="d.get('setting')?.value === 'off_site'; else onsiteIndividuals"
+                >
+                  <input
+                    class="in"
+                    type="number"
+                    formControlName="individualsCount"
+                  />
+                </ng-container>
+                <ng-template #onsiteIndividuals>
+                  <span class="muted">N/A (On-site)</span>
+                </ng-template>
+              </div>
+
+              <!-- # Staff: OFF-SITE ONLY -->
+              <div class="cell form-control cell-staff">
+                <span class="cell-label"># Staff</span>
+                <ng-container
+                  *ngIf="d.get('setting')?.value === 'off_site'; else onsiteStaff"
+                >
+                  <input
+                    class="in"
+                    type="number"
+                    formControlName="staffCount"
+                  />
+                </ng-container>
+                <ng-template #onsiteStaff>
+                  <span class="muted">N/A (On-site)</span>
+                </ng-template>
+              </div>
+
+              <!-- Ratio: OFF-SITE ONLY -->
+              <div class="cell form-control cell-ratio">
+                <span class="cell-label">Calculated Ratio</span>
+                <ng-container
+                  *ngIf="d.get('setting')?.value === 'off_site'; else onsiteRatio"
+                >
+                  <input
+                    class="in"
+                    type="text"
+                    [value]="ratio(i)"
+                    readonly
+                  />
+                </ng-container>
+                <ng-template #onsiteRatio>
+                  <span class="muted">N/A</span>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- WEEKLY INITIALS SECTIONS -->
+        <lib-iss-weekly-initials-section
+          [rows]="socializationArray"
+          legend="Socialization Skills"
+        ></lib-iss-weekly-initials-section>
+
+        <lib-iss-weekly-initials-section
+          [rows]="selfHelpArray"
+          legend="Self-Help Skills"
+        ></lib-iss-weekly-initials-section>
+
+        <lib-iss-weekly-initials-section
+          [rows]="adaptiveArray"
+          legend="Adaptive Skills"
+        ></lib-iss-weekly-initials-section>
+
+        <lib-iss-weekly-initials-section
+          [rows]="implementationArray"
+          legend="Implementation Plan Skill Development"
+        ></lib-iss-weekly-initials-section>
+
+        <lib-iss-weekly-initials-section
+          [rows]="communityArray"
+          legend="Community Integration (for off-site only)"
+        ></lib-iss-weekly-initials-section>
+
+        <!-- NOTES (flex, no table) -->
+        <fieldset class="iss-fieldset">
+          <legend>
+            Community Locations Visited &amp; Special Events or Occurrences
+          </legend>
+
+          <div class="iss-notes" formArrayName="notes">
+            <!-- Header row -->
+            <div class="iss-notes-header">
+              <div class="col col-date">Date</div>
+              <div class="col col-initials">Staff Initials</div>
+              <div class="col col-comment">Comments</div>
+            </div>
+
+            <!-- Note rows -->
+            <div
+              class="iss-note-row"
+              *ngFor="let n of notes.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <div class="col col-date form-control">
+                <span class="cell-label">Date</span>
+                <input
+                  class="in"
+                  type="date"
+                  formControlName="date"
+                />
+              </div>
+
+              <div class="col col-initials form-control">
+                <span class="cell-label">Staff Initials</span>
+                <input
+                  class="in"
+                  type="text"
+                  formControlName="initials"
+                />
+              </div>
+
+              <div class="col col-comment form-control">
+                <span class="cell-label">Comments</span>
+                <textarea
+                  class="in"
+                  rows="1"
+                  formControlName="comment"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Actions -->
+        <div class="iss-actions">
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="(saving$ | async) || form.pristine"
+          >
+            {{ (saving$ | async) ? 'Saving…' : 'Save Staff Log' }}
+          </button>
         </div>
-      </section>
-
-      <section class="iss-week__section iss-week__section--placeholder">
-        <h2>Times &amp; activities</h2>
-        <p>We’ll drop the full 8615 weekly grid here next.</p>
-      </section>
-    </form>
-  </ng-template>
+      </form>
+    </section>
+  </div>
 </section>

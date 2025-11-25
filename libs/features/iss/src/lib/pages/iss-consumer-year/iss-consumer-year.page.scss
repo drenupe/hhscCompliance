@@ -1,68 +1,104 @@
+/* libs/features/iss/src/lib/pages/iss-consumer-year/iss-consumer-year.page.scss */
+
 .iss-year {
-  padding: 1.25rem;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
+
+/* Header */
 
 .iss-year__header {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1.25rem;
-
-  h1 {
-    font-size: 1.15rem;
-    font-weight: 600;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: #6b7280;
-  }
+  margin-bottom: 0.5rem;
 }
+
+.iss-year__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.iss-year__header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Back button – pill style */
 
 .iss-year__back {
   align-self: flex-start;
-  margin-bottom: 0.25rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
+  border: 1px solid #1f2937;
+  background: #111827;
   font-size: 0.8rem;
+  color: #e5e7eb;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
+
+.iss-year__back:hover,
+.iss-year__back:focus-visible {
+  outline: none;
+  background: #020617;
+  border-color: #10b981;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.6);
+}
+
+/* Grid */
 
 .iss-year__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.5rem;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+  gap: 0.75rem;
 }
 
+/* Dark card-style week tiles */
+
 .week-tile {
+  background: #111827;
   border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
-  padding: 0.75rem 0.9rem;
-  background: #ffffff;
+  border: 1px solid #1f2937;
+  padding: 0.8rem 0.95rem;
   text-align: left;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: 0.45rem;
   font-size: 0.85rem;
   transition:
-    box-shadow 120ms ease,
-    transform 120ms ease,
-    border-color 120ms ease;
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease,
+    background 0.15s ease;
 }
+
+.week-tile:hover,
+.week-tile:focus-visible {
+  outline: none;
+  border-color: #10b981;
+  background: #020617;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Date block */
 
 .week-tile__date span {
   display: block;
@@ -73,8 +109,10 @@
 .week-tile__date strong {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #111827;
+  color: #f9fafb;
 }
+
+/* Meta row */
 
 .week-tile__meta {
   display: flex;
@@ -85,29 +123,56 @@
 
 .week-tile__status {
   text-transform: capitalize;
+  color: #e5e7eb;
 }
 
-/* Status color accents */
+.week-tile__hours {
+  color: #9ca3af;
+}
+
+/* Status color accents (border + subtle glow) */
+
 .week-tile--empty {
   opacity: 0.7;
 }
 
 .week-tile--draft {
-  border-color: #e5e7eb;
+  border-color: #4b5563;
 }
 
 .week-tile--submitted {
   border-color: #f97316;
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.25);
 }
 
 .week-tile--approved {
   border-color: #22c55e;
-  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
 }
 
+/* Status text under grid */
+
 .iss-year__status {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Responsive tweaks */
+
+@media (min-width: 640px) {
+  .iss-year__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .iss-year__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .iss-year__header {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }

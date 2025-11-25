@@ -1,96 +1,133 @@
+/* libs/features/iss/src/lib/pages/iss-home/iss-home.page.scss */
+
 .iss-home {
-  padding: 1.5rem;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
+
+/* Header */
 
 .iss-home__header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 1.5rem;
-
-  h1 {
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: #6b7280;
-  }
+  gap: 0.5rem;
 }
+
+.iss-home__header h1 {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.iss-home__header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Grid */
 
 .iss-home__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.75rem;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
+/* Card */
+
 .iss-home__card {
+  background: #111827;
   border-radius: 0.75rem;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #1f2937;
   padding: 0.9rem 1rem;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.5rem;
-  transition:
-    box-shadow 120ms ease,
-    transform 120ms ease,
-    border-color 120ms ease;
-
-  &:hover,
-  &:focus-visible {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.12);
-    transform: translateY(-1px);
-  }
+  gap: 0.75rem;
+  transition: border-color 0.15s ease, transform 0.15s ease,
+    box-shadow 0.15s ease, background 0.15s ease;
 }
 
+.iss-home__card:hover,
+.iss-home__card:focus-visible {
+  outline: none;
+  border-color: #10b981;
+  background: #020617;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Card header */
+
 .iss-home__card-header h2 {
+  margin: 0 0 0.15rem;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .iss-home__secondary {
+  margin: 0;
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #9ca3af;
 }
+
+/* Meta row */
 
 .iss-home__meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .iss-home__chip {
-  font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.6rem;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
+  font-size: 0.7rem;
   font-weight: 500;
+  background: rgba(16, 185, 129, 0.08);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .iss-home__link {
   font-size: 0.8rem;
-  color: #4f46e5;
+  color: #e5e7eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+/* Status messages */
+
 .iss-home__status {
-  font-size: 0.85rem;
-  color: #6b7280;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+/* Responsive tweaks */
+
+@media (min-width: 640px) {
+  .iss-home__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .iss-home__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .iss-home__header {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 }

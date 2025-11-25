@@ -26,11 +26,13 @@
 
         <div class="week-tile__meta">
           <span class="week-tile__status">
-            {{ w.status || 'empty' }}
+            <ng-container *ngIf="w.hasLog; else noLog">
+              {{ w.status || 'draft' }}
+            </ng-container>
+            <ng-template #noLog>empty</ng-template>
           </span>
-          <span *ngIf="w.totalHours">
-            {{ w.totalHours }} hrs
-          </span>
+
+          <span *ngIf="w.totalHours"> {{ w.totalHours }} hrs </span>
         </div>
       </button>
     </section>

@@ -1,6 +1,9 @@
+<!-- libs/features/iss/src/lib/pages/iss-week/iss-week.page.html -->
+
 <div class="iss-staff-shell">
   <section class="iss-right">
-    <form [formGroup]="form" class="iss-entry" (ngSubmit)="submit()">
+    <!-- IMPORTANT: use onSave(), not submit() -->
+    <form [formGroup]="form" class="iss-entry" (ngSubmit)="onSave()">
       <!-- HEADER -->
       <fieldset class="iss-fieldset">
         <legend>Individual Information</legend>
@@ -29,10 +32,9 @@
 
           <div class="iss-grid-3">
             <label class="form-control">
-              <span
-                >Name of Individualized Skills and Socialization
-                Provider</span
-              >
+              <span>
+                Name of Individualized Skills and Socialization Provider
+              </span>
               <input class="in" type="text" formControlName="provider" />
             </label>
 
@@ -56,8 +58,6 @@
       <!-- SERVICE TIME & SETTING / STAFFING (M–F LINE ITEMS) -->
       <fieldset class="iss-fieldset">
         <legend>Service Time &amp; Setting / Staffing</legend>
-
-       
 
         <!-- Rows -->
         <div class="iss-service-week" formArrayName="serviceWeek">
@@ -187,7 +187,9 @@
 
       <!-- NOTES (flex, no table) -->
       <fieldset class="iss-fieldset">
-        <legend>Community Locations Visited &amp; Special Events or Occurrences</legend>
+        <legend>
+          Community Locations Visited &amp; Special Events or Occurrences
+        </legend>
 
         <div class="iss-notes" formArrayName="notes">
           <!-- Header row -->
@@ -226,7 +228,9 @@
       </fieldset>
 
       <div class="iss-actions">
-        <button type="submit" class="btn-primary">Save Staff Log</button>
+        <button type="submit" class="btn-primary">
+          Save Staff Log
+        </button>
       </div>
     </form>
   </section>

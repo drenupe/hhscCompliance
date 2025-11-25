@@ -1,66 +1,124 @@
 // libs/data-access/src/lib/iss/src/lib/+state/iss.selectors.ts
+
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { ISS_FEATURE_KEY, IssState } from './iss.models';
-import { selectAllConsumers } from './iss.reducer';
+import { IssState } from './iss.models';
+import { issFeatureKey } from './iss.reducer';
+import { Consumer, WeekSummary, StaffLog } from '@hhsc-compliance/shared-models';
 
+/**
+ * Feature selector – grabs the whole ISS slice under the key "iss"
+ * (issFeatureKey is exported from iss.reducer.ts as alias of ISS_FEATURE_KEY)
+ */
 export const selectIssState =
-  createFeatureSelector<IssState>(ISS_FEATURE_KEY);
+  createFeatureSelector<IssState>(issFeatureKey);
 
-// Consumers
-export const selectConsumersState = createSelector(
+/* ========== BASIC FIELD SELECTORS ========== */
+
+export const selectConsumers = createSelector(
   selectIssState,
   (state) => state.consumers
 );
 
-export const selectAllIssConsumers = createSelector(
-  selectConsumersState,
-  (state) => selectAllConsumers(state)
+export const selectConsumersLoading = createSelector(
+  selectIssState,
+  (state) => state.consumersLoading
+);
+
+export const selectConsumersError = createSelector(
+  selectIssState,
+  (state) => state.consumersError
 );
 
 export const selectSelectedConsumerId = createSelector(
-  selectConsumersState,
+  selectIssState,
   (state) => state.selectedConsumerId
 );
 
-export const selectSelectedConsumer = createSelector(
-  selectAllIssConsumers,
-  selectSelectedConsumerId,
-  (consumers, id) => consumers.find((c) => c.id === id) || null
-);
-
-// Weeks
-export const selectWeeksState = createSelector(
+export const selectWeeksLoading = createSelector(
   selectIssState,
-  (state) => state.weeks
+  (state) => state.weeksLoading
 );
 
-export const selectWeeksForConsumer = createSelector(
-  selectWeeksState,
-  (state) => state.weeks
+export const selectWeeksError = createSelector(
+  selectIssState,
+  (state) => state.weeksError
+);
+
+export const selectWeeksByConsumer = createSelector(
+  selectIssState,
+  (state) => state.weeksByConsumer
 );
 
 export const selectSelectedServiceDate = createSelector(
-  selectWeeksState,
+  selectIssState,
   (state) => state.selectedServiceDate
 );
 
-// Current log
-export const selectCurrentLogState = createSelector(
+export const selectCurrentLog = createSelector(
   selectIssState,
   (state) => state.currentLog
 );
 
-export const selectCurrentLog = createSelector(
-  selectCurrentLogState,
-  (state) => state.log
-);
-
 export const selectCurrentLogLoading = createSelector(
-  selectCurrentLogState,
-  (state) => state.loading
+  selectIssState,
+  (state) => state.currentLogLoading
 );
 
 export const selectCurrentLogSaving = createSelector(
-  selectCurrentLogState,
-  (state) => state.saving
+  selectIssState,
+  (state) => state.currentLogSaving
+);
+
+export const selectCurrentLogError = createSelector(
+  selectIssState,
+  (state) => state.currentLogError
+);
+
+/* ========== DERIVED SELECTORS ========== */
+
+/**
+ * Currently selected consumer object
+ */
+export const selectSelectedConsumer = createSelector(
+  selectConsumers,
+  selectSelectedConsumerId,
+  (consumers, selectedId): Consumer | null => {
+    if (!selectedId) return null;
+    return consumers.find((c) => c.id === selectedId) ?? null;
+  }
+);
+
+/**
+ * Weeks for the currently selected consumer.
+ * This is what IssFacade.weeks$ uses, and what the year page
+ * subscribes to directly.
+ *
+ * Shape: WeekSummary[] with hasLog / logId / status already set
+ * by StaffLogService.getWeeksForConsumer().
+ */
+export const selectWeeksForConsumer = createSelector(
+  selectWeeksByConsumer,
+  selectSelectedConsumerId,
+  (weeksByConsumer, consumerId): WeekSummary[] => {
+    if (!consumerId) {
+      return [];
+    }
+    return weeksByConsumer[consumerId] ?? [];
+  }
+);
+
+/**
+ * Optional: helper to grab the current log with its week metadata,
+ * if you ever want that on the week page.
+ */
+export const selectCurrentLogWithMeta = createSelector(
+  selectCurrentLog,
+  selectSelectedServiceDate,
+  (log, serviceDate): (StaffLog & { serviceDateFromRoute?: string }) | null => {
+    if (!log) return null;
+    return {
+      ...log,
+      serviceDateFromRoute: serviceDate ?? undefined,
+    };
+  }
 );

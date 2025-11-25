@@ -12,6 +12,7 @@ import { appRoutes } from './app.routes';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
+import { provideStoreDevtools } from '@ngrx/store-devtools'; // 👈 add this
 
 // ✅ Pull ENVIRONMENT + type + ISS feature from data-access (non-lazy lib)
 import {
@@ -50,6 +51,9 @@ import {
   Images,
 } from 'lucide-angular';
 
+
+
+
 // 👇 Local environment config (no external/relative import, Nx is happy)
 const environment: EnvironmentConfig = {
   apiBaseUrl: 'http://localhost:3000/api/v1', // 🔧 set this to your Nest ISS API base URL
@@ -75,6 +79,12 @@ export const appConfig: ApplicationConfig = {
     }),
     provideEffects([IssEffects]),
     provideRouterStore(),
+    provideStoreDevtools({
+      maxAge: 25,              // how many states to keep in history
+      logOnly: false,          // set true if you only want log-only mode in prod
+      trace: true,             // enable stack traces for actions
+      traceLimit: 25,
+    }),
 
     // 🌍 This fixes the ENVIRONMENT NullInjectorError without importing from src/
     {

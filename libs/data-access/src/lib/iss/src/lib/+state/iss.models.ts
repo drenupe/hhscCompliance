@@ -1,42 +1,59 @@
-import { EntityState } from '@ngrx/entity';
+// libs/data-access/src/lib/iss/src/lib/+state/iss.models.ts
+
 import {
   Consumer,
   StaffLog,
   WeekSummary,
 } from '@hhsc-compliance/shared-models';
 
+/**
+ * Feature key for the ISS slice.
+ * Kept UPPER_SNAKE to satisfy existing imports:
+ * - iss-data-access.module.ts
+ * - app.config.ts (via @hhsc-compliance/data-access)
+ */
 export const ISS_FEATURE_KEY = 'iss';
 
-export interface IssConsumersState extends EntityState<Consumer> {
-  loaded: boolean;
-  loading: boolean;
-  error?: string | null;
-  selectedConsumerId?: string | null;
-}
-
-export interface IssWeeksState {
-  loaded: boolean;
-  loading: boolean;
-  error?: string | null;
-  consumerId?: string | null;
-  weeks: WeekSummary[];
-  selectedServiceDate?: string | null;
-}
-
-export interface IssCurrentLogState {
-  loading: boolean;
-  saving: boolean;
-  error?: string | null;
-  log: StaffLog | null;
-}
-
 export interface IssState {
-  consumers: IssConsumersState;
-  weeks: IssWeeksState;
-  currentLog: IssCurrentLogState;
+  consumers: Consumer[];
+  consumersLoading: boolean;
+  consumersError: string | null;
+
+  selectedConsumerId: number | null;
+
+  // key = consumerId
+  weeksByConsumer: Record<number, WeekSummary[]>;
+  weeksLoading: boolean;
+  weeksError: string | null;
+
+  selectedServiceDate: string | null;
+
+  currentLog: StaffLog | null;
+  currentLogLoading: boolean;
+  currentLogSaving: boolean;
+  currentLogError: string | null;
 }
 
-// Shape for feature slice in root Store
 export interface IssPartialState {
+  // state.iss (or state[ISS_FEATURE_KEY])
   readonly [ISS_FEATURE_KEY]: IssState;
 }
+
+export const initialIssState: IssState = {
+  consumers: [],
+  consumersLoading: false,
+  consumersError: null,
+
+  selectedConsumerId: null,
+
+  weeksByConsumer: {},
+  weeksLoading: false,
+  weeksError: null,
+
+  selectedServiceDate: null,
+
+  currentLog: null,
+  currentLogLoading: false,
+  currentLogSaving: false,
+  currentLogError: null,
+};

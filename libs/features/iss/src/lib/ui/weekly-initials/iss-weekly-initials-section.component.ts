@@ -55,8 +55,14 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
       /* Tight fieldset around the weekly grid */
       .iss-weekly-fieldset {
         padding: 0.6rem 0.7rem;
-        margin-bottom: 0.5rem;
-        border: none;
+        margin-bottom: 0.75rem;
+        border: 1px solid var(--clr-line, rgba(148, 163, 184, 0.35));
+        border-radius: 0.6rem;
+        background: color-mix(
+          in srgb,
+          var(--surface-card, #020617) 88%,
+          #020617 12%
+        );
       }
 
       .iss-weekly-fieldset > legend {
@@ -66,20 +72,26 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
         letter-spacing: 0.08em;
         padding: 0 0.35rem;
         margin-left: 0.15rem;
-        margin-bottom: 0.2rem;
-        color: #111827;
+        margin-bottom: 0.35rem;
+        color: var(--clr-muted, #9ca3af);
       }
 
       /* Outer box */
       .iss-weekly {
-        border: 1px solid #d1d5db;
-        background: #ffffff;
+        border: 1px solid var(--clr-line, rgba(148, 163, 184, 0.35));
+        background: radial-gradient(
+            800px 600px at 0% 0%,
+            rgba(148, 163, 184, 0.08),
+            transparent 50%
+          ),
+          var(--surface-card, #020617);
         font-size: 0.8rem;
         width: 100%;
         box-sizing: border-box;
         overflow-x: auto;
-        color: #111827;
-        border-radius: 0.35rem;
+        color: var(--clr-text, #e5e7eb);
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.5));
       }
 
       /* DESKTOP / DEFAULT: table-like row
@@ -93,13 +105,13 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
         min-width: 600px; /* allows scroll on narrow but keeps nice proportions */
       }
 
-      /* Generic cell: softer vertical separators */
+      /* Generic cell */
       .iss-weekly .cell {
         display: flex;
         align-items: stretch;
         justify-content: stretch;
         padding: 0;
-        border-right: 1px solid #e5e7eb;
+        border-right: 1px solid rgba(15, 23, 42, 0.9);
         box-sizing: border-box;
       }
 
@@ -110,10 +122,14 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
       /* Header styling */
       .iss-weekly-header {
-        border-bottom: 1px solid #d1d5db;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.9);
         font-weight: 600;
-        color: #111827;
-        background-color: #f3f4f6;
+        color: var(--text-strong, #f9fafb);
+        background: linear-gradient(
+          to right,
+          rgba(15, 23, 42, 0.95),
+          rgba(15, 23, 42, 0.9)
+        );
       }
 
       .iss-weekly-header .cell {
@@ -124,14 +140,19 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
       /* Data rows baseline */
       .iss-weekly-row {
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.85);
+        background: color-mix(
+          in srgb,
+          var(--surface-muted, #020617) 88%,
+          #020617 12%
+        );
       }
 
       .iss-weekly-row:last-child {
         border-bottom: none;
       }
 
-      /* Column layout: wide Area + 5 equal day columns */
+      /* Column layout */
       .iss-weekly .cell.area {
         text-align: left;
       }
@@ -140,15 +161,15 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
         text-align: center;
       }
 
-      /* Checkerboard columns on larger screens */
+      /* Subtle column striping on larger screens */
       .iss-weekly-header .cell:nth-child(even),
       .iss-weekly-row .cell:nth-child(even) {
-        background-color: #f9fafb; /* light gray */
+        background-color: rgba(15, 23, 42, 0.85);
       }
 
       .iss-weekly-header .cell:nth-child(odd),
       .iss-weekly-row .cell:nth-child(odd) {
-        background-color: #ffffff;
+        background-color: rgba(15, 23, 42, 0.92);
       }
 
       /* Area label input */
@@ -156,13 +177,17 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
         width: 100%;
         border-radius: 0;
         border: none;
-        border-bottom: 1px solid #9ca3af;
-        padding: 0.12rem 0.3rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 0.16rem 0.36rem;
         font-size: 0.8rem;
         font-weight: 500;
         background: transparent;
-        color: #111827;
+        color: var(--clr-text, #e5e7eb);
         box-sizing: border-box;
+      }
+
+      .label-in[readonly] {
+        opacity: 0.9;
       }
 
       /* Day initials inputs */
@@ -171,18 +196,25 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
         max-width: 100%;
         border-radius: 0;
         border: none;
-        border-bottom: 1px solid #9ca3af;
-        padding: 0.12rem 0.22rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.7);
+        padding: 0.16rem 0.26rem;
         font-size: 0.8rem;
         font-weight: 500;
         background: transparent;
-        color: #111827;
+        color: var(--clr-text, #e5e7eb);
         box-sizing: border-box;
         text-align: center;
       }
 
       .day-in::placeholder {
-        color: #6b7280;
+        color: var(--clr-muted, #6b7280);
+      }
+
+      .day-in:focus,
+      .label-in:focus {
+        outline: none;
+        box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+        border-bottom-color: rgba(129, 140, 248, 0.9);
       }
 
       .center {
@@ -208,15 +240,20 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
           display: flex;
           flex-direction: column;
           min-width: 0;
-          border-bottom: 1px solid #e5e7eb;
+          border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+          background: color-mix(
+            in srgb,
+            var(--surface-card, #020617) 90%,
+            #020617 10%
+          );
         }
 
         /* Cells become full-width rows with their own label */
         .iss-weekly .cell {
           border-right: none;
-          border-bottom: 1px solid #e5e7eb;
-          padding: 0.15rem 0.3rem;
-          background-color: #ffffff; /* remove checkerboard on mobile for clarity */
+          border-bottom: 1px solid rgba(15, 23, 42, 0.85);
+          padding: 0.2rem 0.35rem;
+          background-color: transparent;
         }
 
         .iss-weekly-row .cell:last-child {
@@ -230,7 +267,7 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          color: #6b7280;
+          color: var(--clr-muted, #9ca3af);
           margin-bottom: 0.1rem;
         }
 
@@ -253,11 +290,11 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
           content: 'Fri';
         }
 
-        /* Inputs on mobile: solid white boxes for readability */
+        /* Inputs on mobile: slightly more solid for readability */
         .label-in,
         .day-in {
-          background: #ffffff;
-          border-bottom: 1px solid #9ca3af;
+          background: rgba(15, 23, 42, 0.8);
+          border-bottom-color: rgba(148, 163, 184, 0.9);
         }
       }
     `,
