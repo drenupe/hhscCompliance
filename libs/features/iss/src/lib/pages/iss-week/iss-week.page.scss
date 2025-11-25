@@ -1,0 +1,205 @@
+.iss-week {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+
+.iss-week__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.iss-week__header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.iss-week__sub {
+  margin: 0.1rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Status pill */
+.iss-week__status {
+  margin-top: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  background: #f3f4f6;
+}
+
+.iss-week__status-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #9ca3af;
+  flex-shrink: 0;
+}
+
+.iss-week__status-text {
+  white-space: nowrap;
+}
+
+/* Variants */
+.iss-week__status--saving {
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.iss-week__status--saving .iss-week__status-dot {
+  background: #2563eb;
+}
+
+.iss-week__status--saved {
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.iss-week__status--saved .iss-week__status-dot {
+  background: #16a34a;
+}
+
+.iss-week__status--queued {
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.iss-week__status--queued .iss-week__status-dot {
+  background: #eab308;
+}
+
+.iss-week__status--error {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.iss-week__status--error .iss-week__status-dot {
+  background: #ef4444;
+}
+
+.iss-week__actions {
+  align-self: stretch;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.iss-week__actions button {
+  border-radius: 999px;
+  border: none;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #111827;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.15);
+  transition:
+    background 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.iss-week__actions button:hover:not(:disabled) {
+  background: #020617;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.25);
+}
+
+.iss-week__actions button:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Loading text */
+.iss-week__loading {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Form layout */
+.iss-week__form {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.iss-week__section {
+  padding: 0.9rem 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.iss-week__section h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.iss-week__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.iss-week__fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.iss-week__fields span {
+  opacity: 0.85;
+}
+
+.iss-week__fields input {
+  border-radius: 0.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  padding: 0.4rem 0.55rem;
+  font-size: 0.9rem;
+}
+
+.iss-week__fields input:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.iss-week__section--placeholder p {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* ⬆ mobile first; enhance on larger screens */
+@media (min-width: 768px) {
+  .iss-week {
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+
+  .iss-week__header {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .iss-week__actions {
+    justify-content: flex-end;
+  }
+
+  .iss-week__fields {
+    flex-direction: row;
+  }
+
+  .iss-week__fields label {
+    flex: 1;
+  }
+}

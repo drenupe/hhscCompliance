@@ -46,6 +46,8 @@ export const selectWeek = createAction(
   props<{ serviceDate: string }>()
 );
 
+
+
 // Current log
 export const loadLogForWeek = createAction(
   '[ISS] Load Log For Week',
@@ -65,7 +67,7 @@ export const loadLogForWeekFailure = createAction(
 // Save / update
 export const saveLog = createAction(
   '[ISS] Save Log',
-  props<{ logId: string | null; payload: CreateStaffLogDto | UpdateStaffLogDto }>()
+  props<{ logId: string | null; payload: unknown }>()
 );
 
 export const saveLogSuccess = createAction(

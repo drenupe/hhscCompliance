@@ -2,36 +2,69 @@
   <header class="iss-week__header">
     <div>
       <h1>ISS Staff Log</h1>
-      <p>Week of {{ serviceDate | date: 'MMM d, y' }}</p>
+      <p class="iss-week__sub">Week of {{ serviceDate | date: 'MMM d, y' }}</p>
+
+      <div
+        class="iss-week__status"
+        *ngIf="autoSaveStatus !== 'idle'"
+        [ngClass]="'iss-week__status--' + autoSaveStatus"
+      >
+        <span class="iss-week__status-dot"></span>
+        <span class="iss-week__status-text">
+          <ng-container [ngSwitch]="autoSaveStatus">
+            <span *ngSwitchCase="'saving'">Saving…</span>
+            <span *ngSwitchCase="'saved'">
+              Saved
+              <ng-container *ngIf="lastSavedAt">
+                · {{ lastSavedAt | date: 'shortTime' }}
+              </ng-container>
+            </span>
+            <span *ngSwitchCase="'queued'">
+              Offline &mdash; will sync when you’re back online
+            </span>
+            <span *ngSwitchCase="'error'">
+              Can’t auto-save &mdash; please fix required fields
+            </span>
+            <span *ngSwitchDefault>Unsaved changes</span>
+          </ng-container>
+        </span>
+      </div>
     </div>
 
     <div class="iss-week__actions">
-      <button type="button" (click)="onSave()" [disabled]="saving$ | async">
-        {{ (saving$ | async) ? 'Saving…' : 'Save changes' }}
+      <button
+        type="button"
+        (click)="onSave()"
+        [disabled]="(saving$ | async) || !form?.dirty"
+      >
+        {{
+          (saving$ | async)
+            ? 'Saving…'
+            : (form?.dirty ? 'Save changes' : 'Saved')
+        }}
       </button>
-      <!-- Future: Submit, Approve, Print/PDF -->
     </div>
   </header>
 
   <ng-container *ngIf="loading$ | async; else formTpl">
-    <p>Loading log for this week…</p>
+    <p class="iss-week__loading">Loading log for this week…</p>
   </ng-container>
 
   <ng-template #formTpl>
     <form class="iss-week__form" [formGroup]="form">
       <section formGroupName="header" class="iss-week__section">
         <h2>Header</h2>
-        <div class="field-row">
+        <div class="iss-week__fields">
           <label>
-            Location
+            <span>Location</span>
             <input type="text" formControlName="locationName" />
           </label>
           <label>
-            Staff initials
+            <span>Staff initials</span>
             <input type="text" formControlName="staffInitials" />
           </label>
           <label>
-            Ratio
+            <span>Ratio</span>
             <input type="text" formControlName="ratio" />
           </label>
         </div>

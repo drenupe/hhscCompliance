@@ -1,30 +1,44 @@
 <section class="iss-home">
   <header class="iss-home__header">
-    <h1>ISS Logs</h1>
-    <p>Choose a person to work on their weekly ISS log.</p>
+    <div>
+      <h1>ISS Daily Logs</h1>
+      <p>Select a person to open their year-at-a-glance calendar.</p>
+    </div>
   </header>
 
   <ng-container *ngIf="consumers$ | async as consumers; else loading">
-    <div class="iss-home__empty" *ngIf="!consumers.length">
-      <p>No consumers found for this provider yet.</p>
-    </div>
-
-    <div class="iss-home__grid" *ngIf="consumers.length">
-      <button
+    <section class="iss-home__grid" *ngIf="consumers.length; else empty">
+      <article
         class="iss-home__card"
-        *ngFor="let c of consumers"
-        type="button"
+        *ngFor="let c of consumers; trackBy: trackByConsumerId"
         (click)="openConsumer(c)"
+        tabindex="0"
+        role="button"
       >
-        <h2>{{ c.firstName }} {{ c.lastName }}</h2>
-        <p class="iss-home__card-sub">
-          Tap to see their ISS weeks.
-        </p>
-      </button>
-    </div>
+        <header class="iss-home__card-header">
+          <h2>{{ c.firstName }} {{ c.lastName }}</h2>
+          <p class="iss-home__secondary">
+            {{ c.medicaidId || 'No Medicaid ID on file' }}
+          </p>
+        </header>
+
+        <div class="iss-home__meta">
+          <span class="iss-home__chip">ISS</span>
+          <span class="iss-home__link">
+            Open year view →
+          </span>
+        </div>
+      </article>
+    </section>
   </ng-container>
 
   <ng-template #loading>
-    <p>Loading ISS consumers…</p>
+    <p class="iss-home__status">Loading consumers…</p>
+  </ng-template>
+
+  <ng-template #empty>
+    <p class="iss-home__status">
+      No ISS consumers found yet. Add people in the admin area.
+    </p>
   </ng-template>
 </section>

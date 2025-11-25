@@ -1,0 +1,48 @@
+<section class="iss-year">
+  <header class="iss-year__header">
+    <button type="button" class="iss-year__back" (click)="backToHome()">
+      ← Back to ISS home
+    </button>
+
+    <div>
+      <h1>{{ consumerName$ | async }}</h1>
+      <p>Weekly ISS staff logs – year view</p>
+    </div>
+  </header>
+
+  <ng-container *ngIf="weeks$ | async as weeks; else loading">
+    <section class="iss-year__grid" *ngIf="weeks.length; else empty">
+      <button
+        class="week-tile"
+        *ngFor="let w of weeks"
+        type="button"
+        (click)="openWeek(w.serviceDate)"
+        [ngClass]="statusClass(w)"
+      >
+        <div class="week-tile__date">
+          <span>Week of</span>
+          <strong>{{ w.serviceDate | date: 'MMM d' }}</strong>
+        </div>
+
+        <div class="week-tile__meta">
+          <span class="week-tile__status">
+            {{ w.status || 'empty' }}
+          </span>
+          <span *ngIf="w.totalHours">
+            {{ w.totalHours }} hrs
+          </span>
+        </div>
+      </button>
+    </section>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="iss-year__status">Loading weekly logs…</p>
+  </ng-template>
+
+  <ng-template #empty>
+    <p class="iss-year__status">
+      No weeks recorded yet. Open a week and start your first ISS staff log.
+    </p>
+  </ng-template>
+</section>

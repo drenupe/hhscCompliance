@@ -52,7 +52,7 @@ import {
 
 // 👇 Local environment config (no external/relative import, Nx is happy)
 const environment: EnvironmentConfig = {
-  apiBaseUrl: 'http://localhost:3000/api', // 🔧 set this to your Nest ISS API base URL
+  apiBaseUrl: 'http://localhost:3000/api/v1', // 🔧 set this to your Nest ISS API base URL
   // add other fields if you put them on EnvironmentConfig
 };
 

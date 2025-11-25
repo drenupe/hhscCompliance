@@ -1,0 +1,96 @@
+.iss-home {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.iss-home__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+}
+
+.iss-home__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.iss-home__card {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.9rem 1rem;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  transition:
+    box-shadow 120ms ease,
+    transform 120ms ease,
+    border-color 120ms ease;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.12);
+    transform: translateY(-1px);
+  }
+}
+
+.iss-home__card-header h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.iss-home__secondary {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.iss-home__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iss-home__chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 500;
+}
+
+.iss-home__link {
+  font-size: 0.8rem;
+  color: #4f46e5;
+}
+
+.iss-home__status {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
