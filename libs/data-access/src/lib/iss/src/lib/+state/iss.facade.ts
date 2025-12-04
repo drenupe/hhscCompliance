@@ -63,6 +63,24 @@ export class IssFacade {
     );
   }
 
+  /**
+   * Create a brand-new staff log for a consumer + serviceDate.
+   * Used when the user opens an empty week from the year view.
+   */
+  createLogForWeek(
+    consumerId: number,
+    serviceDate: string,
+    payload: CreateStaffLogDto | UpdateStaffLogDto,
+  ): void {
+    this.store.dispatch(
+      IssActions.createLogForWeek({ consumerId, serviceDate, payload }),
+    );
+  }
+
+  /**
+   * Update an existing staff log by id.
+   * Used when a log already exists for the selected week.
+   */
   saveLog(
     logId: number | null,
     payload: CreateStaffLogDto | UpdateStaffLogDto,

@@ -1,4 +1,5 @@
 // libs/features/iss/src/lib/pages/iss-week/iss-week.page.ts
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,6 +33,7 @@ import {
   filter,
   skip,
   takeUntil,
+  take,
 } from 'rxjs/operators';
 
 import { IssFacade } from '@hhsc-compliance/data-access';
@@ -40,11 +42,10 @@ import {
   StaffLogHeader,
   ServiceWeek,
   ServiceDayEntry,
-  UpdateStaffLogDto,
   WeeklyInitialRow,
   WeeklyNote,
   normalizeStaffLogFromApi,
-  buildStaffLogSavePayload,
+  UpdateStaffLogDto,
 } from '@hhsc-compliance/shared-models';
 
 // Weekly initials child
@@ -58,8 +59,6 @@ type AutoSaveSource =
   | 'online'
   | 'beforeunload'
   | 'manual';
-
-const WEEK_DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'] as const;
 
 @Component({
   standalone: true,
@@ -96,6 +95,9 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   autoSaveStatus: AutoSaveStatus = 'idle';
   lastSavedAt: Date | null = null;
 
+  // mobile flag used in template + SCSS
+  isMobile = false;
+
   private readonly destroy$ = new Subject<void>();
 
   private readonly route = inject(ActivatedRoute);
@@ -103,7 +105,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly issFacade = inject(IssFacade);
 
-  // ----- store streams ----- //
+  // ----- store streams -----
   get currentLog$() {
     return this.issFacade.currentLog$;
   }
@@ -114,7 +116,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     return this.issFacade.currentLogSaving$;
   }
 
-  // ===== FormArray getters for template ===== //
+  // ===== FormArray getters for template =====
 
   get serviceWeek(): FormArray<FormGroup> {
     return this.form.get('serviceWeek') as FormArray<FormGroup>;
@@ -144,10 +146,11 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     return this.form.get('notes') as FormArray<FormGroup>;
   }
 
-  // ===== Lifecycle ===== //
+  // ===== Lifecycle =====
 
   ngOnInit(): void {
     this.buildForm();
+    this.updateIsMobile();
     this.bindRouteParams();
     this.bindLogStream();
     this.setupAutoSave();
@@ -159,7 +162,17 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ===== Form building (ISS 8615-ish structure) ===== //
+  // ===== Responsive helper =====
+
+  private updateIsMobile(): void {
+    if (typeof window === 'undefined') {
+      this.isMobile = false;
+      return;
+    }
+    this.isMobile = window.innerWidth <= 768;
+  }
+
+  // ===== Form building (ISS 8615-ish structure) =====
 
   private buildForm(): void {
     this.form = this.fb.group({
@@ -252,7 +265,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ===== Route + NgRx wiring ===== //
+  // ===== Route + NgRx wiring =====
 
   private bindRouteParams(): void {
     this.route.paramMap
@@ -270,6 +283,9 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
           this.issFacade.selectConsumer(this.consumerId);
           this.issFacade.selectWeek(this.serviceDate);
           this.issFacade.loadLogForWeek(this.consumerId, this.serviceDate);
+
+          // Prefill header for brand-new weeks without overwriting existing data
+          this.prefillHeaderFromContext();
         }
       });
   }
@@ -281,17 +297,10 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe((log) => {
-        // Normalize dates from API → UI
-        const normalizedLog = normalizeStaffLogFromApi(log);
+        const normalized = normalizeStaffLogFromApi(log);
 
-        this.currentLogId = normalizedLog.id;
-
-        // If route didn’t specify a date, align with log’s serviceDate
-        if (normalizedLog.serviceDate && !this.serviceDate) {
-          this.serviceDate = normalizedLog.serviceDate;
-        }
-
-        this.patchFormFromLog(normalizedLog);
+        this.currentLogId = normalized.id;
+        this.patchFormFromLog(normalized);
         this.form.markAsPristine();
         this.lastSavedAt = new Date();
 
@@ -305,31 +314,101 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   }
 
   // ======================================================================
+  //  PREFILL HEADER FOR NEW WEEKS
+  // ======================================================================
+
+  private prefillHeaderFromContext(): void {
+    if (!this.form) return;
+
+    const headerGroup = this.form.get('header') as FormGroup | null;
+    if (!headerGroup) return;
+
+    const patch: Record<string, unknown> = {};
+
+    const currentName = headerGroup.get('individualName')?.value;
+    const currentDate = headerGroup.get('date')?.value;
+
+    // Use route serviceDate if the header date is still empty / default
+    if (!currentDate && this.serviceDate) {
+      patch['date'] = this.serviceDate;
+    }
+
+    this.issFacade.selectedConsumer$
+      .pipe(take(1))
+      .subscribe((consumer) => {
+        if (consumer && !currentName) {
+          patch['individualName'] = `${consumer.firstName ?? ''} ${
+            consumer.lastName ?? ''
+          }`.trim();
+        }
+
+        if (Object.keys(patch).length > 0) {
+          headerGroup.patchValue(patch);
+        }
+      });
+  }
+
+  // ======================================================================
+  //  SERVICE WEEK – HELPER TO CHECK NON-EMPTY
+  // ======================================================================
+
+  private hasNonEmptyWeek(week?: ServiceWeek | null): boolean {
+    if (!week) return false;
+
+    const days: (keyof ServiceWeek)[] = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ];
+
+    return days.some((day) => (week[day]?.length ?? 0) > 0);
+  }
+
+  // ======================================================================
   //  PATCH LOG → FORM
   // ======================================================================
 
   private patchFormFromLog(log: StaffLog): void {
-    const header: StaffLogHeader = log.header ?? {};
+    const header = (log.header ?? {}) as StaffLogHeader & {
+      serviceWeek?: ServiceWeek;
+    };
 
-    // ----- TOP HEADER ----- //
+    // ----- TOP HEADER -----
     this.form.patchValue({
       header: {
-        individualName: (header as any).individualName ?? '',
-        date: (header as any).date ?? this.serviceDate ?? '',
-        lon: (header as any).lon ?? '',
-        provider:
-          (header as any).provider ?? (header as any).issProviderName ?? '',
-        license:
-          (header as any).license ?? (header as any).issProviderLicense ?? '',
-        staffNameTitle: (header as any).staffNameTitle ?? '',
+        individualName: header.individualName ?? '',
+        date: header.date ?? this.serviceDate ?? '',
+        lon: header.lon ?? header.levelOfNeed?.toString?.() ?? '',
+        provider: header.provider ?? header.issProviderName ?? '',
+        license: header.license ?? header.issProviderLicense ?? '',
+        staffNameTitle: header.staffNameTitle ?? '',
       },
     });
 
-    // ----- SERVICE WEEK (MON–FRI CARDS) ----- //
-    const week: ServiceWeek | undefined = log.serviceWeek;
+    // ----- SERVICE WEEK (MON–FRI CARDS) -----
+    const weekFromRoot: ServiceWeek | undefined = log.serviceWeek;
+    const weekFromHeader: ServiceWeek | undefined = header.serviceWeek;
+
+    const week: ServiceWeek | undefined = this.hasNonEmptyWeek(weekFromRoot)
+      ? weekFromRoot
+      : this.hasNonEmptyWeek(weekFromHeader)
+        ? weekFromHeader
+        : undefined;
 
     if (week) {
-      WEEK_DAYS.forEach((dayKey, idx) => {
+      const days = [
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+      ] as const;
+
+      days.forEach((dayKey, idx) => {
         const rowGroup = this.serviceWeek.at(idx) as FormGroup | undefined;
         if (!rowGroup) return;
 
@@ -352,7 +431,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       });
     }
 
-    // ----- WEEKLY INITIALS ----- //
+    // ----- WEEKLY INITIALS -----
     this.patchWeeklyArrayFromHeader(this.socializationArray, header.socialization);
     this.patchWeeklyArrayFromHeader(this.selfHelpArray, header.selfHelp);
     this.patchWeeklyArrayFromHeader(this.adaptiveArray, header.adaptive);
@@ -362,7 +441,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     );
     this.patchWeeklyArrayFromHeader(this.communityArray, header.community);
 
-    // ----- NOTES ----- //
+    // ----- NOTES -----
     this.patchNotesFromHeader(this.notes, header.notes);
   }
 
@@ -411,7 +490,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ===== Auto-save engine ===== //
+  // ===== Auto-save engine =====
 
   private setupAutoSave(): void {
     if (!this.form) return;
@@ -429,35 +508,42 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   }
 
   private setupLifecycleAutoSave(): void {
-    fromEvent(window, 'blur')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.queueSave('blur'));
+    if (typeof window !== 'undefined') {
+      // Responsive: recompute mobile flag on resize
+      fromEvent(window, 'resize')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.updateIsMobile());
 
-    fromEvent(document, 'visibilitychange')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (document.visibilityState === 'hidden') {
-          this.queueSave('visibility');
-        }
-      });
+      fromEvent(window, 'blur')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.queueSave('blur'));
 
-    fromEvent(window, 'online')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.form?.dirty && this.autoSaveStatus === 'queued') {
-          this.triggerSave('online');
-        }
-      });
+      fromEvent(document, 'visibilitychange')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          if (document.visibilityState === 'hidden') {
+            this.queueSave('visibility');
+          }
+        });
 
-    fromEvent<BeforeUnloadEvent>(window, 'beforeunload')
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => {
-        if (this.form?.dirty) {
-          this.queueSave('beforeunload');
-          event.preventDefault();
-          event.returnValue = '';
-        }
-      });
+      fromEvent(window, 'online')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          if (this.form?.dirty && this.autoSaveStatus === 'queued') {
+            this.triggerSave('online');
+          }
+        });
+
+      fromEvent<BeforeUnloadEvent>(window, 'beforeunload')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((event) => {
+          if (this.form?.dirty) {
+            this.queueSave('beforeunload');
+            event.preventDefault();
+            event.returnValue = '';
+          }
+        });
+    }
   }
 
   private queueSave(source: AutoSaveSource): void {
@@ -477,31 +563,124 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   }
 
   // ======================================================================
-  //  SAVE → DTO (UI → API mapper)
+  //  BUILD COMMON PAYLOAD (header + serviceWeek)
+  // ======================================================================
+
+  private buildCommonPayload(): {
+    header: StaffLogHeader & { serviceWeek?: ServiceWeek };
+    serviceWeek: ServiceWeek;
+  } {
+    const raw = this.form.getRawValue() as any;
+
+    const serviceWeek = this.buildServiceWeekPayload();
+
+    const header: StaffLogHeader & { serviceWeek?: ServiceWeek } = {
+      ...(raw.header ?? {}),
+
+      // Persist weekly initials + notes under header.*
+      socialization: raw.socialization ?? [],
+      selfHelp: raw.selfHelp ?? [],
+      adaptive: raw.adaptive ?? [],
+      implementation: raw.implementation ?? [],
+      community: raw.community ?? [],
+      notes: raw.notes ?? [],
+
+      // also store the grid here so it's persisted with header JSON
+      serviceWeek,
+    };
+
+    return { header, serviceWeek };
+  }
+
+  // ======================================================================
+  //  BUILD PAYLOAD FOR EFFECT (saveLog)
+  // ======================================================================
+
+  private buildPayload(): UpdateStaffLogDto {
+    const { header, serviceWeek } = this.buildCommonPayload();
+
+    const payload: UpdateStaffLogDto = {
+      header,
+      serviceWeek,
+    };
+
+    return payload;
+  }
+
+  // ======================================================================
+  //  SAVE → CREATE vs UPDATE (delegated to effects via logId)
   // ======================================================================
 
   private triggerSave(_source: AutoSaveSource): void {
     if (!this.form) return;
 
-    const raw = this.form.getRawValue() as any;
+    if (!this.consumerId || !this.serviceDate) {
+      console.warn('[ISS week] Missing consumerId or serviceDate; abort save', {
+        consumerId: this.consumerId,
+        serviceDate: this.serviceDate,
+      });
+      return;
+    }
 
-    const { logId, payload } = buildStaffLogSavePayload({
-      currentLogId: this.currentLogId,
-      providerId: this.providerId,
-      consumerId: this.consumerId,
-      serviceDate: this.serviceDate,
-      rawForm: raw,
-    });
+    if (this.form.invalid) {
+      this.autoSaveStatus = 'error';
+      return;
+    }
+
+    const payload = this.buildPayload();
 
     this.autoSaveStatus = 'saving';
-    this.issFacade.saveLog(logId, payload);
+
+    // Effects decide: if logId is null => create; else update.
+    this.issFacade.saveLog(this.currentLogId, payload);
+  }
+
+  // ======================================================================
+  //  BUILD SERVICE WEEK PAYLOAD
+  // ======================================================================
+
+  private buildServiceWeekPayload(): ServiceWeek {
+    const rows = this.serviceWeek.controls as FormGroup[];
+
+    const mapRow = (g: FormGroup): ServiceDayEntry => {
+      const v = g.value as any;
+
+      return {
+        // Core ServiceDayEntry fields
+        timeIn: v.start ?? null,
+        timeOut: v.end ?? null,
+        activity: null,
+        notes: null,
+
+        // Extended ISS fields
+        date: v.date ?? null,
+        providerName: v.providerName ?? null,
+        providerSignature: v.providerSignature ?? null,
+        start: v.start ?? null,
+        end: v.end ?? null,
+        minutes: v.minutes ?? 0,
+        setting: v.setting ?? 'on_site',
+        individualsCount: v.individualsCount ?? 0,
+        staffCount: v.staffCount ?? 1,
+      };
+    };
+
+    const [mon, tue, wed, thu, fri] = rows.map(mapRow);
+
+    return {
+      monday: [mon],
+      tuesday: [tue],
+      wednesday: [wed],
+      thursday: [thu],
+      friday: [fri],
+    };
   }
 
   onSave(): void {
     this.queueSave('manual');
   }
 
-  // ===== Ratio helper ===== //
+  // ===== Ratio helper =====
 
   ratio(index: number): string {
     const row = this.serviceWeek.at(index) as FormGroup;
@@ -521,7 +700,16 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     return `${individuals}:${staff}`;
   }
 
-  // ===== Back to year ===== //
+  trackByIndex(index: number): number {
+    return index;
+  }
+
+  printWeek(event?: Event): void {
+    event?.preventDefault();
+    window.print();
+  }
+
+  // ===== Back to year =====
 
   backToYear(): void {
     this.router.navigate([

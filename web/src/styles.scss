@@ -1,27 +1,31 @@
-/* =========================
-   Dark Theme — Design Tokens
+/* ========================= 
+   Dark Theme — Design Tokens (Emerald Variant)
    ========================= */
 :root {
   /* surfaces */
-  --bg-page:         radial-gradient(1200px 800px at 20% -10%, #0f1b34 0%, #0b1220 60%);
-  --surface-card:    #121a2f;
-  --surface-muted:   #0e1630;
-  --glass-line:      rgba(255,255,255,0.06);
+  --bg-page: radial-gradient(
+      1200px 800px at 20% -10%,
+      #064e3b 0%,
+      #020617 55%
+    );
+  --surface-card:  #020617;
+  --surface-muted: #02081a;
+  --glass-line:    rgba(34, 197, 94, 0.35); /* emerald-ish border */
 
   /* text */
-  --text-strong:     #f7f9ff;
-  --text:            #e6ebf7;
-  --text-muted:      #9fb0cf;
+  --text-strong: #f9fafb;
+  --text:        #e5fdf5;
+  --text-muted:  #6ee7b7;
 
-  /* brand & states */
-  --brand:           #8ab4ff;
-  --brand-2:         #7aa5ff;
-  --success:         #10b981;
-  --warn:            #f59e0b;
-  --danger:          #ef4444;
+  /* brand & states (emerald-forward) */
+  --brand:    #22c55e; /* emerald-500 */
+  --brand-2:  #16a34a; /* emerald-600 */
+  --success:  #22c55e;
+  --warn:     #f59e0b;
+  --danger:   #ef4444;
 
   /* focus */
-  --ring:            2px solid rgba(138, 180, 255, 0.7);
+  --ring: 2px solid rgba(34, 197, 94, 0.7);
 
   /* spacing scale */
   --sp-1: 6px;  --sp-2: 10px; --sp-3: 14px; --sp-4: 18px;
@@ -33,151 +37,102 @@
              "Segoe UI Emoji","Segoe UI Symbol";
 
   /* shadows */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.25);
-  --shadow-md: 0 8px 20px rgba(0,0,0,.35);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.5);
+  --shadow-md: 0 12px 28px rgba(0,0,0,.7);
 
   /* ==== Back-compat map to old --clr-* tokens ==== */
-  --clr-base:       transparent;           /* page uses gradient */
-  --clr-card:       var(--surface-card);
-  --clr-hover:      color-mix(in srgb, var(--surface-card) 85%, var(--brand) 15%);
-  --clr-accent:     var(--brand);
+  --clr-base:        transparent;           /* page uses gradient */
+  --clr-card:        var(--surface-card);
+  --clr-hover:       color-mix(in srgb, var(--surface-card) 85%, var(--brand) 15%);
+  --clr-accent:      var(--brand);
   --clr-accent-weak: color-mix(in srgb, var(--surface-card) 75%, var(--brand) 25%);
-  --clr-text:       var(--text);
-  --clr-muted:      var(--text-muted);
-  --clr-line:       var(--glass-line);
-  --clr-success:    var(--success);
-  --clr-error:      var(--danger);
-  --icon-color:     currentColor;
+  --clr-text:        var(--text);
+  --clr-muted:       var(--text-muted);
+  --clr-line:        var(--glass-line);
+  --clr-success:     var(--success);
+  --clr-error:       var(--danger);
+  --icon-color:      currentColor;
 }
 
 /* ===== Page Baseline ===== */
-html, body { height: 100%; margin: 0; }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background: var(--bg-page);
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 15px;
   letter-spacing: 0.01em;
-  overflow: hidden; /* layout shell will scroll */
+  overflow: hidden; /* layout shell (lib-app-shell) will scroll internally */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Ensure root component can fill the viewport */
+lib-app-shell {
+  display: block;
+  height: 100%;
+}
+
 /* prefer-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
-}
-
-/* ===== Layout Shell (sidebar + main) ===== */
-.app-shell {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  grid-auto-rows: 100dvh;
-  gap: 0;
-  overflow: hidden;
-}
-
-@media (max-width: 1024px) {
-  .app-shell {
-    grid-template-columns: 72px 1fr; /* collapsed feel on smaller screens */
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }
 
-/* ===== Sidebar ===== */
-.sidebar {
-  position: sticky;
-  top: 0;
-  height: 100dvh;
-  background: linear-gradient(180deg, var(--surface-muted), #0b1220 60%);
-  border-right: 1px solid var(--glass-line);
-  padding: var(--sp-3);
-  overflow: auto;
-  box-shadow: var(--shadow-sm);
-
-  .logo {
-    font-weight: 800;
-    color: var(--brand);
-    letter-spacing: .4px;
-    margin: 2px 6px 10px;
-  }
-
-  .group-label {
-    margin: 10px 8px 6px;
-    color: var(--text-muted);
-    font-size: .78rem;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-  }
-
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    li a {
-      display: grid;
-      grid-template-columns: 20px 1fr auto;
-      align-items: center;
-      gap: .65rem;
-      padding: .55rem .7rem;
-      margin: 2px 0;
-      border-radius: 10px;
-      color: var(--text);
-      text-decoration: none;
-      outline: none;
-      transition: background .15s ease, color .15s ease, transform .05s ease;
-
-      .i { opacity: .95; }
-      .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .badge {
-        padding: .1rem .45rem;
-        font-size: .72rem;
-        border-radius: 999px;
-        background: var(--clr-accent-weak);
-        color: var(--brand);
-      }
-
-      &:hover { background: var(--clr-accent-weak); color: var(--text-strong); }
-      &.active { background: var(--surface-card); border: 1px solid var(--glass-line); color: var(--text-strong); }
-      &:focus-visible { box-shadow: 0 0 0 3px rgba(138,180,255,.25); }
-    }
-  }
-}
-
-/* ===== Main Content Wrapper ===== */
-#main-content, lib-main-content, app-main-content {
-  height: 100dvh;
-  overflow: auto;
-  padding: var(--sp-5) clamp(var(--sp-4), 3vw, var(--sp-6));
-  backdrop-filter: none;
-}
-
-/* Give inner sections a comfortable max-width if desired */
-.container-narrow {
-  max-width: 1200px;
-  margin-inline: auto;
-}
+/* ============================================
+   NOTE:
+   Global layout rules for shell are handled
+   inside AppShell / Sidebar component styles.
+   ============================================ */
 
 /* ===== Cards / Panels ===== */
 .card,
 .app-compliance-summary-card,
 app-compliance-summary-card,
 [app-compliance-summary-card] {
-  background: var(--surface-card);
+  background:
+    radial-gradient(
+      900px 650px at 0% 0%,
+      rgba(34, 197, 94, 0.16),
+      transparent 55%
+    ),
+    var(--surface-card);
   color: var(--text);
   border: 1px solid var(--glass-line);
   border-radius: 14px;
   box-shadow: var(--shadow-sm);
   padding: var(--sp-5);
-  transition: transform .08s ease, box-shadow .15s ease, background .15s ease;
+  transition:
+    transform .08s ease,
+    box-shadow .15s ease,
+    background .15s ease;
 
-  h1, h2, h3 { color: var(--text-strong); margin-top: 0; }
-  p, small  { color: var(--text); }
+  h1, h2, h3 {
+    color: var(--text-strong);
+    margin-top: 0;
+  }
+
+  p, small {
+    color: var(--text);
+  }
 
   &:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
-    background: color-mix(in srgb, var(--surface-card) 92%, var(--brand) 8%);
+    background:
+      radial-gradient(
+        900px 650px at 0% 0%,
+        rgba(34, 197, 94, 0.24),
+        transparent 55%
+      ),
+      color-mix(in srgb, var(--surface-card) 88%, var(--brand) 12%);
   }
 
   &.ok       { border-left: 4px solid var(--success); }
@@ -185,43 +140,33 @@ app-compliance-summary-card,
   &.critical { border-left: 4px solid var(--danger); }
 }
 
-/* ===== Buttons ===== */
-.btn {
-  display: inline-flex; align-items: center; gap: .5rem;
-  padding: .5rem .85rem;
-  border-radius: 10px;
-  border: 1px solid var(--glass-line);
-  background: linear-gradient(180deg, var(--brand-2), var(--brand));
-  color: #0a0e1b;
-  font-weight: 700;
-  letter-spacing: .01em;
-  cursor: pointer;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition: transform .05s ease, filter .15s ease;
+/* ============================================
+   Global emerald pill buttons (override)
+   ============================================ */
 
-  &:hover   { filter: brightness(1.05); }
-  &:active  { transform: translateY(1px); }
-  &:focus-visible { outline: var(--ring); }
 
-  &--ghost {
-    background: transparent;
-    color: var(--text);
-    border-color: var(--glass-line);
-  }
-}
 
 /* ===== Forms ===== */
-label { color: var(--text-muted); font-size: .9rem; }
-input, select, textarea {
+label {
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+
+input,
+select,
+textarea {
   background: var(--surface-muted);
   color: var(--text);
   border: 1px solid var(--glass-line);
   border-radius: 10px;
   padding: .55rem .7rem;
   outline: none;
+  box-sizing: border-box;
 }
-input:focus-visible, select:focus-visible, textarea:focus-visible {
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: var(--ring);
 }
 
@@ -229,9 +174,17 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 .alert,
 .app-status-alert,
 app-status-alert {
-  background: color-mix(in srgb, var(--danger) 18%, var(--surface-card));
+  background: color-mix(
+    in srgb,
+    var(--danger) 18%,
+    var(--surface-card)
+  );
   color: var(--text);
-  border: 1px solid color-mix(in srgb, var(--danger) 35%, var(--glass-line));
+  border: 1px solid color-mix(
+    in srgb,
+    var(--danger) 35%,
+    var(--glass-line)
+  );
   border-radius: 12px;
   padding: var(--sp-4);
   box-shadow: var(--shadow-sm);
@@ -239,18 +192,27 @@ app-status-alert {
 
 /* ===== Dashboard grid helpers ===== */
 .dashboard__header {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 0 var(--sp-4);
   margin-bottom: var(--sp-4);
   border-bottom: 1px solid var(--glass-line);
 
-  h2 { margin: 0; color: var(--text-strong); font-size: 1.35rem; letter-spacing: .2px; }
+  h2 {
+    margin: 0;
+    color: var(--text-strong);
+    font-size: 1.35rem;
+    letter-spacing: .2px;
+  }
 }
+
 .dashboard__card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--sp-4);
 }
+
 .dashboard__chart {
   margin-top: var(--sp-4);
   background: var(--surface-card);
@@ -260,15 +222,331 @@ app-status-alert {
 }
 
 /* ===== Icons ===== */
-lucide-icon { stroke: currentColor; }
+lucide-icon {
+  stroke: currentColor;
+}
 
 /* ===== Scrollbar (WebKit) ===== */
-*::-webkit-scrollbar        { width: 10px; height: 10px; }
-*::-webkit-scrollbar-track  { background: transparent; }
-*::-webkit-scrollbar-thumb  { background: rgba(138,180,255,0.25); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
-*::-webkit-scrollbar-thumb:hover { background: rgba(138,180,255,0.4); }
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(45, 212, 191, 0.25); /* teal-ish thumb */
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 212, 191, 0.45);
+}
 
 /* ===== Utilities ===== */
 .text-strong { color: var(--text-strong) !important; }
 .text-muted  { color: var(--text-muted)  !important; }
-.surface     { background: var(--surface-card); border: 1px solid var(--glass-line); border-radius: 14px; }
+.surface     {
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  border-radius: 14px;
+}
+
+/* =========================
+   PRINT — 8615-STYLE SHEET
+   ========================= */
+@media print {
+  /* Basic page reset */
+  html,
+  body {
+    height: auto;
+    overflow: visible !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: "Times New Roman", Georgia, serif;
+    font-size: 10pt;
+  }
+
+  /* Hide shell chrome when printing */
+  .app-header,
+  .sidebar,
+  .sidebar-pane,
+  .sidebar-overlay,
+  .hamburger-btn,
+  .iss-week-toolbar,
+  .btn {
+    display: none !important;
+  }
+
+  /* Flatten shell so the week page takes the whole width */
+  .app-shell {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  #main-content,
+  lib-main-content,
+  app-main-content {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    backdrop-filter: none !important;
+  }
+
+  .content-container {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ===== The weekly form sheet (mimic paper form) ===== */
+  .iss-week-page {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+
+    /* Letter page with ~3/4" margin all around */
+    padding: 0.75in 0.75in 0.75in 0.75in;
+  }
+
+  /* Header area */
+  .iss-week__header {
+    margin: 0 0 6pt 0;
+    padding: 0;
+    border: none;
+  }
+
+  .iss-week__back,
+  .iss-week__status {
+    display: none !important;
+  }
+
+  .iss-week__titles h1 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 0 0 4pt 0;
+  }
+
+  .iss-week__sub {
+    display: none !important;
+  }
+
+  /* ===== Fieldsets: boxy, black lines ===== */
+  .iss-fieldset,
+  .iss-weekly-fieldset {
+    border: 1px solid #000 !important;
+    border-radius: 0 !important;
+    padding: 4pt 6pt 6pt 6pt !important;
+    margin: 6pt 0 !important;
+    background: #ffffff !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .iss-fieldset > legend,
+  .iss-weekly-fieldset > legend {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    padding: 0 4pt;
+    margin-left: 4pt;
+    color: #000 !important;
+  }
+
+  /* ===== Individual info grid ===== */
+  .iss-grid-3 {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 0.8fr;
+    gap: 4pt;
+  }
+
+  .form-control > span {
+    display: block;
+    font-size: 8pt;
+    font-weight: 600;
+    margin-bottom: 2pt;
+    color: #000 !important;
+  }
+
+  /* ===== Inputs / selects / textareas ===== */
+  input.in,
+  select.in,
+  textarea.in {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-radius: 0 !important;
+    border: 1px solid #000 !important;
+    padding: 2pt 3pt !important;
+    font-size: 9pt !important;
+    box-shadow: none !important;
+  }
+
+  textarea.in {
+    min-height: 4em;
+    resize: none;
+  }
+
+  input.in[readonly] {
+    background: #f9f9f9 !important;
+  }
+
+  /* ===== Service Time & Setting grid ===== */
+  .iss-service-week {
+    border: 1px solid #000 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .iss-service-row {
+    display: grid;
+    grid-template-columns:
+      0.6fr   /* Day */
+      0.9fr   /* Date */
+      1.6fr   /* Provider name */
+      1.3fr   /* Signature */
+      0.7fr   /* Start */
+      0.7fr   /* End */
+      0.7fr   /* Minutes */
+      0.9fr   /* Setting */
+      0.9fr   /* # Individuals */
+      0.7fr   /* # Staff */
+      0.9fr;  /* Ratio */
+    border-top: 1px solid #000;
+  }
+
+  .iss-service-row:first-child {
+    border-top: none;
+  }
+
+  .iss-service-row .cell {
+    border-right: 1px solid #000;
+    padding: 2pt 3pt;
+  }
+
+  .iss-service-row .cell:last-child {
+    border-right: none;
+  }
+
+  .iss-service-row .cell-label {
+    display: block;
+    font-size: 7pt;
+    font-weight: 600;
+    margin-bottom: 1pt;
+    text-transform: uppercase;
+  }
+
+  .iss-service-row .muted {
+    font-size: 8pt;
+    font-style: italic;
+    color: #000;
+  }
+
+  /* ===== Weekly initials tables (Socialization/Self-help/etc.) ===== */
+  .iss-weekly {
+    border: 1px solid #000 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    font-size: 8pt;
+  }
+
+  .iss-weekly-header,
+  .iss-weekly-row {
+    grid-template-columns:
+      2.5fr /* Area label */
+      repeat(5, 0.8fr); /* Mon–Fri */
+  }
+
+  .iss-weekly-header .cell,
+  .iss-weekly-row .cell {
+    background: #ffffff !important;
+    border-right: 1px solid #000 !important;
+  }
+
+  .iss-weekly-header {
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .iss-weekly-row {
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .iss-weekly-header .cell {
+    font-weight: 700;
+    font-size: 8pt;
+    text-align: center;
+  }
+
+  .label-in,
+  .day-in {
+    border: none !important;
+    border-bottom: 1px solid #000 !important;
+    font-size: 8pt !important;
+    padding: 2pt 3pt !important;
+  }
+
+  /* ===== Notes section ===== */
+  .iss-notes {
+    border: 1px solid #000;
+    border-radius: 0;
+    background: #ffffff !important;
+    font-size: 8pt;
+  }
+
+  .iss-notes-header {
+    display: grid;
+    grid-template-columns: 0.8fr 0.9fr 3fr;
+    border-bottom: 1px solid #000;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .iss-notes-header .col {
+    padding: 2pt 3pt;
+    border-right: 1px solid #000;
+  }
+
+  .iss-notes-header .col:last-child {
+    border-right: none;
+  }
+
+  .iss-note-row {
+    display: grid;
+    grid-template-columns: 0.8fr 0.9fr 3fr;
+    border-top: 1px solid #000;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .iss-note-row .col {
+    padding: 2pt 3pt;
+    border-right: 1px solid #000;
+  }
+
+  .iss-note-row .col:last-child {
+    border-right: none;
+  }
+
+  .iss-note-row .cell-label {
+    display: block;
+    font-size: 7pt;
+    font-weight: 600;
+    margin-bottom: 1pt;
+  }
+
+  .iss-note-row textarea.in {
+    min-height: 3.5em;
+  }
+
+  /* Hide bottom actions */
+  .iss-actions {
+    display: none !important;
+  }
+}

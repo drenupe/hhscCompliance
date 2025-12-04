@@ -1,32 +1,155 @@
 :host {
   display: block;
-  /* set your header height here (must match the actual header) */
+  /* Must match your header height */
   --header-h: 56px;
 }
 
-/* libs/web-shell/src/lib/layout/app-shell/app-shell.scss */
-.app-shell{
-  display:grid;
-  grid-template-columns: 260px 1fr;
-  min-height:100dvh;
-  background:var(--clr-bg);
+/* ===========================
+   HEADER
+   =========================== */
+
+.app-header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  height: var(--header-h);
+  box-sizing: border-box;
+  background: #020617;
+  border-bottom: 1px solid var(--clr-line, #1f2937);
+  color: var(--text-strong, #f9fafb);
 }
 
-.sidebar-pane{ border-right:1px solid var(--clr-line); }
-.content-pane{
-  min-width:0;
-  padding:16px;
-  overflow:auto;
+.app-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-/* collapsed */
+.hamburger-btn {
+  border: none;
+  background: transparent;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-icon {
+  font-size: 1.15rem;
+}
+
+/* ===========================
+   MOBILE OVERLAY
+   =========================== */
+
+.sidebar-overlay {
+  position: fixed;
+  inset: var(--header-h) 0 0 0;
+  z-index: 25;
+  background: rgba(15, 23, 42, 0.55);
+  border: none;
+}
+
+/* ===========================
+   SHELL LAYOUT
+   =========================== */
+
+.app-shell {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  /* Fill viewport minus header; body is overflow:hidden */
+  height: calc(100vh - var(--header-h));
+  min-height: calc(100vh - var(--header-h));
+  max-height: calc(100vh - var(--header-h));
+  background: var(--clr-bg, #020617);
+}
+
+/* collapsed sidebar (desktop) */
 .app-shell.collapsed {
-  grid-template-columns: 64px minmax(0, 1fr);
-  column-gap: 12px;
+  grid-template-columns: 72px minmax(0, 1fr);
 }
 
-/* ensure children can shrink/scroll inside the grid tracks */
-.app-shell > * {
+/* mobile: sidebar overlays, content uses full width */
+.app-shell.mobile {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Sidebar pane: when in mobile-open, we overlay it */
+.sidebar-pane {
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--clr-line, #1f2937);
+  background: var(--clr-base, #020617);
+}
+
+/* Sidebar as overlay on mobile */
+.app-shell.mobile .sidebar-pane {
+  position: fixed;
+  top: var(--header-h);
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  z-index: 30;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+/* ===========================
+   CONTENT PANE + SCROLLING
+   =========================== */
+
+.content-pane {
+  min-width: 0;
+  min-height: 0;
+  /* column in the grid */
+  display: flex;
+  flex-direction: column;
+}
+
+/* This is the ONLY scroll container (vertical) */
+.scroll-area {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* content canvas */
+.content-container {
+  padding: 1.25rem;
+  max-width: 1280px;
+  margin-inline: auto;
+  display: grid;
+  gap: 1rem;
+  box-sizing: border-box;
+}
+
+/* Make sure nested pages don’t blow width */
+.content-container > * {
+  min-width: 0;
+}
+
+/* ===========================
+   MOBILE TWEAKS
+   =========================== */
+
+@media (max-width: 768px) {
+  .content-container {
+    padding-inline: 0.75rem;
+  }
+
+  .app-header {
+    padding-inline: 0.6rem;
+  }
 }

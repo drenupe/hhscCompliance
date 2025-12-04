@@ -1,12 +1,101 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class SeedIssProviderConsumersAndWeeklyData1722400000000
-  implements MigrationInterface
-{
-  name = 'SeedIssProviderConsumersAndWeeklyData1722400000000';
+export class IssBaseline1800000000000 implements MigrationInterface {
+  name = 'IssBaseline1800000000000';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // 1) Ensure ISS provider exists (Ellis Works)
+    // 1) Core ISS tables
+    // -------------------------------------------------
+    await queryRunner.query(`
+      CREATE TABLE "iss_provider" (
+        "id" SERIAL PRIMARY KEY,
+        "name" VARCHAR(255) NOT NULL,
+        "license_number" VARCHAR(64) NOT NULL,
+        "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+        CONSTRAINT "UQ_iss_provider_license_number" UNIQUE ("license_number")
+      );
+    `);
+
+    await queryRunner.query(`
+      CREATE TABLE "consumer" (
+        "id" SERIAL PRIMARY KEY,
+        "first_name" VARCHAR(100) NOT NULL,
+        "last_name" VARCHAR(100) NOT NULL,
+        "date_of_birth" DATE,
+        "medicaid_number" VARCHAR(64),
+        "level_of_need" VARCHAR(32),
+        "place_of_service" VARCHAR(32),
+        "iss_provider_id" INTEGER NOT NULL,
+        "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+        CONSTRAINT "FK_consumer_iss_provider"
+          FOREIGN KEY ("iss_provider_id")
+          REFERENCES "iss_provider"("id")
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION,
+        CONSTRAINT "UQ_consumer_name_provider"
+          UNIQUE ("first_name", "last_name", "iss_provider_id")
+      );
+    `);
+
+    await queryRunner.query(`
+      CREATE TABLE "iss_staff_log" (
+        "id" SERIAL PRIMARY KEY,
+        "consumer_id" INTEGER NOT NULL,
+        "iss_provider_id" INTEGER NOT NULL,
+        "service_date" DATE NOT NULL,
+
+        "header" JSONB NOT NULL,
+        "service_week" JSONB NOT NULL,
+        "weekly_sections" JSONB NOT NULL,
+        "notes" JSONB NOT NULL,
+
+        "created_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+        "updated_at" TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+        CONSTRAINT "FK_iss_staff_log_consumer"
+          FOREIGN KEY ("consumer_id")
+          REFERENCES "consumer"("id")
+          ON DELETE CASCADE
+          ON UPDATE NO ACTION,
+
+        CONSTRAINT "FK_iss_staff_log_iss_provider"
+          FOREIGN KEY ("iss_provider_id")
+          REFERENCES "iss_provider"("id")
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION,
+
+        -- *** KEY PIECE: prevent duplicate weeks per consumer ***
+        CONSTRAINT "UQ_iss_staff_log_consumer_date"
+          UNIQUE ("consumer_id", "service_date")
+      );
+    `);
+
+    // 2) Indexes
+    // -------------------------------------------------
+    await queryRunner.query(`
+      CREATE INDEX "IDX_iss_staff_log_consumer_id"
+      ON "iss_staff_log" ("consumer_id");
+    `);
+
+    await queryRunner.query(`
+      CREATE INDEX "IDX_iss_staff_log_service_date"
+      ON "iss_staff_log" ("service_date");
+    `);
+
+    await queryRunner.query(`
+      CREATE INDEX "IDX_iss_staff_log_consumer_date"
+      ON "iss_staff_log" ("consumer_id", "service_date");
+    `);
+
+    await queryRunner.query(`
+      CREATE INDEX "IDX_consumer_iss_provider_id"
+      ON "consumer" ("iss_provider_id");
+    `);
+
+    // 3) Seed Ellis Works provider
+    // -------------------------------------------------
     const providerRows = await queryRunner.query(
       `
       INSERT INTO "iss_provider" (
@@ -16,9 +105,6 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
         "updated_at"
       )
       VALUES ($1, $2, now(), now())
-      ON CONFLICT ("license_number")
-      DO UPDATE SET "name" = EXCLUDED."name",
-                    "updated_at" = now()
       RETURNING "id";
       `,
       ['Ellis Works', '311123'],
@@ -26,7 +112,8 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
 
     const issProviderId: number = providerRows[0].id;
 
-    // 2) Ensure the 5 real consumers exist and are linked to Ellis Works
+    // 4) Seed five consumers
+    // -------------------------------------------------
     const consumers = [
       { firstName: 'Chris', lastName: 'Brown' },
       { firstName: 'Paul', lastName: 'Sipes' },
@@ -57,12 +144,11 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
       );
     }
 
-    // 3) Seed 52 weekly staff logs (one per Monday) for ALL 5 consumers.
-    //    Dates: 2025-09-29 → 2026-09-29 (every Monday).
+    // 5) Seed weekly ISS logs for all 5 consumers, full shape
+    // -------------------------------------------------
     const effectiveFrom = '2025-09-29';
     const effectiveTo = '2026-09-29';
 
-    // Activity text per weekday (used in service_week.activity)
     const baseServiceWeek = {
       monday:
         'Treasure hunt – vintage game stores and bar; watch games and appetizers.',
@@ -75,7 +161,6 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
 
     const initials = 'AM';
 
-    // Weekly initials rows (labels match Angular form)
     const socializationRows = [
       {
         label: 'Communication',
@@ -219,30 +304,24 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
       },
     ];
 
-    // Your exact five billable comments (Mon–Fri) – verbatim
     const mondayComment =
       'Individual participated in community-based ISS from 9:00–3:00 at local vintage game store and restaurant. Staff provided prompts and modeling to increase socialization, communication, and money-handling skills during ordering food, paying at register, and interacting with staff/peers. Individual remained engaged for the majority of activities, required verbal prompts for turn-taking, and tolerated community setting without incident.';
-
     const tuesdayComment =
       'Individual attended ISS from 9:00–3:00 including train trip to Dallas/Fort Worth and movie outing. Staff provided step-by-step instruction and safety cues during public transportation, supported use of community resources (buying tickets, locating seats), and reinforced decision-making and social skills in group setting. Individual followed safety rules, responded to prompts, and no behavioral issues observed.';
-
     const wednesdayComment =
       'Individual participated in community ISS from 9:00–3:00 at local mall and low-cost arcade. Staff provided coaching on money management, appropriate boundaries, and self-advocacy (asking for assistance, making purchases). Individual required verbal prompts to remain on task, accepted redirection, and completed purchases with staff support. No health or safety concerns were noted.';
-
     const thursdayComment =
       'Individual attended ISS from 9:00–3:00 including bowling and bingo activities in the community. Staff supported group participation, turn-taking, and following multi-step directions. Individual demonstrated improved waiting skills and remained with group with minimal prompts. No incidents or injuries occurred and transportation to/from activities was completed safely.';
-
     const fridayComment =
       'Individual participated in ISS from 9:00–3:00 with activities at food pantry, Walmart, and Five Below. Staff supported community integration, functional shopping skills, and self-help tasks (identifying items, handling money, organizing purchases). Individual engaged with staff and peers, required prompts for staying with group and appropriate volume, and demonstrated progress toward PDP community-access goals. No adverse events occurred.';
 
-    // 4) Insert logs for all 5 consumers with full header + service_week + notes
     await queryRunner.query(
       `
       WITH weeks AS (
         SELECT
           generate_series(
-            $1::date,          -- first Monday
-            $2::date,          -- last Monday
+            $1::date,
+            $2::date,
             INTERVAL '1 week'
           )::date AS svc_date
       ),
@@ -278,7 +357,7 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
         tc.iss_provider_id,
         w.svc_date,
 
-        -- HEADER
+        -- HEADER with weekly initials + notes baked in
         jsonb_build_object(
           'individualName',     tc.first_name || ' ' || tc.last_name,
           'date',               w.svc_date,
@@ -418,7 +497,8 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
         now(),
         now()
       FROM weeks w
-      CROSS JOIN target_consumers tc;
+      CROSS JOIN target_consumers tc
+      ON CONFLICT ("consumer_id", "service_date") DO NOTHING;
       `,
       [
         effectiveFrom,
@@ -441,36 +521,13 @@ export class SeedIssProviderConsumersAndWeeklyData1722400000000
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Delete logs & consumers for ONLY these 5 people.
-    await queryRunner.query(
-      `
-      DELETE FROM "iss_staff_log"
-      WHERE "consumer_id" IN (
-        SELECT "id" FROM "consumer"
-        WHERE ( "first_name", "last_name" ) IN (
-          ('Chris', 'Brown'),
-          ('Paul', 'Sipes'),
-          ('James', 'Harris'),
-          ('Roy',   'Lemmond'),
-          ('Stephanie', 'Trujillo')
-        )
-      );
-      `,
-    );
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_consumer_iss_provider_id";`);
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_iss_staff_log_consumer_date";`);
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_iss_staff_log_service_date";`);
+    await queryRunner.query(`DROP INDEX IF EXISTS "IDX_iss_staff_log_consumer_id";`);
 
-    await queryRunner.query(
-      `
-      DELETE FROM "consumer"
-      WHERE ( "first_name", "last_name" ) IN (
-        ('Chris', 'Brown'),
-        ('Paul', 'Sipes'),
-        ('James', 'Harris'),
-        ('Roy',   'Lemmond'),
-        ('Stephanie', 'Trujillo')
-      );
-      `,
-    );
-
-    // We intentionally KEEP the Ellis Works provider.
+    await queryRunner.query(`DROP TABLE IF EXISTS "iss_staff_log";`);
+    await queryRunner.query(`DROP TABLE IF EXISTS "consumer";`);
+    await queryRunner.query(`DROP TABLE IF EXISTS "iss_provider";`);
   }
 }

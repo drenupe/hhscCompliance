@@ -85,8 +85,15 @@ export const saveLogFailure = createAction(
   '[ISS] Save Log Failure',
   props<{ error: string }>(),
 );
+// in iss.actions.ts
+export const createLogForWeek = createAction(
+  '[ISS] Create Log For Week',
+  props<{ consumerId: number; serviceDate: string; payload: CreateStaffLogDto | UpdateStaffLogDto }>(),
+);
 
 export const deleteLogSuccess = createAction(
   '[ISS] Delete Log Success',
   props<{ logId: number }>(),
 );
+
+

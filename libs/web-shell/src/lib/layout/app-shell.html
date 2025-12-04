@@ -1,33 +1,58 @@
 <header class="app-header">
+  <!-- Mobile hamburger -->
   <button
     class="hamburger-btn"
-    *ngIf="layout.isMobile$ | async"
+    *ngIf="(layout.isMobile$ | async) === true"
     (click)="toggleSidebar()"
     type="button"
     aria-label="Open menu"
   >
-    <!-- Replace with your real icon component if available -->
     <span class="hamburger-icon">☰</span>
   </button>
+
   <h1 class="app-title">HHSC Compliance</h1>
 </header>
 
-<!-- mobile overlay -->
+<!-- Mobile overlay (click to close sidebar) -->
 <button
   type="button"
   class="sidebar-overlay"
-  *ngIf="(layout.isMobile$ | async) && (layout.sidebarOpen$ | async)"
+  *ngIf="
+    (layout.isMobile$ | async) === true &&
+    (layout.sidebarOpen$ | async) === true
+  "
   aria-label="Close sidebar"
   (click)="closeSidebar()"
   (keydown.enter)="closeSidebar()"
   (keydown.space)="closeSidebar()"
 ></button>
 
+<div
+  class="app-shell"
+  [class.collapsed]="(layout.sidebarCollapsed$ | async) === true"
+  [class.mobile]="(layout.isMobile$ | async) === true"
+  [class.mobile-open]="
+    (layout.isMobile$ | async) === true &&
+    (layout.sidebarOpen$ | async) === true
+  "
+>
+  <!-- Sidebar column -->
+  <aside
+    class="sidebar-pane"
+    *ngIf="
+      (layout.isMobile$ | async) === false ||
+      (layout.sidebarOpen$ | async) === true
+    "
+  >
+    <lib-sidebar></lib-sidebar>
+  </aside>
 
-<!-- libs/web-shell/src/lib/layout/app-shell/app-shell.html -->
-<div class="app-shell">
-  <lib-sidebar class="sidebar-pane"></lib-sidebar>
-  <main class="content-pane">
-    <router-outlet></router-outlet>
+  <!-- Main content column -->
+  <main class="content-pane" id="main-content">
+    <div class="scroll-area">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
   </main>
 </div>
