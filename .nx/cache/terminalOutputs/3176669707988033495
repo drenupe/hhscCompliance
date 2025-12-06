@@ -1,0 +1,100 @@
+Compiling TypeScript files for project "shared-models"...
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/index.ts[0m:[93m14[0m:[93m1[0m - [91merror[0m[90m TS2308: [0mModule './lib/iss/iss.models' has already exported a member named 'normalizeStaffLogFromApi'. Consider explicitly re-exporting to resolve the ambiguity.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m14[0m export * from './lib/iss/iss.mappers';[39m[22m
+[1m[31m[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.mappers.ts[0m:[93m4[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"./iss.models"' has no exported member 'StaffLog'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m4[0m   StaffLog,[39m[22m
+[1m[31m[7m [0m [91m  ~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.mappers.ts[0m:[93m5[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"./iss.models"' has no exported member 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m5[0m   StaffLogHeader,[39m[22m
+[1m[31m[7m [0m [91m  ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.mappers.ts[0m:[93m6[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"./iss.models"' has no exported member 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m6[0m   ServiceWeek,[39m[22m
+[1m[31m[7m [0m [91m  ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.mappers.ts[0m:[93m7[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"./iss.models"' has no exported member 'ServiceDayEntry'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m7[0m   ServiceDayEntry,[39m[22m
+[1m[31m[7m [0m [91m  ~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.mappers.ts[0m:[93m8[0m:[93m3[0m - [91merror[0m[90m TS2305: [0mModule '"./iss.models"' has no exported member 'WeeklyNote'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m8[0m   WeeklyNote,[39m[22m
+[1m[31m[7m [0m [91m  ~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m25[0m:[93m44[0m - [91merror[0m[90m TS2304: [0mCannot find name 'WeeklyNote'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m25[0m function normalizeWeeklyNotesDates(notes?: WeeklyNote[]): WeeklyNote[] {[39m[22m
+[1m[31m[7m  [0m [91m                                           ~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m25[0m:[93m59[0m - [91merror[0m[90m TS2304: [0mCannot find name 'WeeklyNote'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m25[0m function normalizeWeeklyNotesDates(notes?: WeeklyNote[]): WeeklyNote[] {[39m[22m
+[1m[31m[7m  [0m [91m                                                          ~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m41[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m41[0m function normalizeServiceWeekDates(week?: ServiceWeek): ServiceWeek | undefined {[39m[22m
+[1m[31m[7m  [0m [91m                                          ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m41[0m:[93m57[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m41[0m function normalizeServiceWeekDates(week?: ServiceWeek): ServiceWeek | undefined {[39m[22m
+[1m[31m[7m  [0m [91m                                                        ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m44[0m:[93m39[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceDayEntry'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m44[0m   const normalizeEntries = (entries?: ServiceDayEntry[]): ServiceDayEntry[] => {[39m[22m
+[1m[31m[7m  [0m [91m                                      ~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m44[0m:[93m59[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceDayEntry'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m44[0m   const normalizeEntries = (entries?: ServiceDayEntry[]): ServiceDayEntry[] => {[39m[22m
+[1m[31m[7m  [0m [91m                                                          ~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m77[0m:[93m47[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLog'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m77[0m export function normalizeStaffLogFromApi(log: StaffLog): StaffLog {[39m[22m
+[1m[31m[7m  [0m [91m                                              ~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m77[0m:[93m58[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLog'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m77[0m export function normalizeStaffLogFromApi(log: StaffLog): StaffLog {[39m[22m
+[1m[31m[7m  [0m [91m                                                         ~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m78[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m78[0m   const header: StaffLogHeader = {[39m[22m
+[1m[31m[7m  [0m [91m                ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m111[0m:[93m38[0m - [91merror[0m[90m TS2304: [0mCannot find name 'CreateStaffLogDto'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m111[0m }): { logId: number | null; payload: CreateStaffLogDto | UpdateStaffLogDto } {[39m[22m
+[1m[31m[7m   [0m [91m                                     ~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m111[0m:[93m58[0m - [91merror[0m[90m TS2304: [0mCannot find name 'UpdateStaffLogDto'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m111[0m }): { logId: number | null; payload: CreateStaffLogDto | UpdateStaffLogDto } {[39m[22m
+[1m[31m[7m   [0m [91m                                                         ~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m117[0m:[93m26[0m - [91merror[0m[90m TS2304: [0mCannot find name 'WeeklyNote'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m117[0m   const normalizedNotes: WeeklyNote[] = (rawForm.notes ?? []).map([39m[22m
+[1m[31m[7m   [0m [91m                         ~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m118[0m:[93m15[0m - [91merror[0m[90m TS2304: [0mCannot find name 'WeeklyNote'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m118[0m     (n: any): WeeklyNote => {[39m[22m
+[1m[31m[7m   [0m [91m              ~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m128[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m128[0m   const header: StaffLogHeader = {[39m[22m
+[1m[31m[7m   [0m [91m                ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m149[0m:[93m28[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceDayEntry'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m149[0m   const mapRow = (v: any): ServiceDayEntry => {[39m[22m
+[1m[31m[7m   [0m [91m                           ~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m179[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m179[0m   const serviceWeek: ServiceWeek = {[39m[22m
+[1m[31m[7m   [0m [91m                     ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m193[0m:[93m20[0m - [91merror[0m[90m TS2304: [0mCannot find name 'UpdateStaffLogDto'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m193[0m     const payload: UpdateStaffLogDto = {[39m[22m
+[1m[31m[7m   [0m [91m                   ~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m200[0m:[93m18[0m - [91merror[0m[90m TS2304: [0mCannot find name 'CreateStaffLogDto'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m200[0m   const payload: CreateStaffLogDto = {[39m[22m
+[1m[31m[7m   [0m [91m                 ~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+
+[2m..\..\dist\libs\shared-models\README.md[22m

@@ -1,0 +1,5 @@
+[2m> [22mwebpack-cli build --node-env=production
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 83.8 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (e12d14b351b0e64d)

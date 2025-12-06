@@ -1,0 +1,796 @@
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development  [2m[local cache][22m
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 2 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/b52a2fdd-a1ca-49c1-9f91-3d8cf9b878ec[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/b52a2fdd-a1ca-49c1-9f91-3d8cf9b878ec[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +5ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1ms[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 6240  - [39m11/24/2025, 9:43:37 AM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/a3821c62-0d5e-41f9-a6a3-7d896407d73e[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/a3821c62-0d5e-41f9-a6a3-7d896407d73e[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 16408  - [39m11/24/2025, 11:12:37 AM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/3a906d68-d325-458a-8aaf-3d8bf74250ef[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/3a906d68-d325-458a-8aaf-3d8bf74250ef[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +6ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +3ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +2ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +3ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +3ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 23172  - [39m11/24/2025, 11:24:27 AM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/5890c63d-6d37-49c9-b4b2-6163ce9616d2[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/5890c63d-6d37-49c9-b4b2-6163ce9616d2[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +9ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +10ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 13868  - [39m11/24/2025, 12:30:40 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/1c8d617a-0919-4a95-be7d-9a406cb088f5[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/1c8d617a-0919-4a95-be7d-9a406cb088f5[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +30ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 18908  - [39m11/24/2025, 2:41:11 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/45a59eb0-c05c-4538-8698-6a5ea491aea0[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/45a59eb0-c05c-4538-8698-6a5ea491aea0[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +6ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 16640  - [39m11/24/2025, 3:06:41 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/cf3c1ccc-b4b6-4c8e-849c-4f29c3332dbd[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/cf3c1ccc-b4b6-4c8e-849c-4f29c3332dbd[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +6ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 2112  - [39m11/24/2025, 3:20:25 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/56eaaab8-3853-4a60-a8c1-0ca1b77298d5[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/56eaaab8-3853-4a60-a8c1-0ca1b77298d5[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +5ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 21728  - [39m11/24/2025, 3:51:09 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 78 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (7e0075f33a84c058)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/c06c71c6-0fd5-4b9b-91ad-47bb90e86a8c[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/c06c71c6-0fd5-4b9b-91ad-47bb90e86a8c[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +7ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 9904  - [39m11/24/2025, 3:58:40 PM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: taskkill /pid 3448 /T /F
+ERROR: The process with PID 9448 (child process of PID 23752) could not be terminated.
+Reason: There is no running instance of the task.
+
+[90m    at genericNodeError (node:internal/errors:983:15)[39m
+[90m    at wrappedFn (node:internal/errors:537:14)[39m
+[90m    at ChildProcess.exithandler (node:child_process:415:12)[39m
+[90m    at ChildProcess.emit (node:events:518:28)[39m
+[90m    at maybeClose (node:internal/child_process:1101:16)[39m
+[90m    at Socket.<anonymous> (node:internal/child_process:456:11)[39m
+[90m    at Socket.emit (node:events:518:28)[39m
+[90m    at Pipe.<anonymous> (node:net:346:12)[39m {
+  code: [33m255[39m,
+  killed: [33mfalse[39m,
+  signal: [1mnull[22m,
+  cmd: [32m'taskkill /pid 3448 /T /F'[39m
+}
+
+Node.js v22.17.0

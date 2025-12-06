@@ -1,0 +1,28 @@
+Compiling TypeScript files for project "shared-models"...
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m29[0m:[93m11[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m29[0m   header: StaffLogHeader;[39m[22m
+[1m[31m[7m  [0m [91m          ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m30[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m30[0m   serviceWeek: ServiceWeek;[39m[22m
+[1m[31m[7m  [0m [91m               ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m47[0m:[93m11[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m47[0m   header: StaffLogHeader;[39m[22m
+[1m[31m[7m  [0m [91m          ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m48[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m48[0m   serviceWeek: ServiceWeek;[39m[22m
+[1m[31m[7m  [0m [91m               ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m55[0m:[93m12[0m - [91merror[0m[90m TS2304: [0mCannot find name 'StaffLogHeader'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m55[0m   header?: StaffLogHeader;[39m[22m
+[1m[31m[7m  [0m [91m           ~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[96m/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/shared-models/src/lib/iss/iss.models.ts[0m:[93m56[0m:[93m17[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ServiceWeek'.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[7m56[0m   serviceWeek?: ServiceWeek;[39m[22m
+[1m[31m[7m  [0m [91m                ~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+
+[2m..\..\dist\libs\shared-models\README.md[22m

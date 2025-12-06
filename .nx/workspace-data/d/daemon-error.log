@@ -1,0 +1,26 @@
+Daemon process terminated and closed the connection
+
+Messages from the log:
+[NX v21.2.2 Daemon Server] - 2025-11-25T14:39:54.820Z - [WATCHER]: api/migrations/1722500000000-CleanupOldBlankIssLogs.ts was modified
+[NX v21.2.2 Daemon Server] - 2025-11-25T14:40:07.720Z - Established a connection. Number of open connections: 3
+[NX v21.2.2 Daemon Server] - 2025-11-25T14:40:07.748Z - Closed a connection. Number of open connections: 2
+[NX v21.2.2 Daemon Server] - 2025-11-25T14:40:48.648Z - [REQUEST]: Responding to the client with an error. Error when running postTasksExecution. 
+undefined
+[NX v21.2.2 Daemon Server] - 2025-11-25T14:40:49.080Z - [REQUEST]: Responding to the client with an error. Error when preparing serialized project graph. 
+undefined
+node:internal/process/promises:392
+      new UnhandledPromiseRejection(reason);
+      ^
+
+UnhandledPromiseRejection: This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason "Failed to start plugin worker.".
+    at throwUnhandledRejectionsMode (node:internal/process/promises:392:7)
+    at processPromiseRejections (node:internal/process/promises:475:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:106:32) {
+  code: 'ERR_UNHANDLED_REJECTION'
+}
+
+Node.js v22.17.0
+
+
+
+More information: c:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\.nx\workspace-data\d\daemon.log

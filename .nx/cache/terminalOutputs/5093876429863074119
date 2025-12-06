@@ -1,0 +1,82 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m        [2m | [22m[1mRaw size[22m[39m
+[37m[32mmain.js[39m[37m            [2m | [22m[2mmain[22m         [2m | [22m[36m41.02 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-2XRTFYGJ.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m36.91 kB[39m[37m[2m | [22m[39m
+[37m[32mstyles.css[39m[37m         [2m | [22m[2mstyles[22m       [2m | [22m [36m8.18 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-Q74YNNLB.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m3.05 kB[39m[37m[2m | [22m[39m
+[37m[32mpolyfills.js[39m[37m       [2m | [22m[2mpolyfills[22m    [2m | [22m[36m95 bytes[39m[37m[2m | [22m[39m
+[37m[39m
+[37m[1m [22m                  [2m | [22m[1mInitial total[22m[2m | [22m[1m89.25 kB[22m[39m
+[37m[39m
+[37m[1mLazy chunk files[22m   [2m | [22m[1mNames[22m        [2m | [22m[1mRaw size[22m[39m
+[37m[32mchunk-FVKB2LZW.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m[36m76.87 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-6GNJ5LWP.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m72.89 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-TFDXKP37.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m[36m33.68 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-3E4BUJVJ.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m18.80 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-5HCSLUHU.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m[36m14.02 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-FSTOEMZP.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m2.77 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-NZJHVNBE.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m2.76 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-FVHUDQC5.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.62 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-6BJBXBN4.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.48 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-OC22AHS7.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.47 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-6E7BQVFM.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.47 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-HZIJYW6K.js[39[39m[37mm  [2m | [22m[2mindex[22m        [2m | [22m [36m2.44 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-D2RGAPUD.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.42 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-XNTR7RQO.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.36 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-EB2ID4R2.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m2.33 kB[39m[37m[2m | [22m[39m
+[37m[2m...and 7 more lazy chunks files. Use "--verbose" to show all the files.[22m[39m
+[37m[39m
+[37mApplication bundle generation complete. [97.053 seconds][39m
+[37m[39m
+[37mWatch mode enabled. Watching for file changes...[39m
+[37mNOTE: Raw file sizes do not reflect development server per-request transformations.[39m
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m[2m | [22m[1mRaw size[22m[39m
+[37m[32mmain.js[39m[37m            [2m | [22m[2mmain[22m [2m | [22m[36m43.12 kB[39m[37m[2m | [22m[39m
+[37m[39m
+[37mApplication bundle generation complete. [210.941 seconds][39m
+[37m[39m
+[37mPage reload sent to client(s).[39m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[39m
+[37m[32mmain.js[39m[37m            [2m | [22m[2mmain[22m         [2m | [22m [36m43.12 kB[39m[37m[2m | [22m[39m
+[37m[39m
+[37m[1mLazy chunk files[22m   [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[39m
+[37m[32mchunk-LZUXICOQ.js[39m[37m  [2m | [22m[2mindex[22m        [2m | [22m [36m76.87 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-7YS2PHDZ.js[39m[37m  [2m | [22m[2m-[22m            [2m | [22m [36m72.89 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-7W6EDXMN.js[39m[37m  [2m | [22m[2miss-week-page[22m[2m | [22m[36m200 bytes[39m[37m[2m | [22m[39m
+[37m[39m
+[37mApplication bundle generation complete. [122.752 seconds][39m
+[37m[39m
+[37mPage reload sent to client(s).[39m
+[33m❯[39m Changes detected. Rebuilding...
+
+
+#
+# Fatal process out of memory: Zone
+#
+----- Native stack trace -----
+
+ 1: 00007FF731F4542D 
+ 2: 00007FF731E188CF 
+ 3: 00007FF733097116 
+ 4: 00007FF732A1B7D1 
+ 5: 00007FF7324EAA8B 
+ 6: 00007FF732257600 
+ 7: 00007FF732261917 
+ 8: 00007FF73363C8C7 
+ 9: 00007FF7331B4624 
+10: 00007FF7331AE19A 
+11: 00007FF732996404 
+12: 00007FF73294FD12 
+13: 00007FF732C20515 
+14: 00007FF731E1B5F0 
+15: 00007FF731FA5A43 
+16: 00007FF7337A342E 
+17: 00007FFC62E7E8D7 BaseThreadInitThunk+23
+18: 00007FFC6344C53C RtlUserThreadStart+44

@@ -1,0 +1,31 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "dependencies": {
+    "@angular/common": "20.0.7",
+    "@angular/compiler": "20.0.7",
+    "@angular/core": "20.0.7",
+    "@angular/forms": "20.0.7",
+    "@angular/platform-browser": "20.0.7",
+    "@nestjs/common": "11.1.6",
+    "@nestjs/config": "4.0.2",
+    "@nestjs/core": "11.1.6",
+    "@nestjs/mapped-types": "2.1.0",
+    "@nestjs/platform-express": "11.1.6",
+    "@nestjs/swagger": "11.2.0",
+    "@nestjs/typeorm": "11.0.0",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.14.2",
+    "compression": "1.8.1",
+    "cookie-parser": "1.4.7",
+    "express": "5.1.0",
+    "helmet": "8.1.0",
+    "lucide-angular": "0.545.0",
+    "pg": "8.16.3",
+    "reflect-metadata": "0.1.14",
+    "rxjs": "7.8.2",
+    "typeorm": "0.3.27",
+    "zone.js": "0.15.1"
+  },
+  "main": "main.js"
+}
