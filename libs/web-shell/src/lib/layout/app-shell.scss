@@ -1,7 +1,9 @@
+/* libs/web-shell/src/lib/layout/app-shell.scss */
+
 :host {
   display: block;
-  /* Must match your header height */
   --header-h: 56px;
+  --sidebar-w: 220px; /* adjust this once for the app */
 }
 
 /* ===========================
@@ -47,18 +49,6 @@
 }
 
 /* ===========================
-   MOBILE OVERLAY
-   =========================== */
-
-.sidebar-overlay {
-  position: fixed;
-  inset: var(--header-h) 0 0 0;
-  z-index: 25;
-  background: rgba(15, 23, 42, 0.55);
-  border: none;
-}
-
-/* ===========================
    SHELL LAYOUT
    =========================== */
 
@@ -66,11 +56,10 @@
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  /* Fill viewport minus header; body is overflow:hidden */
-  height: calc(100vh - var(--header-h));
-  min-height: calc(100vh - var(--header-h));
-  max-height: calc(100vh - var(--header-h));
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  height: calc(100dvh - var(--header-h));
+  min-height: calc(100dvh - var(--header-h));
+  max-height: calc(100dvh - var(--header-h));
   background: var(--clr-bg, #020617);
 }
 
@@ -79,29 +68,22 @@
   grid-template-columns: 72px minmax(0, 1fr);
 }
 
-/* mobile: sidebar overlays, content uses full width */
+/* mobile: content uses full width; sidebar turns into fixed drawer itself */
 .app-shell.mobile {
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Sidebar pane: when in mobile-open, we overlay it */
+/* Sidebar pane — acts as the column wrapper */
 .sidebar-pane {
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
+
+  /* let <lib-sidebar> manage its own scroll;
+     no clipping here, just the column background/border */
+  overflow: visible;
+
   border-right: 1px solid var(--clr-line, #1f2937);
   background: var(--clr-base, #020617);
-}
-
-/* Sidebar as overlay on mobile */
-.app-shell.mobile .sidebar-pane {
-  position: fixed;
-  top: var(--header-h);
-  bottom: 0;
-  left: 0;
-  width: 220px;
-  z-index: 30;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
 }
 
 /* ===========================
@@ -111,12 +93,11 @@
 .content-pane {
   min-width: 0;
   min-height: 0;
-  /* column in the grid */
   display: flex;
   flex-direction: column;
 }
 
-/* This is the ONLY scroll container (vertical) */
+/* Main content scroll container */
 .scroll-area {
   flex: 1 1 auto;
   min-height: 0;

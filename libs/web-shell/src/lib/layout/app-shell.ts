@@ -1,9 +1,11 @@
+// libs/web-shell/src/lib/layout/app-shell.ts
+
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+
 import { LayoutService } from '@hhsc-compliance/shared';
 import { Sidebar } from '../layout/sidebar';
-import { MainContent } from '../layout/main-content';
 
 @Component({
   selector: 'lib-app-shell',
@@ -16,10 +18,11 @@ import { MainContent } from '../layout/main-content';
 export class AppShellComponent {
   layout = inject(LayoutService);
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.layout.toggleSidebar();
   }
-  closeSidebar() {
+
+  closeSidebar(): void {
     this.layout.closeSidebar();
   }
 }

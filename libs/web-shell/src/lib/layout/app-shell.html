@@ -1,3 +1,5 @@
+<!-- libs/web-shell/src/lib/layout/app-shell.html -->
+
 <header class="app-header">
   <!-- Mobile hamburger -->
   <button
@@ -13,37 +15,13 @@
   <h1 class="app-title">HHSC Compliance</h1>
 </header>
 
-<!-- Mobile overlay (click to close sidebar) -->
-<button
-  type="button"
-  class="sidebar-overlay"
-  *ngIf="
-    (layout.isMobile$ | async) === true &&
-    (layout.sidebarOpen$ | async) === true
-  "
-  aria-label="Close sidebar"
-  (click)="closeSidebar()"
-  (keydown.enter)="closeSidebar()"
-  (keydown.space)="closeSidebar()"
-></button>
-
 <div
   class="app-shell"
   [class.collapsed]="(layout.sidebarCollapsed$ | async) === true"
   [class.mobile]="(layout.isMobile$ | async) === true"
-  [class.mobile-open]="
-    (layout.isMobile$ | async) === true &&
-    (layout.sidebarOpen$ | async) === true
-  "
 >
-  <!-- Sidebar column -->
-  <aside
-    class="sidebar-pane"
-    *ngIf="
-      (layout.isMobile$ | async) === false ||
-      (layout.sidebarOpen$ | async) === true
-    "
-  >
+  <!-- Sidebar column — always rendered, behavior owned by <lib-sidebar> -->
+  <aside class="sidebar-pane">
     <lib-sidebar></lib-sidebar>
   </aside>
 
