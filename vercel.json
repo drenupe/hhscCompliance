@@ -1,0 +1,5 @@
+{
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm nx build web -c=production",
+  "outputDirectory": "dist/web"
+}
