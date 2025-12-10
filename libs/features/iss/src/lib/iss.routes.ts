@@ -1,10 +1,12 @@
+// libs/features/iss/src/lib/iss.routes.ts (where ISS_ROUTES lives)
+
 import { Routes } from '@angular/router';
 
 export const ISS_ROUTES: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',       // ✅ default to ISS home
+    redirectTo: 'home',
   },
 
   {
@@ -15,7 +17,7 @@ export const ISS_ROUTES: Routes = [
       ),
   },
 
-  // ✅ Year-at-a-glance for one consumer
+  // Year-at-a-glance for one consumer
   {
     path: 'provider/:providerId/consumer/:consumerId/year',
     loadComponent: () =>
@@ -24,7 +26,16 @@ export const ISS_ROUTES: Routes = [
       ),
   },
 
-  // ✅ Week (8615) for one consumer / date
+  // ✅ NEW: print-friendly year summary
+  {
+    path: 'provider/:providerId/consumer/:consumerId/year/print',
+    loadComponent: () =>
+      import(
+        './pages/iss-consumer-year-print/iss-consumer-year-print.page'
+      ).then((m) => m.IssConsumerYearPrintPageComponent),
+  },
+
+  // Week (8615) for one consumer / date
   {
     path: 'provider/:providerId/consumer/:consumerId/week/:serviceDate',
     loadComponent: () =>

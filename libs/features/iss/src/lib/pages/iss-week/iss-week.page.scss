@@ -973,4 +973,54 @@
   }
 }
 
+/* Safety: print iframe should never behave like UI */
+iframe.iss-print-frame {
+  pointer-events: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: 0 !important;
+  z-index: -1 !important;
+}
 
+
+
+
+/* ==================================================
+   SCROLL UNBLOCK + PRINT FRAME HARDENING
+   ================================================== */
+
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+/* Make sure nothing in this page disables scrolling */
+html, body {
+  overflow: auto;
+}
+
+/* If any parent layout accidentally applies these,
+   this helps your page still scroll normally */
+.iss-week-page,
+.iss-staff-shell,
+.iss-right,
+.iss-entry {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Stronger: ensure print iframe can never cover viewport */
+iframe.iss-print-frame {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

@@ -19,6 +19,7 @@ import {
   NgSwitchCase,
   NgSwitchDefault,
 } from '@angular/common';
+
 import {
   FormArray,
   FormBuilder,
@@ -71,11 +72,14 @@ type AutoSaveSource =
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
+
     // Forms
     ReactiveFormsModule,
+
     // Pipes
     AsyncPipe,
     DatePipe,
+
     // Weekly initials child
     IssWeeklyInitialsSectionComponent,
   ],
@@ -328,7 +332,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     const currentName = headerGroup.get('individualName')?.value;
     const currentDate = headerGroup.get('date')?.value;
 
-    // Use route serviceDate if the header date is still empty / default
     if (!currentDate && this.serviceDate) {
       patch['date'] = this.serviceDate;
     }
@@ -377,7 +380,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       serviceWeek?: ServiceWeek;
     };
 
-    // ----- TOP HEADER -----
     this.form.patchValue({
       header: {
         individualName: header.individualName ?? '',
@@ -389,7 +391,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       },
     });
 
-    // ----- SERVICE WEEK (MON–FRI CARDS) -----
     const weekFromRoot: ServiceWeek | undefined = log.serviceWeek;
     const weekFromHeader: ServiceWeek | undefined = header.serviceWeek;
 
@@ -431,8 +432,10 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       });
     }
 
-    // ----- WEEKLY INITIALS -----
-    this.patchWeeklyArrayFromHeader(this.socializationArray, header.socialization);
+    this.patchWeeklyArrayFromHeader(
+      this.socializationArray,
+      header.socialization,
+    );
     this.patchWeeklyArrayFromHeader(this.selfHelpArray, header.selfHelp);
     this.patchWeeklyArrayFromHeader(this.adaptiveArray, header.adaptive);
     this.patchWeeklyArrayFromHeader(
@@ -441,7 +444,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     );
     this.patchWeeklyArrayFromHeader(this.communityArray, header.community);
 
-    // ----- NOTES -----
     this.patchNotesFromHeader(this.notes, header.notes);
   }
 
@@ -449,7 +451,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   //  HELPERS – WEEKLY + NOTES
   // ======================================================================
 
-  /** Hydrate a weekly initials FormArray from header[property] arrays */
   private patchWeeklyArrayFromHeader(
     formArray: FormArray<FormGroup>,
     savedRows?: WeeklyInitialRow[],
@@ -471,7 +472,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  /** Hydrate note rows from header.notes[] */
   private patchNotesFromHeader(
     formArray: FormArray<FormGroup>,
     savedNotes?: WeeklyNote[],
@@ -509,7 +509,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
 
   private setupLifecycleAutoSave(): void {
     if (typeof window !== 'undefined') {
-      // Responsive: recompute mobile flag on resize
       fromEvent(window, 'resize')
         .pipe(takeUntil(this.destroy$))
         .subscribe(() => this.updateIsMobile());
@@ -563,7 +562,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   }
 
   // ======================================================================
-  //  BUILD COMMON PAYLOAD (header + serviceWeek)
+  //  BUILD PAYLOAD
   // ======================================================================
 
   private buildCommonPayload(): {
@@ -571,13 +570,11 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     serviceWeek: ServiceWeek;
   } {
     const raw = this.form.getRawValue() as any;
-
     const serviceWeek = this.buildServiceWeekPayload();
 
     const header: StaffLogHeader & { serviceWeek?: ServiceWeek } = {
       ...(raw.header ?? {}),
 
-      // Persist weekly initials + notes under header.*
       socialization: raw.socialization ?? [],
       selfHelp: raw.selfHelp ?? [],
       adaptive: raw.adaptive ?? [],
@@ -585,31 +582,16 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       community: raw.community ?? [],
       notes: raw.notes ?? [],
 
-      // also store the grid here so it's persisted with header JSON
       serviceWeek,
     };
 
     return { header, serviceWeek };
   }
 
-  // ======================================================================
-  //  BUILD PAYLOAD FOR EFFECT (saveLog)
-  // ======================================================================
-
   private buildPayload(): UpdateStaffLogDto {
     const { header, serviceWeek } = this.buildCommonPayload();
-
-    const payload: UpdateStaffLogDto = {
-      header,
-      serviceWeek,
-    };
-
-    return payload;
+    return { header, serviceWeek };
   }
-
-  // ======================================================================
-  //  SAVE → CREATE vs UPDATE (delegated to effects via logId)
-  // ======================================================================
 
   private triggerSave(_source: AutoSaveSource): void {
     if (!this.form) return;
@@ -628,16 +610,10 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     }
 
     const payload = this.buildPayload();
-
     this.autoSaveStatus = 'saving';
 
-    // Effects decide: if logId is null => create; else update.
     this.issFacade.saveLog(this.currentLogId, payload);
   }
-
-  // ======================================================================
-  //  BUILD SERVICE WEEK PAYLOAD
-  // ======================================================================
 
   private buildServiceWeekPayload(): ServiceWeek {
     const rows = this.serviceWeek.controls as FormGroup[];
@@ -646,13 +622,11 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       const v = g.value as any;
 
       return {
-        // Core ServiceDayEntry fields
         timeIn: v.start ?? null,
         timeOut: v.end ?? null,
         activity: null,
         notes: null,
 
-        // Extended ISS fields
         date: v.date ?? null,
         providerName: v.providerName ?? null,
         providerSignature: v.providerSignature ?? null,
@@ -680,8 +654,6 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     this.queueSave('manual');
   }
 
-  // ===== Ratio helper =====
-
   ratio(index: number): string {
     const row = this.serviceWeek.at(index) as FormGroup;
     const setting = row.get('setting')?.value as
@@ -689,9 +661,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       | 'off_site'
       | undefined;
 
-    if (setting !== 'off_site') {
-      return '';
-    }
+    if (setting !== 'off_site') return '';
 
     const individuals = Number(row.get('individualsCount')?.value ?? 0);
     const staff = Number(row.get('staffCount')?.value ?? 1);
@@ -704,9 +674,210 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     return index;
   }
 
-  printWeek(event?: Event): void {
-    event?.preventDefault();
-    window.print();
+  // ======================================================================
+  //  PRINT WEEK – RELIABLE IFRAME + LIVE VALUE COPY
+  // ======================================================================
+printWeek(event?: Event): void {
+  event?.preventDefault();
+  event?.stopPropagation();
+
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  const source = document.querySelector('.iss-week-page') as HTMLElement | null;
+
+  if (!source) {
+    console.warn('[ISS week] .iss-week-page not found for print');
+    return;
+  }
+
+  // Clean up any leftover print frames first
+  document.querySelectorAll('iframe.iss-print-frame').forEach((el) => el.remove());
+
+  const iframe = document.createElement('iframe');
+  iframe.className = 'iss-print-frame';
+  iframe.setAttribute('aria-hidden', 'true');
+
+  // Hard lock the iframe so it cannot overlay or intercept clicks
+  Object.assign(iframe.style, {
+  position: 'absolute',
+  left: '-9999px',
+  top: '-9999px',
+  width: '1px',
+  height: '1px',
+  border: '0',
+  visibility: 'hidden',
+  opacity: '0',
+  pointerEvents: 'none',
+} as Partial<CSSStyleDeclaration>);
+
+
+  document.body.appendChild(iframe);
+
+  const frameDoc = iframe.contentDocument || iframe.contentWindow?.document;
+  if (!frameDoc) {
+    console.warn('[ISS week] Unable to access iframe document for print');
+    iframe.remove();
+    return;
+  }
+
+  frameDoc.open();
+  frameDoc.write(this.buildPrintShellHtml());
+  frameDoc.close();
+
+  let didRun = false;
+
+  const cleanup = () => {
+  try {
+    // Hard reset any accidental scroll locks
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.height = '';
+  } catch { /* empty */ }
+
+  try { iframe.remove(); } catch { /* empty */ }
+};
+
+
+  // Absolute safety cleanup (in case print is canceled or browser skips onafterprint)
+  const safetyTimer = window.setTimeout(cleanup, 8000);
+
+  const runPrint = () => {
+    if (didRun) return;
+    didRun = true;
+
+    try {
+      const root = frameDoc.getElementById('print-root');
+      if (!root) {
+        console.warn('[ISS week] print-root not found in iframe');
+        window.clearTimeout(safetyTimer);
+        cleanup();
+        return;
+      }
+
+      const clone = source.cloneNode(true) as HTMLElement;
+      // Safety reset before creating print frame
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.height = '';
+      root.appendChild(clone);
+
+      this.copyLiveFormValues(source, clone);
+
+      const frameWin = iframe.contentWindow;
+      if (!frameWin) {
+        window.clearTimeout(safetyTimer);
+        cleanup();
+        return;
+      }
+
+      frameWin.requestAnimationFrame(() => {
+        frameWin.requestAnimationFrame(() => {
+          frameWin.focus();
+          frameWin.print();
+
+          frameWin.onafterprint = () => {
+            window.clearTimeout(safetyTimer);
+            cleanup();
+          };
+        });
+      });
+    } catch (err) {
+      console.warn('[ISS week] print error', err);
+      window.clearTimeout(safetyTimer);
+      cleanup();
+    }
+  };
+
+  iframe.onload = runPrint;
+  setTimeout(runPrint, 0);
+}
+
+
+
+  private buildPrintShellHtml(): string {
+    if (typeof document === 'undefined') {
+      return `<!doctype html><html><head></head><body><div id="print-root"></div></body></html>`;
+    }
+
+    const headClone = document.head.cloneNode(true) as HTMLHeadElement;
+    headClone.querySelectorAll('script').forEach((s) => s.remove());
+
+    const headHtml = headClone.innerHTML;
+
+    return `
+      <!doctype html>
+      <html>
+        <head>
+          ${headHtml}
+          <title>ISS Staff Log – Week of ${this.serviceDate ?? ''}</title>
+          <style>
+            @media print {
+              html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div id="print-root"></div>
+        </body>
+      </html>
+    `;
+  }
+
+  private copyLiveFormValues(
+    sourceRoot: HTMLElement,
+    targetRoot: HTMLElement,
+  ): void {
+    const srcFields = Array.from(
+      sourceRoot.querySelectorAll('input, textarea, select'),
+    ) as Array<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
+
+    const dstFields = Array.from(
+      targetRoot.querySelectorAll('input, textarea, select'),
+    ) as Array<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
+
+    const len = Math.min(srcFields.length, dstFields.length);
+
+    for (let i = 0; i < len; i++) {
+      const s = srcFields[i];
+      const d = dstFields[i];
+
+      if (s instanceof HTMLInputElement && d instanceof HTMLInputElement) {
+        const type = (s.getAttribute('type') || 'text').toLowerCase();
+
+        if (type === 'checkbox' || type === 'radio') {
+          d.checked = s.checked;
+          if (s.checked) d.setAttribute('checked', '');
+          else d.removeAttribute('checked');
+        } else {
+          d.value = s.value ?? '';
+          d.setAttribute('value', s.value ?? '');
+        }
+        continue;
+      }
+
+      if (s instanceof HTMLTextAreaElement && d instanceof HTMLTextAreaElement) {
+        d.value = s.value ?? '';
+        d.textContent = s.value ?? '';
+        continue;
+      }
+
+      if (s instanceof HTMLSelectElement && d instanceof HTMLSelectElement) {
+        d.value = s.value;
+        Array.from(d.options).forEach((opt) => {
+          if (opt.value === s.value) opt.setAttribute('selected', '');
+          else opt.removeAttribute('selected');
+        });
+      }
+    }
   }
 
   // ===== Back to year =====

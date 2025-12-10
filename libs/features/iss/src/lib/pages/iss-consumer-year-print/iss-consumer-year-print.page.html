@@ -1,0 +1,87 @@
+<section class="iss-year-print">
+  <!-- Screen-only toolbar -->
+  <header class="iss-year-print__toolbar no-print">
+    <button type="button" class="btn" (click)="onPrintClick()">
+      Print
+    </button>
+    <button
+      type="button"
+      class="btn btn--ghost"
+      (click)="onCloseClick()"
+    >
+      Close
+    </button>
+  </header>
+
+  <!-- Printable header -->
+  <header class="iss-year-print__header">
+    <h1 class="iss-year-print__title">
+      ISS Weekly Staff Logs – Year Summary
+    </h1>
+
+    <div class="iss-year-print__meta">
+      <div>
+        <strong>Consumer:</strong>
+        <span>{{ consumerName$ | async }}</span>
+      </div>
+      <div>
+        <strong>Printed on:</strong>
+        <span>{{ today | date: 'MMM d, y, h:mm a' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Year table -->
+  <ng-container *ngIf="months$ | async as months; else loading">
+    <section *ngIf="months.length; else empty">
+      <table class="iss-year-print__table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Week of</th>
+            <th>Status</th>
+            <th>Total Hours</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ng-container *ngFor="let m of months">
+            <ng-container *ngIf="m.weeks?.length; else monthWithoutWeeks">
+              <tr *ngFor="let w of m.weeks">
+                <td>{{ m.monthStart | date: 'MMMM y' }}</td>
+                <td>{{ w.serviceDate | date: 'MMM d' }}</td>
+                <td>
+                  <ng-container *ngIf="w.hasLog; else noLog">
+                    {{ w.status || 'draft' }}
+                  </ng-container>
+                </td>
+                <td>{{ w.totalHours || '-' }}</td>
+                <td></td>
+              </tr>
+            </ng-container>
+
+            <ng-template #monthWithoutWeeks>
+              <tr>
+                <td>{{ m.monthStart | date: 'MMMM y' }}</td>
+                <td colspan="4">No weeks recorded</td>
+              </tr>
+            </ng-template>
+          </ng-container>
+        </tbody>
+      </table>
+    </section>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="iss-year-print__status">Loading year data…</p>
+  </ng-template>
+
+  <ng-template #empty>
+    <p class="iss-year-print__status">
+      No weekly ISS staff logs found for this consumer.
+    </p>
+  </ng-template>
+
+  <ng-template #noLog>Empty</ng-template>
+</section>
