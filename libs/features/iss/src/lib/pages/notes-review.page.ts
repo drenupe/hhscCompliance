@@ -13,7 +13,7 @@ type ReviewNote = {
 };
 
 @Component({
-  selector: 'iss-notes-review-page',
+  selector: 'lib-iss-notes-review-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `

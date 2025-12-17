@@ -2,11 +2,36 @@
 import nx from '@nx/eslint-plugin';
 
 /**
- * Dependency constraints for @nx/enforce-module-boundaries
- * using your scope/type tagging strategy.
+ * Enterprise module boundaries:
+ * - type:* = architecture layering
+ * - scope:* = domain grouping
+ * - surface:* = platform (web/api)
+ *
+ * Key rule: type:app may depend on type:shell (and other layers),
+ * and also on scope:* libs (since your libs carry scope tags).
  */
 const depConstraints = [
-  { sourceTag: 'type:app', onlyDependOnLibsWithTags: [] },
+  {
+    sourceTag: 'type:app',
+    onlyDependOnLibsWithTags: [
+      'type:shell',
+      'type:feature',
+      'type:ui',
+      'type:data-access',
+      'type:util',
+
+      // allow scope-tagged libs (including web-shell)
+      'scope:shell',
+      'scope:feature',
+      'scope:ui',
+      'scope:data',
+      'scope:shared',
+      'scope:models',
+
+      // allow same-surface libs if you want to keep surface tags in play
+      'surface:web',
+    ],
+  },
   {
     sourceTag: 'scope:shell',
     onlyDependOnLibsWithTags: [
@@ -50,7 +75,7 @@ export default [
     ],
   },
 
-  // Global Nx module boundaries (with your depConstraints)
+  // Global Nx module boundaries (with depConstraints)
   {
     files: [
       '**/*.ts',
@@ -67,7 +92,6 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          // Keep eslint configs allowed as you had
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints,
         },
@@ -75,7 +99,7 @@ export default [
     },
   },
 
-  // 🔓 Allow migrations to import via relative paths (e.g. libs/shared-models)
+  // Allow migrations to import via relative paths
   {
     files: ['api/migrations/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
     rules: {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'location-selector',
+  selector: 'lib-location-selector',
   imports: [],
   templateUrl: './location-selector.html',
   styleUrl: './location-selector.scss'

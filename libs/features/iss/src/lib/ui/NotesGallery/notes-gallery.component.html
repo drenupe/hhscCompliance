@@ -4,7 +4,9 @@
     <div class="controls">
       <button type="button" (click)="setPrevWeek(anchor)">◀ Prev</button>
 
+      <label for="week-anchor-date" class="sr-only">Week</label>
       <input
+        id="week-anchor-date"
         type="date"
         [ngModel]="anchor || ''"
         (ngModelChange)="setAnchor($event)" />
@@ -15,36 +17,63 @@
   </div>
 </ng-container>
 
-
-
 <div class="filters">
-<label>Consumer
-<input type="text" [ngModel]="(filterConsumer$ | async) || ''" (ngModelChange)="setFilterConsumer($event)">
-</label>
-<label>Location
-<input type="text" [ngModel]="(filterLocation$ | async) || ''" (ngModelChange)="setFilterLocation($event)">
-</label>
-<label class="grow">Search
-<input type="search" [ngModel]="(filterQuery$ | async) || ''" (ngModelChange)="setFilterQuery($event)">
-</label>
-</div>
+  <label for="filter-consumer">Consumer</label>
+  <input
+    id="filter-consumer"
+    type="text"
+    [ngModel]="(filterConsumer$ | async) || ''"
+    (ngModelChange)="setFilterConsumer($event)" />
 
+  <label for="filter-location">Location</label>
+  <input
+    id="filter-location"
+    type="text"
+    [ngModel]="(filterLocation$ | async) || ''"
+    (ngModelChange)="setFilterLocation($event)" />
+
+  <label for="filter-query" class="grow">Search</label>
+  <input
+    id="filter-query"
+    type="search"
+    [ngModel]="(filterQuery$ | async) || ''"
+    (ngModelChange)="setFilterQuery($event)" />
+</div>
 
 <div class="grid">
-<article class="card" *ngFor="let n of (weekNotes$ | async)" (click)="open(n)">
-<header>
-<div class="date">{{ n.date | date:'EEE, MMM d' }}</div>
-<div class="consumer">{{ n.consumer }}</div>
-</header>
-<div class="meta">
-<span class="badge" *ngIf="n.location">{{ n.location }}</span>
-<span class="badge" *ngIf="n.activity">{{ n.activity }}</span>
-<span class="badge" *ngIf="n.initials">Staff: {{ n.initials }}</span>
-</div>
-<p class="comment" [title]="n.comment">{{ n.comment }}</p>
-<footer>
-<button type="button" (click)="$event.stopPropagation(); copy(n.comment)">Copy</button>
-<button type="button" (click)="$event.stopPropagation(); open(n)">Open</button>
-</footer>
-</article>
+  <article
+    class="card"
+    *ngFor="let n of (weekNotes$ | async)"
+    role="button"
+    tabindex="0"
+    (click)="open(n)"
+    (keydown.enter)="open(n)"
+    (keydown.space)="$event.preventDefault(); open(n)">
+    <header>
+      <div class="date">{{ n.date | date: 'EEE, MMM d' }}</div>
+      <div class="consumer">{{ n.consumer }}</div>
+    </header>
+
+    <div class="meta">
+      <span class="badge" *ngIf="n.location">{{ n.location }}</span>
+      <span class="badge" *ngIf="n.activity">{{ n.activity }}</span>
+      <span class="badge" *ngIf="n.initials">Staff: {{ n.initials }}</span>
+    </div>
+
+    <p class="comment" [title]="n.comment">{{ n.comment }}</p>
+
+    <footer>
+      <button
+        type="button"
+        (click)="$event.stopPropagation(); copy(n.comment)">
+        Copy
+      </button>
+
+      <button
+        type="button"
+        (click)="$event.stopPropagation(); open(n)">
+        Open
+      </button>
+    </footer>
+  </article>
 </div>

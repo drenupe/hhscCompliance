@@ -8,7 +8,7 @@ import { IssNote } from '../../models/iss-note.model';
 const ymd = (d: Date) => d.toISOString().slice(0, 10);
 
 @Component({
-  selector: 'iss-notes-gallery',
+  selector: 'lib-iss-notes-gallery',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './notes-gallery.component.html',
@@ -43,7 +43,7 @@ export class NotesGalleryComponent {
   // Modal + utilities
   open(note: IssNote) { this.selected = note; this.showModal = true; }
   close()             { this.showModal = false; }
-  copy(text: string)  { navigator.clipboard?.writeText(text).catch(() => {}); }
+  copy(text: string)  { navigator.clipboard?.writeText(text).catch(() => { /* empty */ }); }
 
   // PDF export helpers (unchanged; keep your existing implementations)
   async exportPdfList()  { /* same as before */ }

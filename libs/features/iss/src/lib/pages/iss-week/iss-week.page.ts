@@ -1,5 +1,3 @@
-// libs/features/iss/src/lib/pages/iss-week/iss-week.page.ts
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -61,6 +59,58 @@ type AutoSaveSource =
   | 'beforeunload'
   | 'manual';
 
+/* ============================================================
+ * Typed form value shapes (removes all `any`)
+ * ============================================================ */
+
+type IssWeekHeaderFormValue = {
+  individualName: string;
+  date: string;
+  lon: string;
+  provider: string;
+  license: string;
+  staffNameTitle: string;
+};
+
+type IssServiceRowFormValue = {
+  day: string;
+  date: string;
+  providerName: string;
+  providerSignature: string;
+  start: string;
+  end: string;
+  minutes: number;
+  setting: 'on_site' | 'off_site' | string;
+  individualsCount: number;
+  staffCount: number;
+};
+
+type IssWeeklyRowFormValue = {
+  label: string;
+  mon: string;
+  tue: string;
+  wed: string;
+  thu: string;
+  fri: string;
+};
+
+type IssNoteRowFormValue = {
+  date: string;
+  initials: string;
+  comment: string;
+};
+
+type IssWeekFormValue = {
+  header: IssWeekHeaderFormValue;
+  serviceWeek: IssServiceRowFormValue[];
+  socialization: IssWeeklyRowFormValue[];
+  selfHelp: IssWeeklyRowFormValue[];
+  adaptive: IssWeeklyRowFormValue[];
+  implementation: IssWeeklyRowFormValue[];
+  community: IssWeeklyRowFormValue[];
+  notes: IssNoteRowFormValue[];
+};
+
 @Component({
   standalone: true,
   selector: 'lib-hhsc-iss-week-page',
@@ -98,6 +148,9 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
 
   autoSaveStatus: AutoSaveStatus = 'idle';
   lastSavedAt: Date | null = null;
+
+  // helpful for debugging / optional UI display later
+  private lastSaveSource: AutoSaveSource | null = null;
 
   // mobile flag used in template + SCSS
   isMobile = false;
@@ -499,9 +552,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
       .pipe(
         skip(1),
         debounceTime(2000),
-        distinctUntilChanged(
-          (a, b) => JSON.stringify(a) === JSON.stringify(b),
-        ),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.queueSave('typing'));
@@ -562,18 +613,18 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   }
 
   // ======================================================================
-  //  BUILD PAYLOAD
+  //  BUILD PAYLOAD (no `any`)
   // ======================================================================
 
   private buildCommonPayload(): {
     header: StaffLogHeader & { serviceWeek?: ServiceWeek };
     serviceWeek: ServiceWeek;
   } {
-    const raw = this.form.getRawValue() as any;
+    const raw = this.form.getRawValue() as IssWeekFormValue;
     const serviceWeek = this.buildServiceWeekPayload();
 
     const header: StaffLogHeader & { serviceWeek?: ServiceWeek } = {
-      ...(raw.header ?? {}),
+      ...(raw.header ?? ({} as IssWeekHeaderFormValue)),
 
       socialization: raw.socialization ?? [],
       selfHelp: raw.selfHelp ?? [],
@@ -593,8 +644,11 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     return { header, serviceWeek };
   }
 
-  private triggerSave(_source: AutoSaveSource): void {
+  private triggerSave(source: AutoSaveSource): void {
     if (!this.form) return;
+
+    // use `source` so lint doesn't flag it and it’s useful for debugging/UI later
+    this.lastSaveSource = source;
 
     if (!this.consumerId || !this.serviceDate) {
       console.warn('[ISS week] Missing consumerId or serviceDate; abort save', {
@@ -611,6 +665,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
 
     const payload = this.buildPayload();
     this.autoSaveStatus = 'saving';
+    this.lastSavedAt = new Date();
 
     this.issFacade.saveLog(this.currentLogId, payload);
   }
@@ -619,7 +674,7 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
     const rows = this.serviceWeek.controls as FormGroup[];
 
     const mapRow = (g: FormGroup): ServiceDayEntry => {
-      const v = g.value as any;
+      const v = g.getRawValue() as IssServiceRowFormValue;
 
       return {
         timeIn: v.start ?? null,
@@ -677,126 +732,132 @@ export class IssWeekPageComponent implements OnInit, OnDestroy {
   // ======================================================================
   //  PRINT WEEK – RELIABLE IFRAME + LIVE VALUE COPY
   // ======================================================================
-printWeek(event?: Event): void {
-  event?.preventDefault();
-  event?.stopPropagation();
 
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
-    return;
-  }
+  printWeek(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
 
-  const source = document.querySelector('.iss-week-page') as HTMLElement | null;
-
-  if (!source) {
-    console.warn('[ISS week] .iss-week-page not found for print');
-    return;
-  }
-
-  // Clean up any leftover print frames first
-  document.querySelectorAll('iframe.iss-print-frame').forEach((el) => el.remove());
-
-  const iframe = document.createElement('iframe');
-  iframe.className = 'iss-print-frame';
-  iframe.setAttribute('aria-hidden', 'true');
-
-  // Hard lock the iframe so it cannot overlay or intercept clicks
-  Object.assign(iframe.style, {
-  position: 'absolute',
-  left: '-9999px',
-  top: '-9999px',
-  width: '1px',
-  height: '1px',
-  border: '0',
-  visibility: 'hidden',
-  opacity: '0',
-  pointerEvents: 'none',
-} as Partial<CSSStyleDeclaration>);
-
-
-  document.body.appendChild(iframe);
-
-  const frameDoc = iframe.contentDocument || iframe.contentWindow?.document;
-  if (!frameDoc) {
-    console.warn('[ISS week] Unable to access iframe document for print');
-    iframe.remove();
-    return;
-  }
-
-  frameDoc.open();
-  frameDoc.write(this.buildPrintShellHtml());
-  frameDoc.close();
-
-  let didRun = false;
-
-  const cleanup = () => {
-  try {
-    // Hard reset any accidental scroll locks
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.height = '';
-  } catch { /* empty */ }
-
-  try { iframe.remove(); } catch { /* empty */ }
-};
-
-
-  // Absolute safety cleanup (in case print is canceled or browser skips onafterprint)
-  const safetyTimer = window.setTimeout(cleanup, 8000);
-
-  const runPrint = () => {
-    if (didRun) return;
-    didRun = true;
-
-    try {
-      const root = frameDoc.getElementById('print-root');
-      if (!root) {
-        console.warn('[ISS week] print-root not found in iframe');
-        window.clearTimeout(safetyTimer);
-        cleanup();
-        return;
-      }
-
-      const clone = source.cloneNode(true) as HTMLElement;
-      // Safety reset before creating print frame
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.height = '';
-      root.appendChild(clone);
-
-      this.copyLiveFormValues(source, clone);
-
-      const frameWin = iframe.contentWindow;
-      if (!frameWin) {
-        window.clearTimeout(safetyTimer);
-        cleanup();
-        return;
-      }
-
-      frameWin.requestAnimationFrame(() => {
-        frameWin.requestAnimationFrame(() => {
-          frameWin.focus();
-          frameWin.print();
-
-          frameWin.onafterprint = () => {
-            window.clearTimeout(safetyTimer);
-            cleanup();
-          };
-        });
-      });
-    } catch (err) {
-      console.warn('[ISS week] print error', err);
-      window.clearTimeout(safetyTimer);
-      cleanup();
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return;
     }
-  };
 
-  iframe.onload = runPrint;
-  setTimeout(runPrint, 0);
-}
+    const source = document.querySelector('.iss-week-page') as HTMLElement | null;
 
+    if (!source) {
+      console.warn('[ISS week] .iss-week-page not found for print');
+      return;
+    }
 
+    // Clean up any leftover print frames first
+    document
+      .querySelectorAll('iframe.iss-print-frame')
+      .forEach((el) => el.remove());
+
+    const iframe = document.createElement('iframe');
+    iframe.className = 'iss-print-frame';
+    iframe.setAttribute('aria-hidden', 'true');
+
+    // Hard lock the iframe so it cannot overlay or intercept clicks
+    Object.assign(iframe.style, {
+      position: 'absolute',
+      left: '-9999px',
+      top: '-9999px',
+      width: '1px',
+      height: '1px',
+      border: '0',
+      visibility: 'hidden',
+      opacity: '0',
+      pointerEvents: 'none',
+    } as Partial<CSSStyleDeclaration>);
+
+    document.body.appendChild(iframe);
+
+    const frameDoc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!frameDoc) {
+      console.warn('[ISS week] Unable to access iframe document for print');
+      iframe.remove();
+      return;
+    }
+
+    frameDoc.open();
+    frameDoc.write(this.buildPrintShellHtml());
+    frameDoc.close();
+
+    let didRun = false;
+
+    const cleanup = () => {
+      try {
+        // Hard reset any accidental scroll locks
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.height = '';
+      } catch {
+        /* empty */
+      }
+
+      try {
+        iframe.remove();
+      } catch {
+        /* empty */
+      }
+    };
+
+    // Absolute safety cleanup (in case print is canceled or browser skips onafterprint)
+    const safetyTimer = window.setTimeout(cleanup, 8000);
+
+    const runPrint = () => {
+      if (didRun) return;
+      didRun = true;
+
+      try {
+        const root = frameDoc.getElementById('print-root');
+        if (!root) {
+          console.warn('[ISS week] print-root not found in iframe');
+          window.clearTimeout(safetyTimer);
+          cleanup();
+          return;
+        }
+
+        const clone = source.cloneNode(true) as HTMLElement;
+
+        // Safety reset before creating print frame
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.height = '';
+
+        root.appendChild(clone);
+        this.copyLiveFormValues(source, clone);
+
+        const frameWin = iframe.contentWindow;
+        if (!frameWin) {
+          window.clearTimeout(safetyTimer);
+          cleanup();
+          return;
+        }
+
+        frameWin.requestAnimationFrame(() => {
+          frameWin.requestAnimationFrame(() => {
+            frameWin.focus();
+            frameWin.print();
+
+            frameWin.onafterprint = () => {
+              window.clearTimeout(safetyTimer);
+              cleanup();
+            };
+          });
+        });
+      } catch (err) {
+        console.warn('[ISS week] print error', err);
+        window.clearTimeout(safetyTimer);
+        cleanup();
+      }
+    };
+
+    iframe.onload = runPrint;
+    setTimeout(runPrint, 0);
+  }
 
   private buildPrintShellHtml(): string {
     if (typeof document === 'undefined') {

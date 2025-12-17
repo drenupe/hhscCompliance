@@ -1,12 +1,50 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-type Json = Record<string, any>;
+type JsonObject = Record<string, unknown>;
+
+type FileReplacement = { replace: string; with: string };
+
+type BuildConfig = JsonObject & {
+  fileReplacements?: FileReplacement[];
+  buildTarget?: string;
+};
+
+type NxTarget = JsonObject & {
+  configurations?: Record<string, BuildConfig>;
+};
+
+type ProjectJson = JsonObject & {
+  targets?: Record<string, NxTarget>;
+};
+
+function isObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null;
+}
 
 /** Always returns a string (fallback is required) */
 function getArg(name: string, fallback: string): string {
   const flag = process.argv.find((a) => a.startsWith(`--${name}=`));
   return flag ? flag.split('=')[1] : fallback;
+}
+
+function normalizeForJson(p: string): string {
+  return p.split(path.sep).join('/');
+}
+
+function ensureTarget(projectJson: ProjectJson, name: string): NxTarget {
+  projectJson.targets ??= {};
+  const existing = projectJson.targets[name];
+  if (existing && isObject(existing)) return existing as NxTarget;
+
+  const created: NxTarget = {};
+  projectJson.targets[name] = created;
+  return created;
+}
+
+function ensureConfigurations(target: NxTarget): Record<string, BuildConfig> {
+  target.configurations ??= {};
+  return target.configurations;
 }
 
 async function main(): Promise<void> {
@@ -22,37 +60,37 @@ async function main(): Promise<void> {
   };
 
   const content = await fs.readFile(projectJsonPath, 'utf-8');
-  const projectJson: Json = JSON.parse(content);
+  const parsed: unknown = JSON.parse(content);
 
-  // Ensure structure exists
-  projectJson.targets ??= {};
-  projectJson.targets.build ??= {};
-  projectJson.targets.build.configurations ??= {};
-  projectJson.targets.serve ??= {};
-  projectJson.targets.serve.configurations ??= {};
+  // Safe-ish cast after runtime check
+  const projectJson: ProjectJson = isObject(parsed) ? (parsed as ProjectJson) : {};
 
-  const normalizeForJson = (p: string) => p.split(path.sep).join('/');
+  // Ensure structure exists (typed)
+  const build = ensureTarget(projectJson, 'build');
+  const serve = ensureTarget(projectJson, 'serve');
+  const buildConfigs = ensureConfigurations(build);
+  const serveConfigs = ensureConfigurations(serve);
 
-  function applyFileReplacements(
-    configName: 'production' | 'staging',
-    withPath: string
-  ): void {
-    const cfg: Json = projectJson.targets.build.configurations[configName] ?? {};
+  function applyFileReplacements(configName: 'production' | 'staging', withPath: string): void {
+    const cfg: BuildConfig = buildConfigs[configName] ?? {};
+
     cfg.fileReplacements = [
       {
         replace: normalizeForJson(path.join(envDir, 'environment.ts')),
         with: normalizeForJson(withPath),
       },
     ];
-    projectJson.targets.build.configurations[configName] = cfg;
+
+    buildConfigs[configName] = cfg;
   }
 
   // Apply production & staging env replacements
   applyFileReplacements('production', envFiles.prod);
   applyFileReplacements('staging', envFiles.staging);
 
-  // Serve:staging → build:staging
-  projectJson.targets.serve.configurations.staging = {
+  // Serve:staging → build:staging (merge-safe)
+  serveConfigs.staging = {
+    ...(serveConfigs.staging ?? {}),
     buildTarget: `${project}:build:staging`,
   };
 

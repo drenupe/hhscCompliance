@@ -43,7 +43,7 @@ export class IssConsumerYearPrintPageComponent
   );
 
   ngOnInit(): void {
-    const providerIdParam = this.route.snapshot.paramMap.get('providerId');
+   // const providerIdParam = this.route.snapshot.paramMap.get('providerId');
     const consumerIdParam = this.route.snapshot.paramMap.get('consumerId');
 
     const consumerId = consumerIdParam ? Number(consumerIdParam) : 0;

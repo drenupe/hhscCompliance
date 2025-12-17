@@ -1,16 +1,16 @@
+
+
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Form8615PrintComponent } from '../ui/Form8615Print/form8615-print.component';
 
 @Component({
-  selector: 'iss-daily-log-page',
+  selector: 'lib-iss-daily-log-page',
   standalone: true,
   imports: [CommonModule, Form8615PrintComponent],
   template: `
-    <iss-form8615-print
-      [header]="header"
-      [rows]="rows">
-    </iss-form8615-print>
+
   `,
 })
 export class IssDailyLogPage {

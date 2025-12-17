@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  selector: 'app-med-admin-page',
+  selector: 'lib-med-admin-page',
   imports: [CommonModule],
   template: `
     <section class="page">

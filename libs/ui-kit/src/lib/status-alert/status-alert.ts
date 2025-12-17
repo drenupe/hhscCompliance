@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'status-alert',
+  selector: 'lib-status-alert',
   imports: [],
   templateUrl: './status-alert.html',
   styleUrl: './status-alert.scss'

@@ -1,140 +1,173 @@
 // libs/features/iss/src/lib/data-access/iss-api.models.ts
 
+import {
+  ISODate,
+  ISODateTime,
+  TimeHHMM,
+  RatioString,
+  JsonBlob,
+  PaginationMeta,
+} from '@hhsc-compliance/shared';
+
+export type IssServiceSetting =
+  | 'on_site'
+  | 'off_site'
+  | 'community'
+  | 'other'
+  | string;
+
+/* ============================================================
+ * Core DTOs
+ * ============================================================ */
+
 export interface IssProviderDto {
   id: number;
   name: string;
   licenseNumber: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: ISODateTime;
+  updatedAt: ISODateTime;
 }
 
 export interface ConsumerDto {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: string | null;
+  dateOfBirth: ISODate | null;
   medicaidNumber: string | null;
   levelOfNeed: string | null;
   placeOfService: string | null;
   issProvider: IssProviderDto;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: ISODateTime;
+  updatedAt: ISODateTime;
 }
+
+/* ============================================================
+ * JSONB: iss_staff_log shapes
+ * ============================================================ */
 
 /**
  * Shape of the JSON blobs in iss_staff_log.
- * Keep these as loose as needed to match your Angular form,
- * we can tighten types later.
+ * Keep these as loose as needed to match your Angular form.
  */
-export interface IssStaffLogHeader {
+export interface IssStaffLogHeader extends JsonBlob {
   individualName: string;
-  date: string;
+  date: ISODate;
   lon?: string | number | null;
   levelOfNeed?: string | number | null;
   placeOfService?: string | null;
   issProviderName?: string | null;
   issProviderLicense?: string | null;
   staffNameTitle?: string | null;
-  [key: string]: any;
 }
 
-export interface IssServiceDay {
-  day: string;          // 'Monday', etc.
-  date: string;         // 'YYYY-MM-DD'
+export interface IssServiceDay extends JsonBlob {
+  day: string; // 'Monday', etc.
+  date: ISODate;
+
   providerName: string;
   providerSignature: string;
-  start: string;        // 'HH:mm'
-  end: string;          // 'HH:mm'
+
+  start: TimeHHMM;
+  end: TimeHHMM;
   minutes: number;
-  setting: 'on_site' | 'off_site' | string;
+
+  setting: IssServiceSetting;
+
   individualsCount: number;
   staffCount: number;
-  ratio: string;        // '2:5'
+  ratio: RatioString;
+
   description?: string;
-  [key: string]: any;
 }
 
-export interface IssWeeklySectionRow {
+export interface IssWeeklySectionRow extends JsonBlob {
   label: string;
   monday?: string | null;
   tuesday?: string | null;
   wednesday?: string | null;
   thursday?: string | null;
   friday?: string | null;
-  [key: string]: any;
 }
 
-export interface IssWeeklySections {
+export interface IssWeeklySections extends JsonBlob {
   socialization?: IssWeeklySectionRow[];
   selfHelp?: IssWeeklySectionRow[];
   adaptive?: IssWeeklySectionRow[];
   implementation?: IssWeeklySectionRow[];
   community?: IssWeeklySectionRow[];
-  [key: string]: any;
 }
 
-export interface IssNote {
-  date: string;      // 'YYYY-MM-DD'
+export interface IssNote extends JsonBlob {
+  date: ISODate;
   initials: string;
   comment: string;
-  [key: string]: any;
 }
+
+/* ============================================================
+ * Staff Log DTO
+ * ============================================================ */
 
 export interface IssStaffLogDto {
   id: number;
   consumer: ConsumerDto;
   issProvider: IssProviderDto;
-  serviceDate: string;           // 'YYYY-MM-DD'
+
+  serviceDate: ISODate;
+
   header: IssStaffLogHeader;
-  serviceWeek: IssServiceDay[];  // JSONB array
+  serviceWeek: IssServiceDay[]; // JSONB array
   weeklySections: IssWeeklySections;
   notes: IssNote[];
-  createdAt: string;
-  updatedAt: string;
+
+  createdAt: ISODateTime;
+  updatedAt: ISODateTime;
 }
 
-/** Shape of the POST body for creating a staff log */
+/* ============================================================
+ * Requests
+ * ============================================================ */
+
 export interface CreateIssStaffLogRequest {
   consumerId: number;
-  serviceDate: string; // 'YYYY-MM-DD'
+  serviceDate: ISODate;
   header: IssStaffLogHeader;
   serviceWeek: IssServiceDay[];
   weeklySections: IssWeeklySections;
   notes: IssNote[];
 }
 
-/** Shape of the PATCH body for updating an existing log */
 export type UpdateIssStaffLogRequest = Partial<CreateIssStaffLogRequest>;
+
+/* ============================================================
+ * Responses
+ * ============================================================ */
 
 export interface ConsumerWithLatestLogResponse {
   consumer: ConsumerDto;
   latestLog: IssStaffLogDto | null;
 }
 
+export interface IssStaffLogTemplate {
+  serviceDate: ISODate;
+  header: IssStaffLogHeader;
+  serviceWeek: IssServiceDay[];
+  weeklySections: IssWeeklySections;
+  notes: IssNote[];
+}
+
 export interface GetLogForDateResponse {
   consumer: ConsumerDto;
   log: IssStaffLogDto | null;
-  defaultTemplate?: {
-    serviceDate: string;
-    header: IssStaffLogHeader;
-    serviceWeek: IssServiceDay[] | any;
-    weeklySections: IssWeeklySections | any;
-    notes: IssNote[] | any;
-  };
+  defaultTemplate?: IssStaffLogTemplate;
 }
 
 export interface WeeksListItem {
   weekNumber: number;
-  serviceDate: string; // Monday of that week
+  serviceDate: ISODate; // Monday of that week
   staffLogId: number;
 }
 
 export interface WeeksListResponse {
   data: WeeksListItem[];
-  meta: {
-    total: number;
-    page: number;
-    limit: number;
-    pageCount: number;
-  };
+  meta: PaginationMeta;
 }

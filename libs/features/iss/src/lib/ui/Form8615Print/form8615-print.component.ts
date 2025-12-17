@@ -54,7 +54,7 @@ type RowForm = FormGroup<{
 }>;
 
 @Component({
-  selector: 'iss-form8615-print',
+  selector: 'lib-iss-form8615-print',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form8615-print.component.html',
@@ -111,6 +111,7 @@ export class Form8615PrintComponent implements OnChanges {
   }
 
   // ---- lifecycle ------------------------------------------------
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(_: SimpleChanges): void {
     // 1) patch header
     if (this.header) {

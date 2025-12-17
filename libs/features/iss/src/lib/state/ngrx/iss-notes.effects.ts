@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { IssNotesActions } from './iss-notes.actions';
 import { NotesApi } from '../../services/notes.api';
 import { catchError, map, of, switchMap } from 'rxjs';
+import { IssNote } from '../../models/iss-note.model';
 
 @Injectable()
 export class IssNotesEffects {
@@ -14,12 +15,10 @@ export class IssNotesEffects {
       ofType(IssNotesActions.loadWeekRequested),
       switchMap(({ start, end, consumer, location, q }) =>
         this.api.list({ start, end, consumer, location, q }).pipe(
-          map(notes => IssNotesActions.loadWeekSucceeded({ notes })),
-          catchError(error => of(IssNotesActions.loadWeekFailed({ error })))
+          map((notes: IssNote[]) => IssNotesActions.loadWeekSucceeded({ notes })),
+          catchError((error: unknown) => of(IssNotesActions.loadWeekFailed({ error })))
         )
       )
     )
   );
-
-  // add create/update/remove when ready, following the same pattern
 }

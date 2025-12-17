@@ -18,6 +18,15 @@
         }
       }
     },
+    "serve:render": {
+  "executor": "@nx/js:node",
+  "dependsOn": ["build"],
+  "options": {
+    "buildTarget": "api:build:production",
+    "runBuildTargetDependencies": false
+  }
+},
+
     "prune-lockfile": {
       "dependsOn": ["build"],
       "cache": true,

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'location-selector',
+  selector: 'lib-location-selector',
   imports: [CommonModule],
   templateUrl: './lib.html',
   styleUrl: './lib.scss'

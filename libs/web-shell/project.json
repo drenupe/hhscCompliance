@@ -4,7 +4,7 @@
   "sourceRoot": "libs/web-shell/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:shell", "surface:web"],
+  "tags": ["type:shell", "scope:shell", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

@@ -1,6 +1,5 @@
 // libs/features/iss/src/lib/data-access/iss-api.service.ts
 
-/* eslint-disable @nx/enforce-module-boundaries */
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';

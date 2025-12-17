@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   standalone: true,
-  selector: 'app-nursing-page',
+  selector: 'lib-nursing-page',
   imports: [CommonModule],
   template: `
     <section class="page">

@@ -8,7 +8,7 @@ type Prompts = 'independent' | 'minimal' | 'moderate' | 'maximal';
 type Behavior = 'appropriate' | 'redirected' | 'escalated' | 'other';
 
 @Component({
-  selector: 'iss-notes-wizard',
+  selector: 'lib-iss-notes-wizard',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './notes-wizard.component.html'
@@ -66,7 +66,7 @@ export class NotesWizardComponent {
   }
 
   private selectedGoals(): string[] {
-    const g = this.formValue().goals!;
+    const g = this.formValue().goals;
     const list: string[] = [];
     if (g?.communityIntegration) list.push('community integration');
     if (g?.peerEngagement)      list.push('peer engagement');
@@ -95,11 +95,11 @@ export class NotesWizardComponent {
     };
 
     const goals = this.selectedGoals();
-    const dur = this.minutesBetween(v.start!, v.end!);
+    const dur = this.minutesBetween(v.start, v.end);
 
     return `Participant engaged in structured ${where} at ${v.location}. ` +
            `Activities included ${v.activity}. ` +
-           `${behaviorPhrase[v.behavior!]}, ${promptsPhrase[v.prompts!]}, and interacted positively with peers. ` +
+           `${behaviorPhrase[v.behavior]}, ${promptsPhrase[v.prompts]}, and interacted positively with peers. ` +
            `Goals of ${goals.join(', ')} were addressed. ` +
            `Participant remained engaged for the full ${dur}-minute service period (${v.start}–${v.end}).`;
   });
@@ -107,7 +107,7 @@ export class NotesWizardComponent {
   // actions
   copyNarrative() {
     const text = this.comment();
-    navigator.clipboard?.writeText(text).catch(() => {});
+    navigator.clipboard?.writeText(text).catch(() => { /* empty */ });
     this.commentReady.emit(text);
   }
 
@@ -121,8 +121,8 @@ export class NotesWizardComponent {
       date: new Date().toISOString().slice(0, 10),
       consumer,
       initials: this.defaultInitials,
-      location: v.location!,
-      activity: v.activity!,
+      location: v.location,
+      activity: v.activity,
       comment: this.comment(),
     };
     this.noteReady.emit(note);
