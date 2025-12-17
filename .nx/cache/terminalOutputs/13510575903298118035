@@ -1,0 +1,105 @@
+
+[0m[7m[1m[36m NX [39m[22m[27m[0m  [36mRunning target [1mbuild[22m for project api and [1m1[22m task it depends on:[39m
+
+
+
+[2m> [22m[2mnx run[22m shared-models:build  [2m[existing outputs match the cache, left as is][22m
+
+
+[2m> [22m[2mnx run[22m api:build:development
+
+[2m> [22mwebpack-cli build --node-env=development
+
+chunk (runtime: main) [1m[32mmain.js[39m[22m (main) 83.8 KiB [1m[33m[entry][39m[22m [1m[32m[rendered][39m[22m
+webpack compiled [1m[32msuccessfully[39m[22m (6efcfc26b48af394)
+
+
+
+[0m[7m[1m[32m NX [39m[22m[27m[0m  [32mSuccessfully ran target [1mbuild[22m for project api and [1m1[22m task it depends on[39m
+
+[2mNx read the output from the cache instead of running the command for 1 out of 2 tasks.[22m
+
+
+[0m[7m[1m[33m NX [39m[22m[27m[0m  [33mNx Cloud encountered some problems[39m
+
+This workspace is more than three days old and is not connected. Workspaces must be connected within 3 days of creation. Claim your workspace at https://cloud.nx.app. (code: 401)
+
+[1m[31mDebugger listening on ws://localhost:9229/26e0d4ca-010b-4c87-8ab8-35ce0dcced1f[39m[22m
+[1m[31mDebugger listening on ws://localhost:9229/26e0d4ca-010b-4c87-8ab8-35ce0dcced1f[39m[22m
+[1m[31mFor help, see: https://nodejs.org/en/docs/inspector[39m[22m
+[1m[31m[39m[22m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mRaciModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConsumersModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIssModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [33m   WARN[39m [38;5;3m[LegacyRouteConverter] [39m[33mUnsupported route path: "/api/*". In previous versions, the symbols ?, *, and + were used to denote optional or repeating path parameters. The latest version of "path-to-regexp" now requires the use of named parameters. For example, instead of using a route like /users/* to capture all routes starting with "/users", you should use /users/*path. For more details, refer to the migration guide. Attempting to auto-convert...[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/api} (version: 1):[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/health, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/:id, DELETE} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mRaciController {/api/raci} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/allowed-roles, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/raci/menu, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIssController {/api/iss} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/providers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumers, GET} (version: 1) route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:consumerId, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/staff-logs/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/latest-log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/log, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/iss/consumer/:id/weeks, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mConsumersController {/api/consumers} (version: 1):[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, POST} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, GET} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/consumers/:id, PATCH} (version: 1) route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [32m🚀 App:  http://localhost:3000/api[39m
+[32m[Nest] 9672  - [39m12/16/2025, 10:29:12 AM [32m    LOG[39m [32m📘 Docs: http://localhost:3000/api/docs[39m
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+
+[7m[1m[36m NX [39m[22m[27m [1mFile change detected. Restarting...[22m
+
+node:internal/errors:983
+  const err = new Error(message);
+              ^
+
+Error: Command failed: taskkill /pid 13636 /T /F
+ERROR: The process with PID 13184 (child process of PID 10560) could not be terminated.
+Reason: There is no running instance of the task.
+
+[90m    at genericNodeError (node:internal/errors:983:15)[39m
+[90m    at wrappedFn (node:internal/errors:537:14)[39m
+[90m    at ChildProcess.exithandler (node:child_process:415:12)[39m
+[90m    at ChildProcess.emit (node:events:518:28)[39m
+[90m    at maybeClose (node:internal/child_process:1101:16)[39m
+[90m    at ChildProcess._handle.onexit (node:internal/child_process:304:5)[39m {
+  code: [33m255[39m,
+  killed: [33mfalse[39m,
+  signal: [1mnull[22m,
+  cmd: [32m'taskkill /pid 13636 /T /F'[39m
+}
+
+Node.js v22.17.0

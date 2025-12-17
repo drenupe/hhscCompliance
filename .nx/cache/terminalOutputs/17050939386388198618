@@ -1,0 +1,82 @@
+
+Linting "iss"...
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\data-access\iss-api.models.ts[24m[0m
+[0m   [2m38:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m54:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m64:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m73:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m   [2m80:18[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m120:36[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m121:41[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m122:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\data-access\iss-api.service.ts[24m[0m
+[0m  [2m3:1[22m  [33mwarning[39m  Unused eslint-disable directive (no problems were reported from '@nx/enforce-module-boundaries')[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\iss-daily-log.page.ts[24m[0m
+[0m  [2m6:13[22m  [31merror[39m  The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\iss-manager.page.ts[24m[0m
+[0m  [2m6:13[22m  [31merror[39m  The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\iss-notes-gallery.page.ts[24m[0m
+[0m  [2m15:13[22m  [31merror[39m  The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\iss-week\iss-week.page.ts[24m[0m
+[0m  [2m572:44[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m596:23[22m  [33mwarning[39m  '_source' is defined but never used       [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m622:28[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\notes-review.page.ts[24m[0m
+[0m   [2m16:13[22m  [31merror[39m    The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m  [2m114:43[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m117:43[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\services\notes.api.ts[24m[0m
+[0m  [2m22:8[22m  [33mwarning[39m  'params' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\state\ngrx\iss-notes.reducer.ts[24m[0m
+[0m   [2m3:10[22m  [33mwarning[39m  'Action' is defined but never used        [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m71:38[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\Form8615Print\form8615-print.component.ts[24m[0m
+[0m   [2m57:13[22m  [31merror[39m    The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m  [2m114:15[22m  [33mwarning[39m  '_' is defined but never used                                                                              [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\NotesGallery\notes-gallery.component.html[24m[0m
+[0m  [2m34:1[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m[0m
+[0m  [2m34:1[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\NotesGallery\notes-gallery.component.ts[24m[0m
+[0m  [2m11:13[22m  [31merror[39m  The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m  [2m46:74[22m  [31merror[39m  Unexpected empty arrow function                                                                            [2m@typescript-eslint/no-empty-function[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\NotesWizard\notes-wizard.component.html[24m[0m
+[0m   [2m5:3[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m14:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m18:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m26:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m35:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m48:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m61:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m65:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\NotesWizard\notes-wizard.component.ts[24m[0m
+[0m   [2m11:13[22m  [31merror[39m    The selector should start with one of these prefixes: "lib" (https://angular.dev/style-guide#style-02-07)  [2m@angular-eslint/component-selector[22m[0m
+[0m   [2m69:15[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m   [2m98:37[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m   [2m98:47[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m102:30[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m102:61[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m110:54[22m  [31merror[39m    Unexpected empty arrow function                                                                            [2m@typescript-eslint/no-empty-function[22m[0m
+[0m  [2m124:17[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m125:17[22m  [33mwarning[39m  Forbidden non-null assertion                                                                               [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[31m[1m✖ 44 problems (19 errors, 25 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[31m[1m  0 errors and 1 warning potentially fixable with the `--fix` option.[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+✖ 44 problems (19 errors, 25 warnings)
+
+  0 errors and 1 warning are potentially fixable with the `--fix` option.
+

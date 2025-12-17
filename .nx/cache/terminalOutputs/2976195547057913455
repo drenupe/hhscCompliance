@@ -1,0 +1,11 @@
+
+Linting "iss"...
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\notes-review.page.ts[24m[0m
+[0m  [2m114:43[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m117:43[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[33m[1m✖ 2 problems (0 errors, 2 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 2 problems (0 errors, 2 warnings)
+

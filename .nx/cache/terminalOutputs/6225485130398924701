@@ -1,0 +1,17 @@
+
+Linting "web-shell"...
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\web-shell\src\lib\app.routes.ts[24m[0m
+[0m  [2m2:10[22m  [33mwarning[39m  'raciGuard' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\web-shell\src\lib\guards\raci.guard.ts[24m[0m
+[0m  [2m40:10[22m  [33mwarning[39m  '_route' is defined but never used     [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m40:25[22m  [33mwarning[39m  '_segments' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\web-shell\src\lib\guards\role.gaurd.ts[24m[0m
+[0m  [2m2:30[22m  [33mwarning[39m  'UrlTree' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[33m[1m✖ 4 problems (0 errors, 4 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 4 problems (0 errors, 4 warnings)
+

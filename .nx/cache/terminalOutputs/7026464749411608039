@@ -1,0 +1,61 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/web[39m
+
+ [31m❯[39m src/app/app.spec.ts [2m([22m[2m3 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 561[2mms[22m[39m
+   [33m[2m✓[22m[39m App[2m > [22mshould create the app [33m 458[2mms[22m[39m
+[31m   [31m×[31m App[2m > [22mshould render something (sanity check)[39m[32m 58[2mms[22m[39m
+[31m     → expected 0 to be greater than 0[39m
+[31m   [31m×[31m App[2m > [22mshould render Welcome web (if present)[39m[32m 39[2mms[22m[39m
+[31m     → expected '' to match /Welcome\s+web/i[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/app/app.spec.ts[2m > [22mApp[2m > [22mshould render something (sanity check)
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/app/app.spec.ts:[2m26:25[22m[39m
+    [90m 24| [39m    [35mconst[39m text [33m=[39m (compiled[33m.[39mtextContent [33m??[39m [32m''[39m)[33m.[39m[34mtrim[39m()[33m;[39m
+    [90m 25| [39m
+    [90m 26| [39m    [34mexpect[39m(text[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 27| [39m  })[33m;[39m
+    [90m 28| [39m
+[90m [2m❯[22m _ZoneDelegate.invoke ../node_modules/zone.js/bundles/zone.umd.js:[2m410:32[22m[39m
+[90m [2m❯[22m ProxyZoneSpec.onInvoke ../node_modules/zone.js/bundles/zone-testing.umd.js:[2m2219:43[22m[39m
+[90m [2m❯[22m _ZoneDelegate.invoke ../node_modules/zone.js/bundles/zone.umd.js:[2m409:38[22m[39m
+[90m [2m❯[22m ZoneImpl.run ../node_modules/zone.js/bundles/zone.umd.js:[2m145:47[22m[39m
+[90m [2m❯[22m wrappedFunc ../packages/vitest-angular/setup-zone.ts:[2m55:26[22m[39m
+[90m [2m❯[22m new ZoneAwarePromise ../node_modules/zone.js/bundles/zone.umd.js:[2m2580:29[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/app/app.spec.ts[2m > [22mApp[2m > [22mshould render Welcome web (if present)
+[31m[1mAssertionError[22m: expected '' to match /Welcome\s+web/i[39m
+
+[32m- Expected:[39m 
+/Welcome\s+web/i
+
+[31m+ Received:[39m 
+""
+
+[36m [2m❯[22m src/app/app.spec.ts:[2m38:18[22m[39m
+    [90m 36| [39m    [90m// This is safe even if the title isn't present yet.[39m
+    [90m 37| [39m    [90m// If you DO want to require it, tell me and I'll make it strict.[39m
+    [90m 38| [39m    [34mexpect[39m(text)[33m.[39m[34mtoMatch[39m([36m/Welcome\s+web/i[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 39| [39m  })[33m;[39m
+    [90m 40| [39m})[33m;[39m
+[90m [2m❯[22m _ZoneDelegate.invoke ../node_modules/zone.js/bundles/zone.umd.js:[2m410:32[22m[39m
+[90m [2m❯[22m ProxyZoneSpec.onInvoke ../node_modules/zone.js/bundles/zone-testing.umd.js:[2m2219:43[22m[39m
+[90m [2m❯[22m _ZoneDelegate.invoke ../node_modules/zone.js/bundles/zone.umd.js:[2m409:38[22m[39m
+[90m [2m❯[22m ZoneImpl.run ../node_modules/zone.js/bundles/zone.umd.js:[2m145:47[22m[39m
+[90m [2m❯[22m wrappedFunc ../packages/vitest-angular/setup-zone.ts:[2m55:26[22m[39m
+[90m [2m❯[22m new ZoneAwarePromise ../node_modules/zone.js/bundles/zone.umd.js:[2m2580:29[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 11:29:39
+[2m   Duration [22m 20.04s[2m (transform 2.86s, setup 7.41s, collect 2.18s, tests 561ms, environment 3.70s, prepare 4.63s)[22m
+

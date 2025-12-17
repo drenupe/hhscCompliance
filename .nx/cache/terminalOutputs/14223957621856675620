@@ -1,0 +1,33 @@
+
+Linting "data-access"...
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\auth\auth-guard.ts[24m[0m
+[0m  [2m3:42[22m  [33mwarning[39m  'route' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m3:49[22m  [33mwarning[39m  'state' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\auth\auth-http\token-storage.service.ts[24m[0m
+[0m  [2m37:14[22m  [33mwarning[39m  'e' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\auth\role-guard.ts[24m[0m
+[0m  [2m3:42[22m  [33mwarning[39m  'route' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m  [2m3:49[22m  [33mwarning[39m  'state' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\iss\src\lib\+state\iss.effects.ts[24m[0m
+[0m  [2m148:20[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m157:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m158:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m  [2m159:17[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\iss\src\lib\base-api.service.ts[24m[0m
+[0m  [2m22:42[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\data-access\src\lib\iss\src\lib\services\staff-log.service.ts[24m[0m
+[0m  [2m2:1[22m  [33mwarning[39m  Unused eslint-disable directive (no problems were reported from '@nx/enforce-module-boundaries')[0m
+[0m[0m
+[0m[33m[1m✖ 11 problems (0 errors, 11 warnings)[22m[39m[0m
+[0m[33m[1m[22m[39m[33m[1m  0 errors and 1 warning potentially fixable with the `--fix` option.[22m[39m[0m
+[0m[33m[1m[22m[39m[0m
+✖ 11 problems (0 errors, 11 warnings)
+
+  0 errors and 1 warning are potentially fixable with the `--fix` option.
+

@@ -12,27 +12,43 @@
       },
       {
         "file": ".github/workflows/ci.yml",
-        "hash": "218321614255880382"
+        "hash": "2727859590745421954"
       },
       {
         "file": ".gitignore",
-        "hash": "557385588170937783"
+        "hash": "8995507758919597204"
       },
       {
         "file": ".vscode/extensions.json",
-        "hash": "10765520025180859680"
+        "hash": "5837262799529507717"
       },
       {
         "file": "README.md",
-        "hash": "15318200514220965410"
+        "hash": "9413093198050325721"
       },
       {
         "file": "nx.json",
-        "hash": "8381713560869982942"
+        "hash": "657027208604398371"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "3333642121467632315"
       },
       {
         "file": "package.json",
-        "hash": "2569956019392445894"
+        "hash": "3316770423849877377"
+      },
+      {
+        "file": "tmp/libs/shared-models/build/tsconfig.generated.2caa7037-3e99-433a-a37d-ee5e2bd6f730.json",
+        "hash": "13226398908182515672"
+      },
+      {
+        "file": "tmp/libs/shared-models/build/tsconfig.generated.688a1439-cb6c-4209-846e-3d5873fc304e.json",
+        "hash": "13226398908182515672"
+      },
+      {
+        "file": "tmp/libs/shared-models/build/tsconfig.generated.8d7b39c2-02a2-435b-82fb-f1d27abf02e4.json",
+        "hash": "13226398908182515672"
       }
     ]
   }

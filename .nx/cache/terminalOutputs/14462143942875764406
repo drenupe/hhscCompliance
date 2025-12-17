@@ -1,0 +1,209 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[37mApplication bundle generation failed. [39.538 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2306: File 'C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/features/iss/src/lib/pages/iss-daily-log.page.ts' is not a module.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/index.ts:10:14:[39m[22m
+[1m[31m[37m      10 │ export * from [32m'./lib/pages/iss-daily-log.page'[37m;[39m[22m
+[1m[31m         ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'list' does not exist on type 'NotesApi'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/state/ngrx/iss-notes.effects.ts:16:17:[39m[22m
+[1m[31m[37m      16 │         this.api.[32mlist[37m({ start, end, consumer, location, q }).pipe([39m[22m
+[1m[31m         ╵                  [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'unknown' is not assignable to type 'IssNote[]'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/state/ngrx/iss-notes.effects.ts:17:59:[39m[22m
+[1m[31m[37m      17 │           map(notes => IssNotesActions.loadWeekSucceeded({ [32mnotes[37m })),[39m[22m
+[1m[31m         ╵                                                            [32m~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  The expected type comes from property 'notes' which is declared here on type '{ notes: IssNote[]; }'[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/state/ngrx/iss-notes.actions.ts:8:35:[39m[22m
+[1m[31m[37m      8 │     'Load Week Succeeded': props<{ [32mnotes[37m: IssNote[] }>(),[39m[22m
+[1m[31m        ╵                                    [32m~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[37mWatch mode enabled. Watching for file changes...[39m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [29.825 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2306: File 'C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/features/iss/src/lib/pages/iss-daily-log.page.ts' is not a module.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/index.ts:10:14:[39m[22m
+[1m[31m[37m      10 │ export * from [32m'./lib/pages/iss-daily-log.page'[37m;[39m[22m
+[1m[31m         ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'list' does not exist on type 'NotesApi'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/state/ngrx/iss-notes.effects.ts:17:17:[39m[22m
+[1m[31m[37m      17 │         this.api.[32mlist[37m({ start, end, consumer, location, q }).pipe([39m[22m
+[1m[31m         ╵                  [32m~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [13.499 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2306: File 'C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/features/iss/src/lib/pages/iss-daily-log.page.ts' is not a module.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/index.ts:10:14:[39m[22m
+[1m[31m[37m      10 │ export * from [32m'./lib/pages/iss-daily-log.page'[37m;[39m[22m
+[1m[31m         ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [4.034 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2306: File 'C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/features/iss/src/lib/pages/iss-daily-log.page.ts' is not a module.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/index.ts:10:14:[39m[22m
+[1m[31m[37m      10 │ export * from [32m'./lib/pages/iss-daily-log.page'[37m;[39m[22m
+[1m[31m         ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'm'.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/services/notes.api.ts:133:0:[39m[22m
+[1m[31m[37m      133 │ [32mm[37m[39m[22m
+[1m[31m          ╵ [32m^[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [3.416 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2306: File 'C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/libs/features/iss/src/lib/pages/iss-daily-log.page.ts' is not a module.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/index.ts:10:14:[39m[22m
+[1m[31m[37m      10 │ export * from [32m'./lib/pages/iss-daily-log.page'[37m;[39m[22m
+[1m[31m         ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [19.149 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8008: Required inputs 'header', 'rows' from component Form8615PrintComponent must be specified.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/pages/iss-daily-log.page.ts:13:4:[39m[22m
+[1m[31m[37m      13 │     [32m<lib-iss-form8615-print>[37m[39m[22m
+[1m[31m         ╵     [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [24.158 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG8008: Required inputs 'header', 'rows' from component Form8615PrintComponent must be specified.[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    libs/features/iss/src/lib/pages/iss-daily-log.page.ts:13:2:[39m[22m
+[1m[31m[37m      13 │   [32m<lib-iss-form8615-print>[37m[39m[22m
+[1m[31m         ╵   [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37m[1mInitial chunk files[22m[2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m[39m
+[37m[32mmain.js[39m[37m            [2m | [22m[2mmain[22m                        [2m | [22m [36m45.24 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-NLTUZEGD.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m [36m38.48 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-J74PUUUF.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m  [36m6.14 kB[39m[37m[2m | [22m[39m
+[37m[32mstyles.css[39m[37m         [2m | [22m[2mstyles[22m                      [2m | [22m  [36m4.19 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-Y5RQAIA6.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m  [36m1.50 kB[39m[37m[2m | [22m[39m
+[37m[32mpolyfills.js[39m[37m       [2m | [22m[2mpolyfills[22m                   [2m | [22m [36m95 bytes[39m[37m[2m | [22m[39m
+[37m[39m
+[37m[1m [22m                  [2m | [22m[1mInitial total[22m               [2m | [22m [1m95.65 kB[22m[39m
+[37m[39m
+[37m[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                       [2m | [22m [1mRaw size[22m[39m
+[37m[32mchunk-5SAFPXRO.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m[36m123.58 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-TZXS6ZYA.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m [36m82.43 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-VNEC7NZQ.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m [36m58.84 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-VG4AXITQ.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m [36m36.01 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-R5RPJHQY.js[39m[37m  [2m | [22m[2miss-consumer-year-print-page[22m[2m | [22m [36m20.39 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-5JC4BZ4M.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m [36m14.02 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-INZPAA5K.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [22m  [36m2.77 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-KBJTUD4D.js[39m[37m  [2m | [22m[2m-[22m                           [2m | [2[39m[37m2m  [36m2.76 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-NFCUO6CW.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.63 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-PZEANV5O.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.48 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-CVTMO4SE.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.47 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-YLGFZKUO.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.47 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-RTTIRL2Q.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.45 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-ZIGMBNAZ.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.42 kB[39m[37m[2m | [22m[39m
+[37m[32mchunk-WNZIPMNZ.js[39m[37m  [2m | [22m[2mindex[22m                       [2m | [22m  [36m2.36 kB[39m[37m[2m | [22m[39m
+[37m[2m...and 8 more lazy chunks files. Use "--verbose" to show all the files.[22m[39m
+[37m[39m
+[37mApplication bundle generation complete. [5.435 seconds][39m
+[37m[39m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNG8113: Form8615PrintComponent is not used within the template of IssDailyLogPage[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m    libs/features/iss/src/lib/pages/iss-daily-log.page.ts:11:26:[39m[22m
+[1m[33m[37m      11 │   imports: [CommonModule, [32mForm8615PrintComponent[37m],[39m[22m
+[1m[33m         ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[33m[39m[22m
+[1m[33m[39m[22m
+[37mNOTE: Raw file sizes do not reflect development server per-request transformations.[39m
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4200[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [38.252 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCannot find tsconfig file "web/tsconfig.app.json"[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS500: Error: ENOENT: no such file or directory, lstat 'C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\web\tsconfig.app.json'[39m[22m
+[1m[31m    at Object.lstatSync (node:fs:1715:25)[39m[22m
+[1m[31m    at NodeJSFileSystem.lstat (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-3NKMA2JO.js:73:15)[39m[22m
+[1m[31m    at calcProjectFileAndBasePath (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-M367SQSJ.js:4952:29)[39m[22m
+[1m[31m    at readConfiguration (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-M367SQSJ.js:4978:39)[39m[22m
+[1m[31m    at C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\angular-compilation.js:71:69[39m[22m
+[1m[31m    at profileSync (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\esbuild\profiling.js:68:16)[39m[22m
+[1m[31m    at AotCompilation.loadConfiguration (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\angular-compilation.js:71:44)[39m[22m
+[1m[31m    at async AotCompilation.initialize (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\aot-compilation.js:62:100)[39m[22m
+[1m[31m    at async initialize (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\parallel-worker.js:38:88)[39m[22m
+[1m[31m    at async onMessage (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\piscina\dist\worker.js:180:22)[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "C:\\Users\\tjmcc\\hhcsComplianceV20\\hhsc-compliance\\web\\src\\main.ts"[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[33m❯[39m Changes detected. Rebuilding...
+[32m✔[39m Changes detected. Rebuilding...
+[37mApplication bundle generation failed. [11.008 seconds][39m
+[37m[39m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "web/src/styles.scss"[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m    angular:styles/global:styles:1:8:[39m[22m
+[1m[31m[37m      1 │ @import [32m'web/src/styles.scss'[37m;[39m[22m
+[1m[31m        ╵         [32m~~~~~~~~~~~~~~~~~~~~~[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m  You can mark the path "web/src/styles.scss" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCannot find tsconfig file "web/tsconfig.app.json"[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS500: Error: ENOENT: no such file or directory, lstat 'C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\web\tsconfig.app.json'[39m[22m
+[1m[31m    at Object.lstatSync (node:fs:1715:25)[39m[22m
+[1m[31m    at NodeJSFileSystem.lstat (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-3NKMA2JO.js:73:15)[39m[22m
+[1m[31m    at calcProjectFileAndBasePath (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-M367SQSJ.js:4952:29)[39m[22m
+[1m[31m    at readConfiguration (file:///C:/Users/tjmcc/hhcsComplianceV20/hhsc-compliance/node_modules/@angular/compiler-cli/bundles/chunk-M367SQSJ.js:4978:39)[39m[22m
+[1m[31m    at C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\angular-compilation.js:71:69[39m[22m
+[1m[31m    at profileSync (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\esbuild\profiling.js:68:16)[39m[22m
+[1m[31m    at AotCompilation.loadConfiguration (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\angular-compilation.js:71:44)[39m[22m
+[1m[31m    at async AotCompilation.initialize (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\aot-compilation.js:62:100)[39m[22m
+[1m[31m    at async initialize (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\@angular\build\src\tools\angular\compilation\parallel-worker.js:38:88)[39m[22m
+[1m[31m    at async onMessa[39m[22m[1m[31mge (C:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\node_modules\piscina\dist\worker.js:180:22)[0m [1m[35m[plugin angular-compiler][0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "C:\\Users\\tjmcc\\hhcsComplianceV20\\hhsc-compliance\\web\\src\\main.ts"[0m[39m[22m
+[1m[31m[39m[22m
+[1m[31m[39m[22m

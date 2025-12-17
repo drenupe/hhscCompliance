@@ -1,0 +1,21 @@
+
+Linting "iss"...
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\pages\notes-review.page.ts[24m[0m
+[0m  [2m114:43[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m  [2m117:43[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m[0m
+[0m[0m
+[0m[4mC:\Users\tjmcc\hhcsComplianceV20\hhsc-compliance\libs\features\iss\src\lib\ui\NotesWizard\notes-wizard.component.html[24m[0m
+[0m   [2m5:3[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m14:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m18:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m26:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m35:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m48:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m61:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m  [2m65:7[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m[0m
+[0m[0m
+[0m[31m[1m✖ 10 problems (8 errors, 2 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+✖ 10 problems (8 errors, 2 warnings)
+
