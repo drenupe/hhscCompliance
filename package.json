@@ -3,29 +3,29 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
-  "scripts": {
-    "build": "nx build api",
-    "start": "node dist/api/main.js",
+"scripts": {
+  "build": "nx build api",
+  "build:web": "nx build web",
+  "dev:api": "nx serve api",
+  "dev:web": "nx serve web",
 
-    "dev:api": "nx serve api",
-    "dev:web": "nx serve web",
+  "lint": "nx lint",
+  "test": "nx test",
 
-    "lint": "nx lint",
-    "test": "nx test",
+  "e2e:api": "cross-env NODE_ENV=test API_PREFIX=api jest --config api/jest-e2e.json --runInBand",
+  "e2e:web": "nx e2e web-e2e",
 
-    "e2e:api": "cross-env NODE_ENV=test API_PREFIX=api jest --config api/jest-e2e.json --runInBand",
-    "e2e:web": "nx e2e web-e2e",
+  "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js -d api/src/configuration/typeorm/data-source.ts migration:run",
+  "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d api/src/configuration/typeorm/data-source.ts migration:revert",
+  "db:gen:init_auth": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/init_auth",
 
-    "db:migrate": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js -d api/src/configuration/typeorm/data-source.ts migration:run",
-    "db:revert": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d api/src/configuration/typeorm/data-source.ts migration:revert",
-    "db:gen:init_auth": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d api/src/configuration/typeorm/data-source.ts migration:generate api/migrations/init_auth",
+  "typeorm": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json node ./node_modules/typeorm/cli.js -d api/src/configuration/typeorm/data-source.ts",
+  "ssl:check": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json ts-node -r tsconfig-paths/register -r dotenv/config api/scripts/ssl-check.ts",
 
-    "typeorm": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json node ./node_modules/typeorm/cli.js -d api/src/configuration/typeorm/data-source.ts",
-    "ssl:check": "cross-env TS_NODE_PROJECT=api/tsconfig.typeorm.json ts-node -r tsconfig-paths/register -r dotenv/config api/scripts/ssl-check.ts",
+  "patch:project": "tsx web/tools/patch-project-json.ts",
+  "patch:frontend-config": "tsx ./frontend/tools/update-project-json.ts"
+},
 
-    "patch:project": "tsx web/tools/patch-project-json.ts",
-    "patch:frontend-config": "tsx ./frontend/tools/update-project-json.ts"
-  },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~1.17.1",
     "@analogjs/vitest-angular": "~1.17.1",
