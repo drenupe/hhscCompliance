@@ -10,6 +10,7 @@
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "outputMode": "static",
         "outputPath": "dist/web",
         "browser": "web/src/main.ts",
         "polyfills": ["zone.js"],
