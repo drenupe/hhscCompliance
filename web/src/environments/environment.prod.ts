@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: '', // fill or override at runtime
+  apiBaseUrl: 'https://api-staging-n8tk.onrender.com', // fill or override at runtime
 };
