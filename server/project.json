@@ -1,25 +1,34 @@
 {
   "name": "api",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "api/src",
+  "sourceRoot": "server/src",
   "projectType": "application",
   "tags": ["type:app", "surface:api"],
   "targets": {
     "build": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{workspaceRoot}/dist/api"],
+      "defaultConfiguration": "production",
       "options": {
-        "command": "webpack-cli build",
-        "args": ["--node-env=production"],
-        "cwd": "api"
+        "target": "node",
+        "outputPath": "dist/api",
+        "main": "server/src/main.ts",
+        "tsConfig": "server/tsconfig.app.json",
+        "webpackConfig": "server/webpack.config.js"
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "sourceMap": true,
+          "optimization": false
+        },
+        "production": {
+          "sourceMap": false,
+          "optimization": true
         }
       }
     },
+
     "prune-lockfile": {
-      "dependsOn": ["build"],
       "cache": true,
       "executor": "@nx/js:prune-lockfile",
       "outputs": [
@@ -27,22 +36,24 @@
         "{workspaceRoot}/dist/api/package-lock.json"
       ],
       "options": {
-        "buildTarget": "build"
+        "buildTarget": "api:build:production"
       }
     },
+
     "copy-workspace-modules": {
-      "dependsOn": ["build"],
       "cache": true,
       "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
       "executor": "@nx/js:copy-workspace-modules",
       "options": {
-        "buildTarget": "build"
+        "buildTarget": "api:build:production"
       }
     },
+
     "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "dependsOn": ["build:production", "prune-lockfile", "copy-workspace-modules"],
       "executor": "nx:noop"
     },
+
     "serve": {
       "continuous": true,
       "executor": "@nx/js:node",
@@ -61,6 +72,7 @@
         }
       }
     },
+
     "test": {
       "options": {
         "passWithNoTests": true

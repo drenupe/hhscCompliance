@@ -1,80 +1,8 @@
 {
-  "name": "api",
+  "name": "web",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "api/src",
+  "sourceRoot": "web/src",
   "projectType": "application",
-  "tags": ["type:app", "surface:api"],
-  "targets": {
-    "build": {
-      "executor": "@nx/webpack:webpack",
-      "outputs": ["{workspaceRoot}/dist/api"],
-      "defaultConfiguration": "production",
-      "options": {
-        "webpackConfig": "api/webpack.config.js"
-      },
-      "configurations": {
-        "development": {
-          "sourceMap": true,
-          "optimization": false
-        },
-        "production": {
-          "sourceMap": false,
-          "optimization": true
-        }
-      }
-    },
-
-    "prune-lockfile": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "executor": "@nx/js:prune-lockfile",
-      "outputs": [
-        "{workspaceRoot}/dist/api/package.json",
-        "{workspaceRoot}/dist/api/package-lock.json"
-      ],
-      "options": {
-        "buildTarget": "api:build"
-      }
-    },
-
-    "copy-workspace-modules": {
-      "dependsOn": ["build"],
-      "cache": true,
-      "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
-      "executor": "@nx/js:copy-workspace-modules",
-      "options": {
-        "buildTarget": "api:build"
-      }
-    },
-
-    "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
-      "executor": "nx:noop"
-    },
-
-    "serve": {
-      "continuous": true,
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "dependsOn": ["build"],
-      "options": {
-        "buildTarget": "api:build",
-        "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "api:build:development"
-        },
-        "production": {
-          "buildTarget": "api:build:production"
-        }
-      }
-    },
-
-    "test": {
-      "options": {
-        "passWithNoTests": true
-      }
-    }
-  }
+  "tags": ["type:app", "surface:web"],
+  "targets": {}
 }
