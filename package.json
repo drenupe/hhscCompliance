@@ -4,20 +4,20 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "nx run api:prune",
-    "build:api": "nx build api",
+    "build": "nx run server:prune",
+    "build:server": "nx build server",
     "build:web": "nx build web",
 
-    "dev:api": "nx serve api",
+    "dev:server": "nx serve server",
     "dev:web": "nx serve web",
 
-    "deploy:api": "nx run api:prune",
-    "start:dist": "node dist/api/main.js",
+    "deploy:server": "nx run server:prune",
+    "start:dist": "node dist/server/main.js",
 
     "lint": "nx lint",
     "test": "nx test",
 
-    "e2e:api": "cross-env NODE_ENV=test API_PREFIX=api jest --config server/jest-e2e.json --runInBand",
+    "e2e:server": "cross-env NODE_ENV=test API_PREFIX=api jest --config server/jest-e2e.json --runInBand",
     "e2e:web": "nx e2e web-e2e",
 
     "db:migrate": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js -d server/src/configuration/typeorm/data-source.ts migration:run",
@@ -30,7 +30,6 @@
     "patch:project": "tsx web/tools/patch-project-json.ts",
     "patch:frontend-config": "tsx ./frontend/tools/update-project-json.ts"
   },
-
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~1.17.1",
     "@analogjs/vitest-angular": "~1.17.1",
