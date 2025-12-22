@@ -29,6 +29,7 @@
     },
 
     "prune-lockfile": {
+      "dependsOn": ["build:production"],
       "cache": true,
       "executor": "@nx/js:prune-lockfile",
       "outputs": [
@@ -41,16 +42,17 @@
     },
 
     "copy-workspace-modules": {
+      "dependsOn": ["build:production"],
       "cache": true,
-      "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
       "executor": "@nx/js:copy-workspace-modules",
+      "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
       "options": {
         "buildTarget": "api:build:production"
       }
     },
 
     "prune": {
-      "dependsOn": ["build:production", "prune-lockfile", "copy-workspace-modules"],
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
       "executor": "nx:noop"
     },
 
