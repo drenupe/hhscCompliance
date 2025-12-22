@@ -1,132 +1,79 @@
 {
-  "name": "web",
+  "name": "api",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "api/src",
   "projectType": "application",
-  "prefix": "app",
-  "sourceRoot": "web/src",
-  "tags": ["type:app", "surface:web"],
+  "tags": ["type:app", "surface:api"],
   "targets": {
     "build": {
-      "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{workspaceRoot}/dist/api"],
+      "defaultConfiguration": "production",
       "options": {
-        "outputMode": "static",
-        "outputPath": "dist/web",
-        "browser": "web/src/main.ts",
-        "polyfills": ["zone.js"],
-        "tsConfig": "web/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
-        "assets": [
-          {
-            "glob": "**/*",
-            "input": "web/public",
-            "output": "."
-          }
-        ],
-        "styles": ["web/src/styles.scss"]
+        "webpackConfig": "api/webpack.config.js"
       },
       "configurations": {
         "development": {
-          "optimization": false,
-          "extractLicenses": false,
-          "sourceMap": true
-        },
-        "staging": {
-          "outputHashing": "all",
-          "optimization": true,
-          "extractLicenses": true,
           "sourceMap": true,
-          "fileReplacements": [
-            {
-              "replace": "web/src/environments/environment.ts",
-              "with": "web/src/environments/environment.staging.ts"
-            }
-          ],
-          "budgets": [
-            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "25kb",
-              "maximumError": "50kb"
-            }
-          ]
+          "optimization": false
         },
         "production": {
-          "outputHashing": "all",
-          "optimization": true,
-          "extractLicenses": true,
           "sourceMap": false,
-          "budgets": [
-            { "type": "initial", "maximumWarning": "500kb", "maximumError": "1mb" },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "25kb",
-              "maximumError": "50kb"
-            }
-          ],
-          "fileReplacements": [
-            {
-              "replace": "web/src/environments/environment.ts",
-              "with": "web/src/environments/environment.prod.ts"
-            }
-          ]
+          "optimization": true
         }
-      },
-      "defaultConfiguration": "development"
+      }
+    },
+
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/dist/api/package.json",
+        "{workspaceRoot}/dist/api/package-lock.json"
+      ],
+      "options": {
+        "buildTarget": "api:build"
+      }
+    },
+
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "api:build"
+      }
+    },
+
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
     },
 
     "serve": {
-      "executor": "@angular/build:dev-server",
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "api:build",
+        "runBuildTargetDependencies": false
+      },
       "configurations": {
         "development": {
-          "buildTarget": "web:build:development",
-          "proxyConfig": "web/proxy.conf.json",
-          "host": "localhost",
-          "port": 4200,
-          "open": true
-        },
-        "staging": {
-          "buildTarget": "web:build:staging",
-          "proxyConfig": "web/proxy.conf.json",
-          "host": "localhost",
-          "port": 4200,
-          "open": true
+          "buildTarget": "api:build:development"
         },
         "production": {
-          "buildTarget": "web:build:production",
-          "port": 4200
+          "buildTarget": "api:build:production"
         }
-      },
-      "defaultConfiguration": "development"
-    },
-
-    "extract-i18n": {
-      "executor": "@angular/build:extract-i18n",
-      "options": {
-        "buildTarget": "web:build"
       }
-    },
-
-    "lint": {
-      "executor": "@nx/eslint:lint"
     },
 
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../coverage/web"
-      }
-    },
-
-    "serve-static": {
-      "executor": "@nx/web:file-server",
-      "continuous": true,
-      "options": {
-        "buildTarget": "web:build:production",
-        "port": 4300,
-        "spa": true,
-        "staticFilePath": "dist/web"
+        "passWithNoTests": true
       }
     }
   }

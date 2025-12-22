@@ -1,9 +1,8 @@
-// api/src/main.ts
 import {
+  ClassSerializerInterceptor,
   Logger,
   ValidationPipe,
   VersioningType,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -26,10 +25,12 @@ async function bootstrap() {
       bufferLogs: true,
     });
 
+    // Render/Reverse proxy support
     app.set('trust proxy', 1);
 
     const globalPrefix = process.env.API_PREFIX || 'api';
     app.setGlobalPrefix(globalPrefix);
+
     app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
 
     app.use(helmet());
@@ -42,16 +43,15 @@ async function bootstrap() {
       credentials: true,
     });
 
-    
-
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
         transformOptions: { enableImplicitConversion: true },
-      }),
+      })
     );
+
     const reflector = app.get(Reflector);
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
@@ -75,16 +75,18 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     const port = Number(process.env.PORT ?? 3000);
-    await app.listen(port, '0.0.0.0');
+    const host = '0.0.0.0';
 
-    Logger.log(`🚀 App:  http://localhost:${port}/${globalPrefix}`);
+    await app.listen(port, host);
+
+    Logger.log(`🚀 API listening on ${host}:${port}`);
+    Logger.log(`➡️  Prefix: /${globalPrefix}`);
+
     if (enableSwagger) {
-      Logger.log(`📘 Docs: http://localhost:${port}/${globalPrefix}/docs`);
+      Logger.log(`📘 Docs: /${globalPrefix}/docs`);
     }
   } catch (err) {
-    // 🔥 THIS WILL SHOW YOU WHY IT'S CRASHING
     Logger.error('❌ Nest failed to start', err);
-    // Make sure the process exits non-zero
     process.exit(1);
   }
 }
