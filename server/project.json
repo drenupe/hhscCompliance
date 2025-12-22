@@ -37,7 +37,7 @@
         "{workspaceRoot}/dist/api/package-lock.json"
       ],
       "options": {
-        "buildTarget": "api:build:production"
+        "buildTarget": "server:build:production"
       }
     },
 
@@ -47,7 +47,7 @@
       "executor": "@nx/js:copy-workspace-modules",
       "outputs": ["{workspaceRoot}/dist/api/workspace_modules"],
       "options": {
-        "buildTarget": "api:build:production"
+        "buildTarget": "server:build:production"
       }
     },
 
@@ -62,15 +62,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "api:build",
+        "buildTarget": "server:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "api:build:development"
+          "buildTarget": "server:build:development"
         },
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "server:build:production"
         }
       }
     },
