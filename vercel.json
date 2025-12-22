@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "npm ci",
-  "buildCommand": "npx nx build web --configuration=production",
+  "buildCommand": "npx nx build web --configuration=production && node tools/vercel-fix-dist.mjs",
   "outputDirectory": "dist/web",
   "routes": [
     { "handle": "filesystem" },
