@@ -4,5 +4,29 @@
   "sourceRoot": "web/src",
   "projectType": "application",
   "tags": ["type:app", "surface:web"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{workspaceRoot}/dist/web"],
+      "defaultConfiguration": "production",
+      "options": {
+        "configFile": "web/vite.config.ts",
+        "outputPath": "dist/web"
+      },
+      "configurations": {
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "configFile": "web/vite.config.ts"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    }
+  }
 }
