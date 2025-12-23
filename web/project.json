@@ -10,8 +10,7 @@
       "outputs": ["{workspaceRoot}/dist/web"],
       "defaultConfiguration": "production",
       "options": {
-        "configFile": "web/vite.config.ts",
-        "outputPath": "dist/web"
+        "configFile": "web/vite.config.ts"
       },
       "configurations": {
         "production": {}
