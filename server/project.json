@@ -62,18 +62,12 @@
         "runBuildTargetDependencies": false
       },
       "configurations": {
-        "development": {
-          "buildTarget": "server:build:development"
-        },
-        "production": {
-          "buildTarget": "server:build:production"
-        }
+        "development": { "buildTarget": "server:build:development" },
+        "production": { "buildTarget": "server:build:production" }
       }
     },
     "test": {
-      "options": {
-        "passWithNoTests": true
-      }
+      "options": { "passWithNoTests": true }
     }
   }
 }

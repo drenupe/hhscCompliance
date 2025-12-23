@@ -4,32 +4,34 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-  "build": "nx build server --configuration=production",
-  "build:server": "nx build server",
-  "build:web": "nx build web",
+    "build": "nx build server --configuration=production",
+    "build:server": "nx build server",
+    "build:web": "nx build web",
 
-  "dev:server": "nx serve server",
-  "dev:web": "nx serve web",
+    "dev:server": "nx serve server",
+    "dev:web": "nx serve web",
 
-  "deploy:server": "nx run server:prune",
-  "start:dist": "node dist/api/main.js",
+    "deploy:server": "nx run server:prune",
 
-  "lint": "nx lint",
-  "test": "nx test",
+    "start": "node dist/api/main.js",
+    "start:dist": "node dist/api/main.js",
 
-  "e2e:server": "nx run server-e2e:e2e",
-  "e2e:web": "nx e2e web-e2e",
+    "lint": "nx lint",
+    "test": "nx test",
 
-  "db:migrate": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js -d server/src/configuration/typeorm/data-source.ts migration:run",
-  "db:revert": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d server/src/configuration/typeorm/data-source.ts migration:revert",
-  "db:gen:init_auth": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d server/src/configuration/typeorm/data-source.ts migration:generate server/migrations/init_auth",
+    "e2e:server": "nx run server-e2e:e2e",
+    "e2e:web": "nx e2e web-e2e",
 
-  "typeorm": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json node ./node_modules/typeorm/cli.js -d server/src/configuration/typeorm/data-source.ts",
-  "ssl:check": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json ts-node -r tsconfig-paths/register -r dotenv/config server/scripts/ssl-check.ts",
+    "db:migrate": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js -d server/src/configuration/typeorm/data-source.ts migration:run",
+    "db:revert": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d server/src/configuration/typeorm/data-source.ts migration:revert",
+    "db:gen:init_auth": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json typeorm-ts-node-commonjs -r tsconfig-paths/register -r dotenv/config -d server/src/configuration/typeorm/data-source.ts migration:generate server/migrations/init_auth",
 
-  "patch:project": "tsx web/tools/patch-project-json.ts",
-  "patch:frontend-config": "tsx ./frontend/tools/update-project-json.ts"
-},
+    "typeorm": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json node ./node_modules/typeorm/cli.js -d server/src/configuration/typeorm/data-source.ts",
+    "ssl:check": "cross-env TS_NODE_PROJECT=server/tsconfig.typeorm.json ts-node -r tsconfig-paths/register -r dotenv/config server/scripts/ssl-check.ts",
+
+    "patch:project": "tsx web/tools/patch-project-json.ts",
+    "patch:frontend-config": "tsx ./frontend/tools/update-project-json.ts"
+  },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~1.17.1",
     "@analogjs/vitest-angular": "~1.17.1",
