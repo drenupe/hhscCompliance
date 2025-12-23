@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-  "build": "nx run server:prune",
+  "build": "nx build server --configuration=production",
   "build:server": "nx build server",
   "build:web": "nx build web",
 
