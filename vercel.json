@@ -4,7 +4,7 @@
   "buildCommand": "npx nx build web --configuration=production && node tools/vercel-fix-dist.mjs",
   "outputDirectory": "dist/web",
   "routes": [
-    { "src": "/api/(.*)", "dest": "https://api-staging-n8tk.onrender.com/api/$1" },
+    { "src": "/api/v1/(.*)",  "dest": "https://api-staging-n8tk.onrender"},
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]

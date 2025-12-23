@@ -10,16 +10,29 @@ export abstract class BaseApiService {
 
   /**
    * Safely joins apiBaseUrl + path (removes double /)
-   * apiBaseUrl: http://localhost:3000/api/v1
-   * path:       /consumers  -> http://localhost:3000/api/v1/consumers
+   *
+   * NOTE:
+   * - In production (Vercel), prefer a RELATIVE base like "/api/v1"
+   *   so Vercel rewrites can proxy to Render (no CORS).
+   * - Never default to localhost in shared/browser code.
    */
   protected buildUrl(path: string): string {
-    const base = this.env.apiBaseUrl.replace(/\/$/, '');   // strip trailing /
-    const normalizedPath = path.replace(/^\//, '');        // strip leading /
+    const baseFromEnv = (this.env?.apiBaseUrl ?? '').trim();
+
+    // ✅ Safe default for browser deployments (works with Vercel rewrites)
+    const base = (baseFromEnv || '/api/v1').replace(/\/+$/, ''); // strip trailing slashes
+
+    const normalizedPath = String(path ?? '')
+      .trim()
+      .replace(/^\/+/, ''); // strip leading slashes
+
+    // If caller passes "" or "/", return base
+    if (!normalizedPath) return base;
+
     return `${base}/${normalizedPath}`;
   }
 
-  protected get<T>(url: string, params?: any) {
+  protected get<T>(url: string, params?: Record<string, any>) {
     return this.http.get<T>(url, { params });
   }
 
