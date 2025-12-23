@@ -10,7 +10,7 @@
       "outputs": ["{workspaceRoot}/dist/web"],
       "defaultConfiguration": "production",
       "options": {
-        "configFile": "web/vite.config.ts"
+        "configFile": "web/vite.config.mts"
       },
       "configurations": {
         "production": {}
@@ -20,7 +20,7 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "configFile": "web/vite.config.ts"
+        "configFile": "web/vite.config.mts"
       },
       "configurations": {
         "development": {},
