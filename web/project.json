@@ -10,7 +10,8 @@
       "outputs": ["{workspaceRoot}/dist/web"],
       "defaultConfiguration": "production",
       "options": {
-        "configFile": "web/vite.config.mts"
+        "configFile": "web/vite.config.mts",
+        "outputPath": "dist/web"
       },
       "configurations": {
         "production": {}
