@@ -27,7 +27,6 @@
         }
       }
     },
-
     "prune-lockfile": {
       "dependsOn": ["build:production"],
       "cache": true,
@@ -40,7 +39,6 @@
         "buildTarget": "server:build:production"
       }
     },
-
     "copy-workspace-modules": {
       "dependsOn": ["build:production"],
       "cache": true,
@@ -50,12 +48,10 @@
         "buildTarget": "server:build:production"
       }
     },
-
     "prune": {
       "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
       "executor": "nx:noop"
     },
-
     "serve": {
       "continuous": true,
       "executor": "@nx/js:node",
@@ -74,7 +70,6 @@
         }
       }
     },
-
     "test": {
       "options": {
         "passWithNoTests": true
