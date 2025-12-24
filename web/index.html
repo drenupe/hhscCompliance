@@ -2,11 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- ✅ Required for Angular router + assets on Vercel/static hosting -->
+    <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>HHSC Compliance</title>
   </head>
+
   <body>
-     <lib-app-shell></lib-app-shell>
+    <!-- ✅ Must match AppShellComponent selector -->
+    <lib-app-shell></lib-app-shell>
+
     <!-- Vite entry -->
     <script type="module" src="/src/main.ts"></script>
   </body>
