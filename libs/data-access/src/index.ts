@@ -25,6 +25,9 @@ export * from './lib/iss/src/lib/+state/iss.effects';
 export * from './lib//iss/src/lib/services/iss-provider.service';
 export * from './lib//iss/src/lib/services/consumers.service';
 export * from './lib//iss/src/lib/services/staff-log.service';
+export * from './lib/auth/auth-state/dev-auth.options';
+
+
 export * from './lib/iss/src/lib/tokens/environment.token';
 export { ISS_FEATURE_KEY } from './lib/iss/src/lib/+state/iss.models';
 export { IssFacade } from './lib/iss/src/lib/+state/iss.facade';

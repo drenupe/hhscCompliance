@@ -5,6 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   importProvidersFrom,
 } from '@angular/core';
+
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { appRoutes } from './app.routes';
@@ -13,6 +14,10 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
 import { provideStoreDevtools } from '@ngrx/store-devtools'; // 👈 add this
+
+import { AUTH_STATE_OPTIONS } from '@hhsc-compliance/data-access';
+import { DEV_AUTH_OPTIONS } from '@hhsc-compliance/data-access';
+
 
 // ✅ Pull ENVIRONMENT + type + ISS feature from data-access (non-lazy lib)
 import {
@@ -91,6 +96,27 @@ export const appConfig: ApplicationConfig = {
       provide: ENVIRONMENT,
       useValue: environment,
     },
+    // ✅ Auth state options (optional)
+{
+  provide: AUTH_STATE_OPTIONS,
+  useValue: {
+    persistence: 'none',          // keep off during dev
+    storageKey: 'app_user',
+    defaultRole: 'DirectCareStaff',
+  },
+},
+
+// ✅ DEV auth (optional) – enable to skip login while building
+{
+  provide: DEV_AUTH_OPTIONS,
+  useValue: {
+    enabled: true,
+    roles: ['Admin'],             // pick any real AppRole(s)
+    // or provide a full user:
+    // user: { id: 'dev', email: 'dev@local', roles: ['Admin'] }
+  },
+},
+
 
     importProvidersFrom(
       LucideAngularModule.pick({

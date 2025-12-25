@@ -1,4 +1,4 @@
-// libs/web-shell/src/lib/app.config.ts
+// libs/web/app/app.config.ts
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
