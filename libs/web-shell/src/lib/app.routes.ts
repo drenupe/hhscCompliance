@@ -74,6 +74,13 @@ export const appRoutes: Routes = [
         (m: typeof import('@hhsc-compliance/iss')) => m.ISS_ROUTES
       ),
   },
+   {
+    path: 'consumers',
+    loadChildren: () =>
+      import('@hhsc-compliance/consumers').then(
+        (m: typeof import('@hhsc-compliance/consumers')) => m.CONSUMER_ROUTES
+      ),
+  },
 // // Staff
  // { path: 'staff',
  //   canMatch: [raciGuard('staff')],

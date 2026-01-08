@@ -1,0 +1,13 @@
+{
+  "name": "consumers",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/consumers/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:feature", "surface:web"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

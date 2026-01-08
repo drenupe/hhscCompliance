@@ -43,7 +43,12 @@
       "@hhsc-compliance/shared": ["libs/shared/src/index.ts"],
       "@hhsc-compliance/shared-models": ["libs/shared-models/src/index.ts"],
       "@hhsc-compliance/ui-kit": ["libs/ui-kit/src/index.ts"],
-      "@hhsc-compliance/web-shell": ["libs/web-shell/src/index.ts"]
+      "@hhsc-compliance/web-shell": ["libs/web-shell/src/index.ts"],
+      "@hhsc-compliance/consumers": ["libs/features/consumers/src/index.ts"],
+      
+      "@hhsc-compliance/ui-overlay": [
+        "libs/shared/src/lib/ui-overlay/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

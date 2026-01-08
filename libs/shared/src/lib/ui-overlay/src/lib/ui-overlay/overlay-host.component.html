@@ -1,0 +1,29 @@
+<ng-container *ngIf="top() as t">
+  <div class="hhsc-overlay-root">
+    <!-- Backdrop MUST be a real button -->
+    <button
+      type="button"
+      class="hhsc-overlay-backdrop"
+      aria-label="Close dialog"
+      (click)="onBackdropClick()"
+    ></button>
+
+    <!-- Sheet -->
+    <section
+      #sheetEl
+      class="hhsc-sheet"
+      [class.hhsc-sheet--sm]="t.size === 'sm'"
+      [class.hhsc-sheet--md]="t.size === 'md'"
+      [class.hhsc-sheet--lg]="t.size === 'lg'"
+      [class.hhsc-sheet--full]="t.size === 'full'"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="t.ariaLabel || 'Dialog'"
+      tabindex="-1"
+    >
+      <ng-container
+        *ngComponentOutlet="t.component; injector: makeInjector(t.data, t.ref)"
+      ></ng-container>
+    </section>
+  </div>
+</ng-container>

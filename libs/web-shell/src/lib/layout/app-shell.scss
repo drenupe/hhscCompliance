@@ -1,9 +1,21 @@
-/* libs/web-shell/src/lib/layout/app-shell.scss */
-
 :host {
   display: block;
+
   --header-h: 56px;
-  --sidebar-w: 220px; /* adjust this once for the app */
+  --sidebar-w: 220px;
+
+  /* ✅ z-index contract */
+  --z-header: 200;
+  --z-shell: 100;
+  --z-sidebar: 300;
+  --z-sidebarOverlay: 250;
+
+  /* global bottom-sheet overlay */
+  --z-overlayRoot: 2000;
+  --z-overlayBackdrop: 2001;
+  --z-overlaySheet: 2002;
+
+  background: var(--clr-bg, #020617);
 }
 
 /* ===========================
@@ -11,14 +23,18 @@
    =========================== */
 
 .app-header {
-  position: relative;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
+
   height: var(--header-h);
+  padding: 0.5rem 0.75rem;
   box-sizing: border-box;
+
   background: #020617;
   border-bottom: 1px solid var(--clr-line, #1f2937);
   color: var(--text-strong, #f9fafb);
@@ -34,12 +50,12 @@
   border: none;
   background: transparent;
   color: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 32px;
   height: 32px;
   border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding: 0;
 }
@@ -54,41 +70,31 @@
 
 .app-shell {
   position: relative;
-  z-index: 10;
+  z-index: var(--z-shell);
+
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+
   height: calc(100dvh - var(--header-h));
   min-height: calc(100dvh - var(--header-h));
   max-height: calc(100dvh - var(--header-h));
-  background: var(--clr-bg, #020617);
 }
 
-/* collapsed sidebar (desktop) */
 .app-shell.collapsed {
   grid-template-columns: 72px minmax(0, 1fr);
 }
 
-/* mobile: content uses full width; sidebar turns into fixed drawer itself */
 .app-shell.mobile {
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* Sidebar pane — acts as the column wrapper */
 .sidebar-pane {
   min-width: 0;
   min-height: 0;
-
-  /* let <lib-sidebar> manage its own scroll;
-     no clipping here, just the column background/border */
-  overflow: visible;
-
   border-right: 1px solid var(--clr-line, #1f2937);
   background: var(--clr-base, #020617);
+  overflow: visible;
 }
-
-/* ===========================
-   CONTENT PANE + SCROLLING
-   =========================== */
 
 .content-pane {
   min-width: 0;
@@ -97,16 +103,14 @@
   flex-direction: column;
 }
 
-/* Main content scroll container */
 .scroll-area {
   flex: 1 1 auto;
-  min-height: 0;
   min-width: 0;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-/* content canvas */
 .content-container {
   padding: 1.25rem;
   max-width: 1280px;
@@ -116,21 +120,11 @@
   box-sizing: border-box;
 }
 
-/* Make sure nested pages don’t blow width */
 .content-container > * {
   min-width: 0;
 }
 
-/* ===========================
-   MOBILE TWEAKS
-   =========================== */
-
 @media (max-width: 768px) {
-  .content-container {
-    padding-inline: 0.75rem;
-  }
-
-  .app-header {
-    padding-inline: 0.6rem;
-  }
+  .content-container { padding-inline: 0.75rem; }
+  .app-header { padding-inline: 0.6rem; }
 }

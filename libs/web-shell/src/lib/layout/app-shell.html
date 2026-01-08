@@ -1,13 +1,11 @@
 <!-- libs/web-shell/src/lib/layout/app-shell.html -->
 
 <header class="app-header">
-  <!-- Mobile hamburger -->
   <button
-    class="hamburger-btn"
-    *ngIf="(layout.isMobile$ | async) === true"
-    (click)="toggleSidebar()"
     type="button"
-    aria-label="Open menu"
+    class="hamburger-btn"
+    aria-label="Toggle menu"
+    (click)="toggleSidebar()"
   >
     <span class="hamburger-icon">☰</span>
   </button>
@@ -20,17 +18,18 @@
   [class.collapsed]="(layout.sidebarCollapsed$ | async) === true"
   [class.mobile]="(layout.isMobile$ | async) === true"
 >
-  <!-- Sidebar column — always rendered, behavior owned by <lib-sidebar> -->
   <aside class="sidebar-pane">
     <lib-sidebar></lib-sidebar>
   </aside>
 
-  <!-- Main content column -->
-  <main class="content-pane" id="main-content">
-    <div class="scroll-area">
+  <section class="content-pane">
+    <main id="main-content" class="scroll-area">
       <div class="content-container">
         <router-outlet></router-outlet>
       </div>
-    </div>
-  </main>
+    </main>
+  </section>
 </div>
+
+<!-- ✅ GLOBAL OVERLAY HOST MUST LIVE OUTSIDE SCROLL CONTAINER -->
+<lib-overlay-host></lib-overlay-host>

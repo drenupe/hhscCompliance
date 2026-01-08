@@ -11,7 +11,7 @@
       "defaultConfiguration": "production",
       "options": {
         "target": "node",
-        "outputPath": "../dist/api",
+        "outputPath": "dist/api",
         "main": "server/src/main.ts",
         "tsConfig": "server/tsconfig.app.json",
         "webpackConfig": "server/webpack.config.js"
@@ -27,6 +27,7 @@
         }
       }
     },
+
     "prune-lockfile": {
       "dependsOn": ["build"],
       "cache": true,
@@ -39,6 +40,7 @@
         "buildTarget": "server:build:production"
       }
     },
+
     "copy-workspace-modules": {
       "dependsOn": ["build"],
       "cache": true,
@@ -48,26 +50,53 @@
         "buildTarget": "server:build:production"
       }
     },
+
     "prune": {
       "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
       "executor": "nx:noop"
     },
+
     "serve": {
-      "continuous": true,
-      "executor": "@nx/js:node",
+      "executor": "nx:run-commands",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
       "options": {
-        "buildTarget": "server:build",
-        "runBuildTargetDependencies": false
+        "cwd": "{workspaceRoot}"
       },
       "configurations": {
-        "development": { "buildTarget": "server:build:development" },
-        "production": { "buildTarget": "server:build:production" }
+        "development": {
+          "command": "npx nx build server --configuration=development && node dist/api/main.js"
+        },
+        "production": {
+          "command": "npx nx build server --configuration=production && node dist/api/main.js"
+        }
       }
     },
+
+    "serve:debug": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "development",
+      "options": {
+        "cwd": "{workspaceRoot}"
+      },
+      "configurations": {
+        "development": {
+          "command": "npx nx build server --configuration=development && node --inspect=9229 dist/api/main.js"
+        }
+      }
+    },
+
+    "serve:watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "npx nx build server --configuration=development --watch"
+      }
+    },
+
     "test": {
-      "options": { "passWithNoTests": true }
+      "options": {
+        "passWithNoTests": true
+      }
     }
   }
 }

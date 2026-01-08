@@ -1,4 +1,4 @@
-// api/src/app/app.module.ts
+// server/src/app/app.module.ts
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,51 +13,44 @@ import { AppService } from './app.service';
 // Feature modules
 import { AuthModule } from './auth/auth.module';
 import { RaciModule } from './raci/raci.module';
-// import { UsersModule } from './users/users.module';
-// import { MetricsModule } from './observability/metrics/metrics.module';
-import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { IssModule } from './iss/iss.module';
 import { ConsumersModule } from './consumers/consumers.module';
-// import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-// import { HttpErrorFilter } from './common/filters/http-exception.filter';
-// import { HttpLoggingInterceptor } from './common/interceptors/http-logging.interceptor';
-// import { MetricsInterceptor } from './observability/metrics/metrics.interceptor';
+
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+
+const NODE_ENV = process.env.NODE_ENV ?? 'development';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration],                  // 🔑 use your zod-based config
+      load: [configuration], // Zod-based config loader
       envFilePath: [
-        // app-specific first
-        join(process.cwd(), `api/.env.${process.env.NODE_ENV}.local`),
-        join(process.cwd(), `api/.env.${process.env.NODE_ENV}`),
-        join(process.cwd(), 'api/.env'),
-        // common fallbacks
-        `.env.${process.env.NODE_ENV}.local`,
-        `.env.${process.env.NODE_ENV}`,
-        '.env',
+        // Prefer env files colocated with the server app
+        join(process.cwd(), `server/.env.${NODE_ENV}.local`),
+        join(process.cwd(), `server/.env.${NODE_ENV}`),
+        join(process.cwd(), 'server/.env'),
+
+        // Fallback to workspace root env files
+        join(process.cwd(), `.env.${NODE_ENV}.local`),
+        join(process.cwd(), `.env.${NODE_ENV}`),
+        join(process.cwd(), '.env'),
       ],
+      // optional, but often helpful if you use ${VAR} references inside .env files
+      expandVariables: true,
     }),
 
     // 🔌 DB connection (uses `configuration()` + async.config)
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
 
-    // feature modules
+    // Feature modules
     AuthModule,
     RaciModule,
     IssModule,
-    ConsumersModule
-    // UsersModule,
-    // MetricsModule,
+    ConsumersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    // { provide: APP_INTERCEPTOR, useClass: MetricsInterceptor },
-    // { provide: APP_FILTER, useClass: HttpErrorFilter },
-    // { provide: APP_INTERCEPTOR, useClass: HttpLoggingInterceptor },
-  ],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

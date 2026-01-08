@@ -5,4 +5,3 @@ export * from './lib/app.config';
 export * from './lib/layout/sidebar';
 export * from './lib/layout/app-shell';
 export * from './lib/layout/main-content';
-

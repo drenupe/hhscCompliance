@@ -5,7 +5,7 @@ import path, { resolve as resolvePath } from 'node:path';
 import { config as dotenvConfig } from 'dotenv';
 
 // Load env from api/.env (and let ConfigModule also see it)
-dotenvConfig({ path: resolvePath(process.cwd(), 'api/.env') });
+dotenvConfig({ path: resolvePath(process.cwd(), 'server/.env') });
 
 const root = process.cwd();
 const url = process.env.DATABASE_URL ?? '';
@@ -24,10 +24,10 @@ export default new DataSource({
   ssl: sslOn ? baseSsl : false,
 
   // Use entities from the *source* when running with ts-node
-  entities: [path.resolve(root, 'apps/api/src/app/**/*.entity.{ts,js}')],
+  entities: [path.resolve(root, 'apps/server/src/app/**/*.entity.{ts,js}')],
 
   // Raw TS migrations when running via ts-node (your script uses TS_NODE_PROJECT)
-  migrations: [path.resolve(root, 'api/migrations/*.{ts,js}')],
+  migrations: [path.resolve(root, 'server/migrations/*.{ts,js}')],
 
   // Optional logging while debugging migrations
   // logging: ['error', 'warn', 'schema', 'migration'],

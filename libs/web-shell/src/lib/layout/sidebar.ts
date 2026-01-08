@@ -32,8 +32,6 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
         "
         aria-label="Close menu"
         (click)="layout.closeSidebar()"
-        (keydown.enter)="layout.closeSidebar()"
-        (keydown.space)="layout.closeSidebar()"
       ></button>
 
       <!-- Actual sidebar nav -->
@@ -73,34 +71,30 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
     </div>
   `,
   styles: [`
-:host {
-  display: block;
-  /* inherits --sidebar-w and --header-h from lib-app-shell */
-}
+:host { display: block; }
 
-/* ==========================
-   SIDEBAR CONTAINER
-   ========================== */
+/* container */
+.sidebar-shell { position: relative; }
 
-.sidebar-shell {
-  position: relative;
-}
-
-/* ==========================
-   SIDEBAR NAV (DESKTOP BASE)
-   ========================== */
-
+/* desktop nav: fills the column (AppShell grid controls height) */
 .sidebar {
-  position: relative;                    /* desktop: lives in the column */
+  position: relative;
   top: 0;
-  height: 100dvh;
+
+  /* ✅ match shell height (prevents bottom artifacts + enables proper inner scroll) */
+  height: calc(100dvh - var(--header-h, 56px));
   width: var(--sidebar-w, 220px);
+
   background: var(--clr-base, #020617);
   padding: 10px 10px 8px;
+
   display: flex;
   flex-direction: column;
-  overflow: visible;                     /* inner scroll handles overflow */
-  z-index: 60;
+
+  /* ✅ important: prevent “weird gradient / bleed” at bottom */
+  overflow: hidden;
+
+  z-index: var(--z-sidebar, 300);
   pointer-events: auto;
 }
 
@@ -115,21 +109,22 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
   flex-shrink: 0;
 }
 
-/* scrollable nav area */
+/* scroll area inside sidebar */
 .sidebar__scroll {
   flex: 1 1 auto;
-  min-height: 0;                         /* 🔑 flex + scroll */
+  min-height: 0;                /* 🔑 enables scrolling inside flex column */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;
   -webkit-overflow-scrolling: touch;
+
+  /* ✅ avoids scroll “fade/gradient” feel */
+  background: transparent;
+  scrollbar-gutter: stable;
 }
 
 /* groups */
-.group {
-  margin: 10px 0;
-}
-
+.group { margin: 10px 0; }
 .group-label {
   margin: 6px 8px 4px;
   color: var(--clr-muted, #9ca3af);
@@ -139,11 +134,7 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
 }
 
 /* list */
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+.list { list-style: none; margin: 0; padding: 0; }
 
 .list li a {
   display: flex;
@@ -154,16 +145,15 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
   color: var(--clr-text, #e5e7eb);
   text-decoration: none;
   font-size: 0.82rem;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    transform 0.05s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.05s ease;
 }
 
-.list li a .i {
-  opacity: 0.9;
-  flex: 0 0 18px;
+.list li a:focus-visible {
+  outline: var(--ring);
+  outline-offset: 2px;
 }
+
+.list li a .i { opacity: 0.9; flex: 0 0 18px; }
 
 .list li a .t {
   white-space: nowrap;
@@ -190,45 +180,46 @@ import { switchMap, map, shareReplay } from 'rxjs/operators';
   color: var(--clr-accent, #22c55e);
 }
 
-/* ==========================
-   MOBILE DRAWER + OVERLAY
-   ========================== */
+/* overlay button hidden on desktop */
+.sidebar-overlay { display: none; }
 
-.sidebar-overlay {
-  display: none; /* default: no overlay on desktop */
-}
-
-/* Mobile styles */
+/* MOBILE drawer */
 @media (max-width: 768px) {
-  /* Drawer */
   .sidebar-shell.mobile .sidebar {
     position: fixed;
     top: var(--header-h, 56px);
     bottom: 0;
     left: 0;
+
     width: var(--sidebar-w, 220px);
-    height: auto;                        /* defined by top/bottom */
-    z-index: 1000;
+    height: auto;                /* top/bottom define size */
+
+    /* ✅ keep inner scroll clean */
+    overflow: hidden;
+
+    z-index: var(--z-sidebar, 300);
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+
     transform: translateX(-100%);
     transition: transform 200ms ease-out;
   }
 
-  .sidebar-shell.mobile.open .sidebar {
-    transform: translateX(0);
-  }
+  .sidebar-shell.mobile.open .sidebar { transform: translateX(0); }
 
-  /* Overlay lives INSIDE sidebar-shell now */
   .sidebar-shell.mobile .sidebar-overlay {
     display: block;
     position: fixed;
     top: var(--header-h, 56px);
     right: 0;
     bottom: 0;
-    left: var(--sidebar-w, 220px);       /* 🔑 never cover the menu strip */
-    z-index: 900;                        /* below menu (1000), above content */
+    left: var(--sidebar-w, 220px);
+
+    z-index: var(--z-sidebarOverlay, 250);
     background: rgba(15, 23, 42, 0.55);
-    pointer-events: auto;                /* clickable to close */
+    pointer-events: auto;
+
+    border: 0;
+    padding: 0;
   }
 }
   `],
@@ -243,16 +234,15 @@ export class Sidebar {
       const out = menuForRole(role);
       return isObservable(out) ? out : of(out);
     }),
-    map((groups) => Array.isArray(groups) ? groups : [groups]),
+    map((groups) => (Array.isArray(groups) ? groups : [groups])),
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
   trackGroup = (_: number, g: MenuGroup) => g.label;
-  trackItem  = (_: number, i: MenuGroup['items'][number]) => i.path;
+  trackItem = (_: number, i: MenuGroup['items'][number]) => i.path;
 
   handleItemClick(): void {
-    // On mobile, close the drawer after navigation.
-    // On desktop, sidebar stays open; LayoutService can decide behavior.
+    // ✅ close drawer after navigation on mobile
     this.layout.closeSidebar();
   }
 }
