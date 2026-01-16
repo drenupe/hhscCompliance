@@ -7,25 +7,37 @@ import {
 } from '@angular/core';
 
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
-import { appRoutes } from './app.routes';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
-import { provideStoreDevtools } from '@ngrx/store-devtools'; // 👈 add this
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { AUTH_STATE_OPTIONS } from '@hhsc-compliance/data-access';
-import { DEV_AUTH_OPTIONS } from '@hhsc-compliance/data-access';
+import { appRoutes } from './app.routes';
 
-
-// ✅ Pull ENVIRONMENT + type + ISS feature from data-access (non-lazy lib)
 import {
+  AUTH_STATE_OPTIONS,
+  DEV_AUTH_OPTIONS,
   ENVIRONMENT,
   EnvironmentConfig,
+
+  // ISS
   ISS_FEATURE_KEY,
   issReducer,
   IssEffects,
+
+  // Providers (✅ add these exports in @hhsc-compliance/data-access index.ts)
+  PROVIDERS_FEATURE_KEY,
+  providersReducer,
+  ProvidersEffects,
+
+  // Interceptor (✅ must be exported from @hhsc-compliance/data-access)
+  RequestIdInterceptor,
 } from '@hhsc-compliance/data-access';
 
 import {
@@ -56,19 +68,16 @@ import {
   Images,
 } from 'lucide-angular';
 
-
-
-
 // 👇 Local environment config (no external/relative import, Nx is happy)
 const environment: EnvironmentConfig = {
-   apiBaseUrl: '/api/v1', // 🔧 set this to your Nest ISS API base URL
-  // add other fields if you put them on EnvironmentConfig
+  apiBaseUrl: '/api/v1',
 };
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+
     provideRouter(
       appRoutes,
       withInMemoryScrolling({
@@ -76,47 +85,54 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
-    provideHttpClient(),
 
-    // 🧠 NgRx
+    // ✅ HttpClient + DI interceptors
+    provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestIdInterceptor,
+      multi: true,
+    },
+
+    // 🧠 NgRx (root registration for ISS + Providers)
     provideStore({
       [ISS_FEATURE_KEY]: issReducer,
+      [PROVIDERS_FEATURE_KEY]: providersReducer,
     }),
-    provideEffects([IssEffects]),
+    provideEffects([IssEffects, ProvidersEffects]),
     provideRouterStore(),
     provideStoreDevtools({
-      maxAge: 25,              // how many states to keep in history
-      logOnly: false,          // set true if you only want log-only mode in prod
-      trace: true,             // enable stack traces for actions
+      maxAge: 25,
+      logOnly: false,
+      trace: true,
       traceLimit: 25,
     }),
 
-    // 🌍 This fixes the ENVIRONMENT NullInjectorError without importing from src/
+    // 🌍 ENV injection (prevents NullInjectorError)
     {
       provide: ENVIRONMENT,
       useValue: environment,
     },
+
     // ✅ Auth state options (optional)
-{
-  provide: AUTH_STATE_OPTIONS,
-  useValue: {
-    persistence: 'none',          // keep off during dev
-    storageKey: 'app_user',
-    defaultRole: 'DirectCareStaff',
-  },
-},
+    {
+      provide: AUTH_STATE_OPTIONS,
+      useValue: {
+        persistence: 'none',
+        storageKey: 'app_user',
+        defaultRole: 'DirectCareStaff',
+      },
+    },
 
-// ✅ DEV auth (optional) – enable to skip login while building
-{
-  provide: DEV_AUTH_OPTIONS,
-  useValue: {
-    enabled: true,
-    roles: ['Admin'],             // pick any real AppRole(s)
-    // or provide a full user:
-    // user: { id: 'dev', email: 'dev@local', roles: ['Admin'] }
-  },
-},
-
+    // ✅ DEV auth (optional)
+    {
+      provide: DEV_AUTH_OPTIONS,
+      useValue: {
+        enabled: true,
+        roles: ['Admin'],
+        // user: { id: 'dev', email: 'dev@local', roles: ['Admin'] }
+      },
+    },
 
     importProvidersFrom(
       LucideAngularModule.pick({
@@ -144,7 +160,7 @@ export const appConfig: ApplicationConfig = {
         Bed,
         FileText,
         Images,
-      })
+      }),
     ),
   ],
 };

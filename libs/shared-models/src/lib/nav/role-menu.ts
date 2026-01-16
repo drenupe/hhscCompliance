@@ -24,6 +24,7 @@ const CORE: MenuGroup = {
   items: [
     { label: 'Dashboard', path: '/dashboard',             icon: 'layout-dashboard' },
     { label: 'Consumers', path: '/consumers',             icon: 'users' },
+    { label: 'Providers', path: '/providers',             icon: 'users' },
     { label: 'Locations', path: '/residential/locations', icon: 'home' },
   ],
 };

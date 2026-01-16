@@ -1,8 +1,10 @@
 // libs/data-access/src/lib/iss/src/lib/services/iss-provider.service.ts
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BaseApiService } from '../base-api.service';
 import { Provider } from '@hhsc-compliance/shared-models'; // or your actual model
+
+import { BaseApiService } from '../../../../api-core/base-api.service';
+
 
 @Injectable({ providedIn: 'root' })
 export class IssProviderService extends BaseApiService {

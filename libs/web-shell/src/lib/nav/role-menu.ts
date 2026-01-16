@@ -24,7 +24,7 @@ export const ROUTES = {
   consumerShell: '/consumers',           // base; shell lives at /consumers/:consumerId/...
 
   // Residential / Locations (keep your existing behavior)
-  locations: '/residential/locations',
+  locations: '/compliance/residential',
 
   // Compliance
   complianceResidential: '/compliance/residential',

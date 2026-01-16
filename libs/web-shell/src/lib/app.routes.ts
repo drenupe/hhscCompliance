@@ -10,14 +10,30 @@ export const appRoutes: Routes = [
     loadComponent: () =>
       import('@hhsc-compliance/dashboard').then(m => m.Dashboard),
   },
- 
 
   {
+    path: 'consumers',
+    loadChildren: () =>
+      import('@hhsc-compliance/consumers').then(
+        (m: typeof import('@hhsc-compliance/consumers')) => m.CONSUMER_ROUTES
+      ),
+  },
+ 
+
+   {
+    path: 'providers',
+    loadChildren: () =>
+      import('@hhsc-compliance/providers').then(
+        (m: typeof import('@hhsc-compliance/providers')) => m.PROVIDERS_ROUTES
+      ),
+  },
+ 
+
+   {
     path: 'compliance/residential',
-    // canMatch: [raciGuard('residential')], // optional
-    loadComponent: () =>
+    loadChildren: () =>
       import('@hhsc-compliance/residential').then(
-        (m) => m.Residential
+        (m: typeof import('@hhsc-compliance/residential')) => m.RESIDENTIAL_ROUTES
       ),
   },
 
@@ -74,13 +90,7 @@ export const appRoutes: Routes = [
         (m: typeof import('@hhsc-compliance/iss')) => m.ISS_ROUTES
       ),
   },
-   {
-    path: 'consumers',
-    loadChildren: () =>
-      import('@hhsc-compliance/consumers').then(
-        (m: typeof import('@hhsc-compliance/consumers')) => m.CONSUMER_ROUTES
-      ),
-  },
+ 
 // // Staff
  // { path: 'staff',
  //   canMatch: [raciGuard('staff')],

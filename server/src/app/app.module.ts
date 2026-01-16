@@ -17,6 +17,8 @@ import { IssModule } from './iss/iss.module';
 import { ConsumersModule } from './consumers/consumers.module';
 
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { ProvidersModule } from './providers/providers.module';
+import { RolesGuard } from './auth/roles.guard';
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
 
@@ -48,9 +50,10 @@ const NODE_ENV = process.env.NODE_ENV ?? 'development';
     RaciModule,
     IssModule,
     ConsumersModule,
+    ProvidersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,RolesGuard],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,1 +1,2 @@
-export * from './lib/residential/residential';
+export * from './lib/residential/residential.routes';
+export * from './lib/residential/residential.routes';

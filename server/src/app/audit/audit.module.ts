@@ -1,7 +1,11 @@
-// api/src/app/audit/audit.module.ts
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuditService } from './audit.service';
-import { AuditInterceptor } from './interceptors/audit.interceptor';
+import { AuditLogEntity } from './entities/audit.entity';
 
-@Module({ providers: [AuditService, AuditInterceptor], exports: [AuditService, AuditInterceptor] })
+@Module({
+  imports: [TypeOrmModule.forFeature([AuditLogEntity])],
+  providers: [AuditService],
+  exports: [AuditService],
+})
 export class AuditModule {}
