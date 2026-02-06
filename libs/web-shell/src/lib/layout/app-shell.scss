@@ -1,16 +1,22 @@
+/* ============================================
+   libs/web-shell/src/lib/layout/app-shell.scss
+   CLEAN DROP-IN (single source of truth)
+   - Shell owns centering + scrolling
+   - Feature pages only style their own content
+   ============================================ */
+
 :host {
   display: block;
-
+  --sidebar-w: 320px; /* must match your grid sidebar width */
   --header-h: 56px;
   --sidebar-w: 220px;
 
-  /* ✅ z-index contract */
+  /* z-index contract */
   --z-header: 200;
   --z-shell: 100;
   --z-sidebar: 300;
-  --z-sidebarOverlay: 250;
 
-  /* global bottom-sheet overlay */
+  /* overlay */
   --z-overlayRoot: 2000;
   --z-overlayBackdrop: 2001;
   --z-overlaySheet: 2002;
@@ -60,10 +66,6 @@
   padding: 0;
 }
 
-.hamburger-icon {
-  font-size: 1.15rem;
-}
-
 /* ===========================
    SHELL LAYOUT
    =========================== */
@@ -88,12 +90,74 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* ===========================
+   SIDEBAR
+   =========================== */
+
 .sidebar-pane {
   min-width: 0;
   min-height: 0;
   border-right: 1px solid var(--clr-line, #1f2937);
   background: var(--clr-base, #020617);
   overflow: visible;
+  z-index: var(--z-sidebar);
+}
+
+/* ===========================
+   CONTENT
+   =========================== */
+.content-pane {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+
+  /* ✅ anchor overlays to content column */
+  position: relative;
+}
+/* host sits on top of content pane */
+.overlay-host {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlayRoot, 2000);
+}
+
+/* ✅ ONLY scroll container */
+.scroll-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: transparent;
+}
+
+/* ✅ ALWAYS centered content column */
+.content-container {
+  width: 100%;
+  min-width: 0;
+
+  /* center + cap */
+  max-width: 1280px;
+  margin-inline: auto;
+
+  /* consistent gutter */
+  padding: 1.25rem;
+  box-sizing: border-box;
+
+  display: grid;
+  gap: 1rem;
+
+  /* keep children from drifting */
+  justify-items: stretch;
+}
+
+/* ✅ Make routed pages fill centered column */
+.content-container > * {
+  width: 100%;
+  min-width: 0;
 }
 
 .content-pane {
@@ -101,30 +165,13 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+
+  position: relative; /* ✅ anchor overlays */
 }
 
-.scroll-area {
-  flex: 1 1 auto;
-  min-width: 0;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.content-container {
-  padding: 1.25rem;
-  max-width: 1280px;
-  margin-inline: auto;
-  display: grid;
-  gap: 1rem;
-  box-sizing: border-box;
-}
-
-.content-container > * {
-  min-width: 0;
-}
 
 @media (max-width: 768px) {
-  .content-container { padding-inline: 0.75rem; }
-  .app-header { padding-inline: 0.6rem; }
+  .content-container {
+    padding: 0.75rem;
+  }
 }

@@ -1,5 +1,4 @@
 // libs/shared/src/lib/ui-overlay/src/lib/overlay/overlay.types.ts
-
 import { Type } from '@angular/core';
 import { OverlayRef } from './overlay-ref';
 
@@ -9,20 +8,20 @@ export interface OverlayOpenOptions<TData = unknown> {
   size?: OverlaySize;
   ariaLabel?: string;
   data?: TData;
-
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
 }
 
-export interface OverlayEntry<TData = unknown> {
+/**
+ * One entry in the overlay stack
+ */
+export interface OverlayEntry<TData = unknown, TResult = unknown> {
   id: string;
-  component: Type<unknown>;
-  ref: OverlayRef;
-
+  component: Type<unknown> | any;
+  ref: OverlayRef<TResult>;
   size: OverlaySize;
   ariaLabel?: string;
   data?: TData;
-
   closeOnBackdrop: boolean;
   closeOnEscape: boolean;
 }

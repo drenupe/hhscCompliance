@@ -1,6 +1,6 @@
+<!-- libs/shared/src/lib/ui-overlay/src/lib/overlay/overlay-host.component.html -->
 <ng-container *ngIf="top() as t">
   <div class="hhsc-overlay-root">
-    <!-- Backdrop MUST be a real button -->
     <button
       type="button"
       class="hhsc-overlay-backdrop"
@@ -8,7 +8,6 @@
       (click)="onBackdropClick()"
     ></button>
 
-    <!-- Sheet -->
     <section
       #sheetEl
       class="hhsc-sheet"
@@ -21,9 +20,11 @@
       [attr.aria-label]="t.ariaLabel || 'Dialog'"
       tabindex="-1"
     >
-      <ng-container
-        *ngComponentOutlet="t.component; injector: makeInjector(t.data, t.ref)"
-      ></ng-container>
+      <div class="hhsc-sheet-inner">
+        <ng-container
+          *ngComponentOutlet="t.component; injector: topInjector()!"
+        ></ng-container>
+      </div>
     </section>
   </div>
 </ng-container>

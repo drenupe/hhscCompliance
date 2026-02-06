@@ -1,116 +1,34 @@
-/* ===== Dashboard Layout ===== */
-.dash {
-  display: grid;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
+:host {
+  display: block;
 }
 
-/* Header: title + location selector */
-.dash__header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  margin-bottom: .25rem;
-  border-bottom: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
 
-  h2 {
-    margin: 0;
-    font-size: clamp(1.1rem, 1.2rem + .2vw, 1.35rem);
-    font-weight: 800;
-    color: var(--text-strong, var(--clr-text, #111827));
-    letter-spacing: .2px;
-  }
-}
-
-/* Location picker (right aligned) */
-.dash__loc {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  white-space: nowrap;
-
-  span {
-    color: var(--text-muted, var(--clr-muted, #6b7280));
-    font-size: .9rem;
-  }
-
-  select {
-    appearance: none;
-    background: var(--surface-muted, var(--clr-card, #fff));
-    color: var(--text, var(--clr-text, #111827));
-    border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
-    border-radius: 10px;
-    padding: .45rem .75rem;
-    line-height: 1.2;
-    outline: none;
-    transition: border-color .15s ease, box-shadow .15s ease;
-
-    &:focus-visible {
-      box-shadow: 0 0 0 3px rgba(138,180,255,.25);
-      border-color: color-mix(in srgb, var(--brand, #8ab4ff) 50%, var(--glass-line, #93c5fd));
-    }
-  }
-}
-
-/* Responsive grid for summary cards */
 .dash__grid {
   display: grid;
+  gap: 1rem;
+
+  /* responsive columns */
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: clamp(.85rem, 2vw, 1.25rem);
+  align-items: stretch;
 }
 
-/* Alerts row (uses your tokens, good contrast in dark) */
-.dash__alert .alert {
-  background: color-mix(in srgb, var(--danger, #ef4444) 18%, var(--surface-card, #fff));
-  border: 1px solid color-mix(in srgb, var(--danger, #ef4444) 35%, var(--glass-line, #fecaca));
-  color: var(--text, #991b1b);
-  padding: .85rem 1rem;
-  border-radius: 10px;
+/* critical: allow children to shrink inside grid */
+.dash__grid > * {
+  min-width: 0;
 }
 
-/* Chart wrapper spacing (works for any chart lib) */
-.dash__chart {
-  margin-top: clamp(.5rem, 1.5vw, 1rem);
-  background: var(--surface-card, var(--clr-card, #fff));
-  border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
-  border-radius: 14px;
-  padding: clamp(1rem, 2.5vw, 1.5rem);
-}
-
-/* ===== Card ===== */
+/* ===== Card (local to component) ===== */
 .card {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: .6rem;
-  padding: clamp(.9rem, 2.2vw, 1.1rem);
+  padding: 1rem;
   background: var(--surface-card, var(--clr-card, #fff));
   color: var(--text, var(--clr-text, #111827));
   border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
   border-radius: 12px;
   min-height: 168px;
   transition: background-color .15s ease, box-shadow .15s ease, transform .05s ease;
-
-  /* headings inside card */
-  h3 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-strong, var(--clr-text, #111827));
-  }
-
-  /* small meta row */
-  .meta {
-    color: var(--text-muted, var(--clr-muted, #6b7280));
-    font-size: .85rem;
-  }
-
-  /* action row */
-  .actions {
-    display: flex;
-    gap: .5rem;
-    align-items: center;
-  }
 
   &:hover {
     background: color-mix(in srgb, var(--surface-card, #fff) 92%, var(--brand, #8ab4ff) 8%);
@@ -123,22 +41,51 @@
   }
 }
 
-/* Status rails (keep your existing class names) */
+.card__icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-strong, var(--clr-text, #111827));
+}
+
+.card__meta {
+  color: var(--text-muted, var(--clr-muted, #6b7280));
+  font-size: .85rem;
+}
+
+/* ✅ the COUNT */
+.card__value {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* actions */
+.card__actions {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
+    background: transparent;
+    border-radius: 10px;
+    padding: .45rem .7rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Status rails */
 .card.is-ok       { border-left: 4px solid var(--clr-success, var(--success, #16a34a)); }
 .card.is-warning  { border-left: 4px solid var(--clr-warn,    var(--warn,    #f59e0b)); }
 .card.is-critical { border-left: 4px solid var(--clr-error,   var(--danger,  #dc2626)); }
-
-/* Make interactive areas clearly focusable */
-.card a, .card button, .dash__loc select {
-  outline: none;
-}
-.card a:focus-visible, .card button:focus-visible {
-  box-shadow: 0 0 0 3px rgba(138,180,255,.25);
-  border-radius: 10px;
-}
-
-/* Mobile tweaks */
-@media (max-width: 640px) {
-  .dash__header { flex-wrap: wrap; gap: .75rem; }
-  .dash__loc { width: 100%; justify-content: flex-start; }
-}

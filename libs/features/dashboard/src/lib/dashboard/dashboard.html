@@ -4,13 +4,31 @@
 
     <label class="dash__loc">
       <span>Location</span>
-      <select [(ngModel)]="selectedLocation" (ngModelChange)="onLocationChange($event)">
-        <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+
+      <select
+        [(ngModel)]="selectedLocationId"
+        (ngModelChange)="onLocationChange($event)"
+        [disabled]="loadingLocations || !locations.length"
+      >
+        <option value="" *ngIf="!locations.length">
+          {{ loadingLocations ? 'Loading locations…' : 'No locations found' }}
+        </option>
+
+        <option *ngFor="let loc of locations" [value]="loc.id">
+          {{ locationLabel(loc) }}
+        </option>
       </select>
     </label>
   </header>
 
-  <section class="dash__grid">
+  <div class="msg" *ngIf="message">{{ message }}</div>
+
+  <div class="msg" *ngIf="loadingLocations">Loading residences…</div>
+  <div class="msg" *ngIf="!loadingLocations && !locations.length">
+    Create 1 residence first — then the dashboard will populate.
+  </div>
+
+  <section class="dash__grid" *ngIf="locations.length">
     <lib-compliance-summary-card
       *ngFor="let s of summaryData"
       [summary]="s"
@@ -27,7 +45,7 @@
     </div>
   </section>
 
-  <section class="dash__chart">
+  <section class="dash__chart" *ngIf="locations.length">
     <lib-compliance-chart [data]="chartData"></lib-compliance-chart>
   </section>
 </section>

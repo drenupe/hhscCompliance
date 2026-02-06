@@ -17,6 +17,7 @@
     "paths": {
       "@hhsc-compliance/ane": ["libs/features/ane/src/index.ts"],
       "@hhsc-compliance/behavior": ["libs/features/behavior/src/index.ts"],
+      "@hhsc-compliance/compliance": ["libs/features/compliance/src/index.ts"],
       "@hhsc-compliance/consumers": ["libs/features/consumers/src/index.ts"],
       "@hhsc-compliance/cost-report": ["libs/features/admin/src/index.ts"],
       "@hhsc-compliance/dashboard": ["libs/features/dashboard/src/index.ts"],

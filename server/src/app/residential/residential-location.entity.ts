@@ -15,6 +15,7 @@ export type ResidentialType = 'THREE_PERSON' | 'FOUR_PERSON' | 'HOST_HOME';
 export type RecordStatus = 'ACTIVE' | 'INACTIVE';
 
 @Entity({ name: 'residential_locations' })
+@Index('ux_res_locs_provider_location_code', ['providerId', 'locationCode'], { unique: true })
 export class ResidentialLocationEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -26,6 +27,11 @@ export class ResidentialLocationEntity {
   @ManyToOne(() => ProviderEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'provider_id' })
   provider?: ProviderEntity;
+
+  // ✅ NEW: unique provider-scoped location code (A–Z, 0–9, length 4)
+  @Index('ix_res_locs_location_code')
+  @Column({ type: 'text', name: 'location_code' })
+  locationCode!: string;
 
   @Index()
   @Column({ type: 'text' })

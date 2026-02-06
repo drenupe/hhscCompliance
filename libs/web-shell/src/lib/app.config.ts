@@ -7,11 +7,7 @@ import {
 } from '@angular/core';
 
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-  HTTP_INTERCEPTORS,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
@@ -31,12 +27,17 @@ import {
   issReducer,
   IssEffects,
 
-  // Providers (✅ add these exports in @hhsc-compliance/data-access index.ts)
+  // Providers
   PROVIDERS_FEATURE_KEY,
   providersReducer,
   ProvidersEffects,
 
-  // Interceptor (✅ must be exported from @hhsc-compliance/data-access)
+  // ✅ Compliance Results (ADD THESE EXPORTS IN @hhsc-compliance/data-access index.ts)
+  COMPLIANCE_RESULTS_FEATURE_KEY,
+  complianceResultsReducer,
+  ComplianceResultsEffects,
+
+  // Interceptor
   RequestIdInterceptor,
 } from '@hhsc-compliance/data-access';
 
@@ -68,7 +69,6 @@ import {
   Images,
 } from 'lucide-angular';
 
-// 👇 Local environment config (no external/relative import, Nx is happy)
 const environment: EnvironmentConfig = {
   apiBaseUrl: '/api/v1',
 };
@@ -86,20 +86,24 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
 
-    // ✅ HttpClient + DI interceptors
     provideHttpClient(withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: RequestIdInterceptor,
-      multi: true,
-    },
+    { provide: HTTP_INTERCEPTORS, useClass: RequestIdInterceptor, multi: true },
 
-    // 🧠 NgRx (root registration for ISS + Providers)
+    // 🧠 NgRx (root registration)
     provideStore({
       [ISS_FEATURE_KEY]: issReducer,
       [PROVIDERS_FEATURE_KEY]: providersReducer,
+
+      // ✅ add compliance results
+      [COMPLIANCE_RESULTS_FEATURE_KEY]: complianceResultsReducer,
     }),
-    provideEffects([IssEffects, ProvidersEffects]),
+    provideEffects([
+      IssEffects,
+      ProvidersEffects,
+
+      // ✅ add compliance results effects
+      ComplianceResultsEffects,
+    ]),
     provideRouterStore(),
     provideStoreDevtools({
       maxAge: 25,
@@ -108,13 +112,8 @@ export const appConfig: ApplicationConfig = {
       traceLimit: 25,
     }),
 
-    // 🌍 ENV injection (prevents NullInjectorError)
-    {
-      provide: ENVIRONMENT,
-      useValue: environment,
-    },
+    { provide: ENVIRONMENT, useValue: environment },
 
-    // ✅ Auth state options (optional)
     {
       provide: AUTH_STATE_OPTIONS,
       useValue: {
@@ -123,14 +122,11 @@ export const appConfig: ApplicationConfig = {
         defaultRole: 'DirectCareStaff',
       },
     },
-
-    // ✅ DEV auth (optional)
     {
       provide: DEV_AUTH_OPTIONS,
       useValue: {
         enabled: true,
         roles: ['Admin'],
-        // user: { id: 'dev', email: 'dev@local', roles: ['Admin'] }
       },
     },
 

@@ -1,0 +1,20 @@
+{
+  "name": "compliance",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/compliance/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:feature", "type:ui"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../coverage/libs/features/compliance"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

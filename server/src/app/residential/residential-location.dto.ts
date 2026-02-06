@@ -1,6 +1,22 @@
-import { IsIn, IsOptional, IsString, MaxLength, MinLength, Matches } from 'class-validator';
+import {
+  IsIn,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+  Matches,
+} from 'class-validator';
 
 export class CreateResidentialLocationDto {
+  // ✅ REQUIRED
+  @IsString()
+  @MinLength(4)
+  @MaxLength(4)
+  @Matches(/^[A-Z0-9]{4}$/, {
+    message: 'locationCode must be 4 letters/numbers (A–Z, 0–9)',
+  })
+  locationCode!: string;
+
   @IsString()
   @MinLength(2)
   @MaxLength(120)
@@ -31,11 +47,23 @@ export class CreateResidentialLocationDto {
 
   @IsOptional()
   @IsString()
-  @Matches(/^\d{5}(-\d{4})?$/, { message: 'zip must be 5 digits (or 9 with dash)' })
+  @Matches(/^\d{5}(-\d{4})?$/, {
+    message: 'zip must be 5 digits (or 9 with dash)',
+  })
   zip?: string | null;
 }
 
 export class UpdateResidentialLocationDto {
+  // ✅ OPTIONAL on update
+  @IsOptional()
+  @IsString()
+  @MinLength(4)
+  @MaxLength(4)
+  @Matches(/^[A-Z0-9]{4}$/, {
+    message: 'locationCode must be 4 letters/numbers (A–Z, 0–9)',
+  })
+  locationCode?: string;
+
   @IsOptional()
   @IsString()
   @MinLength(2)
@@ -63,7 +91,9 @@ export class UpdateResidentialLocationDto {
 
   @IsOptional()
   @IsString()
-  @Matches(/^\d{5}(-\d{4})?$/, { message: 'zip must be 5 digits (or 9 with dash)' })
+  @Matches(/^\d{5}(-\d{4})?$/, {
+    message: 'zip must be 5 digits (or 9 with dash)',
+  })
   zip?: string | null;
 
   @IsOptional()

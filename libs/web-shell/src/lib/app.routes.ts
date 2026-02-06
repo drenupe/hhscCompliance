@@ -27,7 +27,14 @@ export const appRoutes: Routes = [
         (m: typeof import('@hhsc-compliance/providers')) => m.PROVIDERS_ROUTES
       ),
   },
- 
+{
+  path: 'compliance',
+  loadChildren: () =>
+    import('@hhsc-compliance/compliance').then(
+      (m: typeof import('@hhsc-compliance/compliance')) => m.COMPLIANCE_ROUTES,
+    ),
+},
+
 
    {
     path: 'compliance/residential',

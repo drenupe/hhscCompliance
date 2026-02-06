@@ -1,9 +1,15 @@
+/* libs/shared/src/lib/ui-overlay/src/lib/overlay/overlay-host.component.scss */
+
+:host { display: block; }
+
 .hhsc-overlay-root {
   position: fixed;
   inset: 0;
   z-index: var(--z-overlayRoot, 2000);
+  overflow: hidden;
 }
 
+/* Backdrop full screen by default */
 .hhsc-overlay-backdrop {
   position: absolute;
   inset: 0;
@@ -14,35 +20,33 @@
   cursor: default;
 }
 
-.hhsc-overlay-backdrop:focus-visible {
-  outline: var(--ring, 2px solid rgba(34, 197, 94, 0.7));
-  outline-offset: -2px;
-}
-
-/* ✅ Sheet is now a layout container; inner content scrolls */
 .hhsc-sheet {
   position: absolute;
-  left: 50%;
   bottom: 0;
-  transform: translateX(-50%);
+  z-index: var(--z-overlaySheet, 2002);
 
   width: min(720px, calc(100% - 24px));
-  max-height: 82dvh; /* ✅ dvh behaves better on mobile address bar */
-  z-index: var(--z-overlaySheet, 2002);
+  max-height: 82dvh;
 
   border-radius: 16px 16px 0 0;
   border: 1px solid var(--clr-line, rgba(34, 197, 94, 0.35));
   background: var(--clr-card, #020617);
-  box-shadow: var(--shadow-md, 0 12px 28px rgba(0,0,0,.7));
+  box-shadow: var(--shadow-md, 0 12px 28px rgba(0, 0, 0, 0.7));
 
-  /* ✅ IMPORTANT: do NOT make the sheet itself the scroller */
   display: flex;
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
 
-  /* padding + safe-area */
   padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
+}
+
+/* inner column */
+.hhsc-sheet-inner {
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+  min-width: 0;
 }
 
 .hhsc-sheet--sm { width: min(520px, calc(100% - 24px)); }
@@ -50,12 +54,47 @@
 .hhsc-sheet--lg { width: min(960px, calc(100% - 24px)); }
 
 .hhsc-sheet--full {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transform: none;
-
   width: 100%;
   max-height: 92dvh;
   border-radius: 16px 16px 0 0;
+}
+
+/* ==========================================================
+   DESKTOP: CENTER TO CONTENT PANE (NOT FULL SCREEN)
+   Use 100vw because overlay is fixed; % is not the content pane.
+   ========================================================== */
+@media (min-width: 769px) {
+  .hhsc-overlay-backdrop {
+    left: var(--sidebar-w, 220px);
+  }
+
+  .hhsc-sheet {
+    left: calc(var(--sidebar-w, 220px) + (100vw - var(--sidebar-w, 220px)) / 2);
+    transform: translateX(-50%);
+  }
+
+  .hhsc-sheet--full {
+    left: var(--sidebar-w, 220px);
+    right: 0;
+    transform: none;
+  }
+}
+
+/* Collapsed sidebar (72px) */
+:host-context(.app-shell.collapsed) .hhsc-overlay-backdrop { left: 72px; }
+:host-context(.app-shell.collapsed) .hhsc-sheet {
+  left: calc(72px + (100vw - 72px) / 2);
+  transform: translateX(-50%);
+}
+:host-context(.app-shell.collapsed) .hhsc-sheet--full {
+  left: 72px;
+  right: 0;
+  transform: none;
+}
+
+/* Mobile: full screen */
+@media (max-width: 768px) {
+  .hhsc-overlay-backdrop { left: 0; }
+  .hhsc-sheet { left: 50%; transform: translateX(-50%); }
+  .hhsc-sheet--full { left: 0; right: 0; transform: none; }
 }

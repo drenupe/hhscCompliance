@@ -15,26 +15,31 @@ export interface ComplianceSummaryView {
   count: number;
   status: SummaryStatus;
   lastUpdated?: string;
+
+  // ✅ deep link support
+  link?: any[];
+  queryParams?: Record<string, any>;
 }
 
 @Component({
   selector: 'lib-compliance-summary-card',
   standalone: true,
   imports: [CommonModule],
-  // If your file name is `compliance-summary-card.html`, keep this:
   templateUrl: './compliance-summary-card.html',
-  // If you use `.component.html`, change to `./compliance-summary-card.component.html`
   styleUrls: ['./compliance-summary-card.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComplianceSummaryCard {
-  @Input() summary?: ComplianceSummaryView;  // allow undefined at compile time
-  @Output() viewDetails = new EventEmitter<string>(); // emits module
+  @Input() summary?: ComplianceSummaryView;
+
+  // ✅ IMPORTANT: emit the whole object (not a string)
+  @Output() viewDetails = new EventEmitter<ComplianceSummaryView>();
 
   get statusClass(): string {
-    const s = this.summary?.status ?? 'ok';
-    return `is-${s}`;
-  }
+  const s = this.summary?.status ?? 'ok';
+  return `is-${s}`;
+}
+
 
   get icon(): string {
     switch (this.summary?.status) {
@@ -46,8 +51,10 @@ export class ComplianceSummaryCard {
         return '✔';
     }
   }
+  
+onView(e?: Event) {
+  console.log('[card] click', { hasSummary: !!this.summary, summary: this.summary });
+  if (this.summary) this.viewDetails.emit(this.summary);
+}
 
-  onView() {
-    if (this.summary?.module) this.viewDetails.emit(this.summary.module);
-  }
 }

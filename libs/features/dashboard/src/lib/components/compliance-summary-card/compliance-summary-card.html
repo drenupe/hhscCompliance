@@ -1,12 +1,9 @@
-<article
-  [ngClass]="['card', statusClass]"
-  tabindex="0"
-  [attr.aria-label]="summary?.title || 'Compliance summary card'"
->
+<article class="card" [ngClass]="statusClass" tabindex="0">
   <div class="card__icon" aria-hidden="true">{{ icon }}</div>
 
   <header class="card__head">
     <h3 class="card__title">{{ summary?.title || '—' }}</h3>
+
     <small class="card__meta" *ngIf="summary?.lastUpdated as lu">
       Updated {{ lu }}
     </small>
@@ -15,7 +12,7 @@
   <p class="card__value">{{ summary?.count ?? 0 }}</p>
 
   <footer class="card__actions">
-    <button type="button" (click)="onView()" [disabled]="!summary?.module">
+    <button type="button" (click)="onView()" [disabled]="!summary">
       View details
     </button>
   </footer>

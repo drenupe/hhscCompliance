@@ -1,3 +1,11 @@
+.card__title,
+.card__value,
+.card__meta {
+  color: #fff !important;
+}
+
+
+
 .card {
   display: grid;
   grid-template-rows: auto auto 1fr auto;

@@ -1,6 +1,6 @@
 // libs/shared/src/lib/ui-overlay/src/lib/overlay/overlay.service.ts
-
 import { Injectable, signal } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { OverlayEntry, OverlayOpenOptions, OverlaySize } from './overlay.types';
 import { OverlayRef } from './overlay-ref';
 
@@ -12,16 +12,25 @@ function nextId() {
 
 @Injectable({ providedIn: 'root' })
 export class OverlayService {
+  /** source of truth */
   readonly stack = signal<OverlayEntry[]>([]);
 
-  open<TData = unknown>(
+  /** backwards compatible observable */
+  private readonly _stack$ = new BehaviorSubject<OverlayEntry[]>([]);
+  readonly stack$ = this._stack$.asObservable();
+
+  private sync$(): void {
+    this._stack$.next(this.stack());
+  }
+
+  open<TData = unknown, TResult = unknown>(
     component: any,
     opts: OverlayOpenOptions<TData> = {}
-  ): OverlayRef {
+  ): OverlayRef<TResult> {
     const id = nextId();
-    const ref = new OverlayRef(this, id);
+    const ref = new OverlayRef<TResult>(this, id);
 
-    const entry: OverlayEntry<TData> = {
+    const entry: OverlayEntry<TData, TResult> = {
       id,
       component,
       ref,
@@ -33,33 +42,35 @@ export class OverlayService {
     };
 
     this.stack.update((s) => [...s, entry]);
+    this.sync$();
 
-    // Lock body scroll when first overlay opens
-    if (this.stack().length === 1) {
-      document.body.style.overflow = 'hidden';
-    }
-
+    if (this.stack().length === 1) document.body.style.overflow = 'hidden';
     return ref;
   }
 
-  close(id?: string): void {
+  close<TResult = unknown>(id?: string, result?: TResult): void {
     const before = this.stack();
-
-    // close top if id not provided
     const targetId = id ?? (before.length ? before[before.length - 1].id : undefined);
     if (!targetId) return;
 
+    const entry = before.find((e) => e.id === targetId);
     const after = before.filter((e) => e.id !== targetId);
-    this.stack.set(after);
 
-    // Restore scroll when last overlay closes
-    if (after.length === 0) {
-      document.body.style.overflow = '';
-    }
+    this.stack.set(after);
+    this.sync$();
+
+    // notify after removal
+    (entry?.ref as OverlayRef<TResult> | undefined)?._notifyClosed(result);
+
+    if (after.length === 0) document.body.style.overflow = '';
   }
 
   closeAll(): void {
+    const before = this.stack();
     this.stack.set([]);
+    this.sync$();
+
+    for (const e of before) e.ref._notifyClosed(undefined);
     document.body.style.overflow = '';
   }
 }

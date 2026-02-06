@@ -28,8 +28,9 @@
         <router-outlet></router-outlet>
       </div>
     </main>
+     <!-- ✅ MUST be inside .app-shell so :host-context(.app-shell...) works -->
+  <lib-overlay-host></lib-overlay-host>
   </section>
-</div>
 
-<!-- ✅ GLOBAL OVERLAY HOST MUST LIVE OUTSIDE SCROLL CONTAINER -->
-<lib-overlay-host></lib-overlay-host>
+ 
+</div>
