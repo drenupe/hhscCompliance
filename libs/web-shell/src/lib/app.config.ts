@@ -70,7 +70,7 @@ import {
 } from 'lucide-angular';
 
 const environment: EnvironmentConfig = {
-  apiBaseUrl: '/api/v1',
+  apiBaseUrl: '/api',
 };
 
 export const appConfig: ApplicationConfig = {

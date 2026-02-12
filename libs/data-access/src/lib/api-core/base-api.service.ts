@@ -1,4 +1,3 @@
-// libs/data-access/src/lib/iss/src/lib/base-api.service.ts
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ENVIRONMENT, EnvironmentConfig } from './tokens/environment.token';
@@ -8,13 +7,25 @@ export abstract class BaseApiService {
   protected readonly env = inject<EnvironmentConfig>(ENVIRONMENT);
   protected readonly http = inject(HttpClient);
 
-  protected buildUrl(path: string): string {
-    const baseFromEnv = (this.env?.apiBaseUrl ?? '').trim();
-    const base = (baseFromEnv || '/api/v1').replace(/\/+$/, '');
-    const normalizedPath = String(path ?? '').trim().replace(/^\/+/, '');
-    if (!normalizedPath) return base;
-    return `${base}/${normalizedPath}`;
+protected buildUrl(path: string): string {
+  console.log('[BaseApi] apiBaseUrl=', this.env?.apiBaseUrl, 'path=', path);
+
+  const baseFromEnv = (this.env?.apiBaseUrl ?? '').trim();
+
+  // default stays /api/v1
+  let base = (baseFromEnv || '/api/v1').replace(/\/+$/, '');
+
+  // ✅ if it's NOT absolute (http/https), force leading slash
+  if (!/^https?:\/\//i.test(base)) {
+    base = '/' + base.replace(/^\/+/, '');
   }
+
+  const normalizedPath = String(path ?? '').trim().replace(/^\/+/, '');
+  if (!normalizedPath) return base;
+
+  return `${base}/${normalizedPath}`;
+}
+
 
   /** ✅ remove undefined/null/empty/"undefined"/"null" and build HttpParams */
   protected sanitizeParams(params?: Record<string, any>): HttpParams | undefined {
@@ -25,7 +36,6 @@ export abstract class BaseApiService {
     for (const [key, raw] of Object.entries(params)) {
       if (raw === undefined || raw === null) continue;
 
-      // arrays (allow multi query params)
       if (Array.isArray(raw)) {
         const arr = raw
           .map((v) => String(v).trim())
@@ -34,7 +44,6 @@ export abstract class BaseApiService {
         continue;
       }
 
-      // primitives
       const v = String(raw).trim();
       if (!v) continue;
       if (v.toLowerCase() === 'undefined' || v.toLowerCase() === 'null') continue;
@@ -42,10 +51,7 @@ export abstract class BaseApiService {
       cleaned[key] = v;
     }
 
-    // If everything got removed, don't send params at all
     if (!Object.keys(cleaned).length) return undefined;
-
-    // HttpClient will serialize HttpParams correctly
     return new HttpParams({ fromObject: cleaned });
   }
 

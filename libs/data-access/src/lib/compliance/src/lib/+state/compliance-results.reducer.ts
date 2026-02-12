@@ -1,32 +1,20 @@
 import { createReducer, on } from '@ngrx/store';
 import { ComplianceResultsActions } from './compliance-results.actions';
-import { ComplianceResultDto } from '@hhsc-compliance/shared-models';
+import {
+  COMPLIANCE_RESULTS_FEATURE_KEY, // still exported from models, OK to export here too if you want
+  ComplianceResultsState,
+  initialComplianceResultsState,
+} from './compliance-results.models';
 
-export const COMPLIANCE_RESULTS_FEATURE_KEY = 'complianceResults';
-
-export interface ComplianceResultsState {
-  selectedLocationId: string | null;
-  loading: boolean;
-  saving: boolean;
-  error: string | null;
-  rows: ComplianceResultDto[];
-}
-
-export const initialState: ComplianceResultsState = {
-  selectedLocationId: null,
-  loading: false,
-  saving: false,
-  error: null,
-  rows: [],
-};
-
-export const complianceResultsReducer = createReducer(
-  initialState,
+export const complianceResultsReducer = createReducer<ComplianceResultsState>(
+  initialComplianceResultsState,
 
   on(ComplianceResultsActions.selectLocation, (s, { locationId }) => ({
     ...s,
     selectedLocationId: locationId,
   })),
+
+  // If you have module/status/subcategory selection actions, keep them here too
 
   on(ComplianceResultsActions.load, (s) => ({ ...s, loading: true, error: null })),
   on(ComplianceResultsActions.loadSuccess, (s, { rows }) => ({

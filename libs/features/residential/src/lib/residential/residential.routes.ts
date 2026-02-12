@@ -7,9 +7,9 @@ export const RESIDENTIAL_ROUTES: Routes = [
       import('./pages/residential-locations.page').then((m) => m.ResidentialLocationsPage),
   },
   {
-    path: 'location',
+    path: 'location/:locationId',
     loadComponent: () =>
-      import('./pages/residential-shell.page').then((m) => m.ResidentialShellPage),
+    import('./pages/residential-shell.page').then((m) => m.ResidentialShellPage),
     children: [
   { path: '', pathMatch: 'full', redirectTo: 'overview' },
 

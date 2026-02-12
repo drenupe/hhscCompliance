@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { COMPLIANCE_RESULTS_FEATURE_KEY, ComplianceResultsState } from './compliance-results.reducer';
+import { COMPLIANCE_RESULTS_FEATURE_KEY, ComplianceResultsState } from './compliance-results.models';
 
 export const selectComplianceResultsState =
   createFeatureSelector<ComplianceResultsState>(COMPLIANCE_RESULTS_FEATURE_KEY);

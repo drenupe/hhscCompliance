@@ -436,35 +436,47 @@ export class ComplianceMessageCenterPage {
   }
 
   openDeepLink(r: ComplianceResultDto) {
-    if (!r.routeCommands?.length) {
-      console.log('Deep link missing for:', r.ruleCode);
-      return;
-    }
+  const commands = this.buildDeepLinkCommands(r);
 
-    // Base query params coming from backend result
-    const raw = (r.queryParams ?? {}) as Record<string, any>;
+  console.log('[deep-link click]', {
+    rule: r.ruleCode,
+    storedRouteCommands: r.routeCommands,
+    computedRouteCommands: commands,
+    queryParams: r.queryParams,
+  });
 
-    // ✅ Deep-link contract enforcement:
-    // - always include locationId
-    // - always include focus (ruleCode or id)
-    // - strip undefined/null/'' keys
-    const qp = this.sanitizeQueryParams({
-      ...raw,
-
-      // Carry location forward even if backend forgot it
-      locationId: raw['locationId'] ?? this.locationId ?? '',
-
-      // Gold-standard focus param (destination page will scroll/highlight)
-      // Prefer backend-provided focus if present, else ruleCode, else id
-      focus: raw['focus'] ?? raw['rule'] ?? r.ruleCode ?? (r as any).id ?? '',
-    });
-
-    this.router.navigate(r.routeCommands, {
-      queryParams: qp,
-      // optional: preserve any existing higher-level params if you want
-      // queryParamsHandling: 'merge',
-    });
+  if (!commands?.length) {
+    console.warn('[deep-link] Missing/invalid deep link for', r.ruleCode);
+    return;
   }
+
+  this.router
+    .navigate(commands as any, { queryParams: r.queryParams ?? {} })
+    .then((ok) => {
+      if (!ok) console.error('[deep-link] Navigation failed (no matching route)', commands);
+    })
+    .catch((err) => console.error('[deep-link] Navigation error', err));
+}
+
+private buildDeepLinkCommands(r: ComplianceResultDto): (string | number)[] | null {
+  // Only deep link residential rules here
+  if (r.entityType !== 'RESIDENTIAL') return null;
+
+  // You MUST have a locationId if your routes are location-scoped
+  if (!r.locationId) return ['/', 'compliance', 'residential']; // safe fallback
+
+  // Rule → route mapping
+  switch (r.ruleCode) {
+    case '565.23(b)(5)':
+      // Your route is: /compliance/residential/location/:locationId/emergency/fire-drills
+      return ['/', 'compliance', 'residential', 'location', r.locationId, 'emergency', 'fire-drills'];
+
+    default:
+      return ['/', 'compliance', 'residential', 'location', r.locationId, 'overview'];
+  }
+}
+
+
 
   private sanitizeQueryParams(qp: Record<string, any>): Record<string, any> {
     const out: Record<string, any> = {};
@@ -496,7 +508,7 @@ export class ComplianceMessageCenterPage {
   }
 
 
-  
+
   severityClass(r: ComplianceResultDto): string {
     const sev = String((r as any).severity ?? '').toUpperCase();
     if (sev === 'CRITICAL') return 'sev-critical';

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { BaseApiService } from '../../../../api-core/base-api.service';
+
 import {
   ComplianceResultDto,
   CreateComplianceResultInput,
@@ -20,7 +21,7 @@ export type ComplianceResultsListParams = {
 
 @Injectable({ providedIn: 'root' })
 export class ComplianceResultsApi extends BaseApiService {
-  private readonly path = '/compliance-results';
+  private readonly path = 'v1/compliance-results';
 
 list(params: ComplianceResultsListParams = {}): Observable<ComplianceResultDto[]> {
   const url = this.buildUrl(this.path);

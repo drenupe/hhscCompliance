@@ -44,7 +44,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
         </nav>
 
         <main class="main">
-          <router-outlet />
+          <router-outlet></router-outlet>
         </main>
       </div>
     </section>

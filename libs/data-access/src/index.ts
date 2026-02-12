@@ -8,10 +8,25 @@ export * from './lib/api-core/base-api.service';
 export * from './lib/api-core/tokens/environment.token';
 
 // =====================================
-// Compliance domain services
+// Residential (API + Feature State)
 // =====================================
 export * from './lib/residential/src/lib/services/residential-locations.api';
+export * from './lib/residential/src/lib/services/fire-drills.api';
 
+// Fire Drills (Feature State)
+export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.actions';
+export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.selectors';
+export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.reducer';
+export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.effects';
+export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.facade';
+
+// Named re-exports (optional, but helpful for app.config.ts readability)
+export { FIRE_DRILLS_FEATURE_KEY } from './lib/residential/src/lib/fire-drills/+state/fire-drills.models';
+export { FireDrillsFacade } from './lib/residential/src/lib/fire-drills/+state/fire-drills.facade';
+
+// =====================================
+// Compliance domain services
+// =====================================
 export * from './lib/programmatic/programmatic.service';
 export * from './lib/finance/finance.service';
 export * from './lib/behavior/behavior.service';
@@ -28,10 +43,10 @@ export * from './lib/dashboard/compliance-dashboard.service';
 // =====================================
 export * from './lib/compliance/src/lib/services/compliance-results.api';
 
+export * from './lib/compliance/src/lib/+state/compliance-results.reducer';
 export * from './lib/compliance/src/lib/+state/compliance-results.models';
 export * from './lib/compliance/src/lib/+state/compliance-results.actions';
 export * from './lib/compliance/src/lib/+state/compliance-results.selectors';
-export * from './lib/compliance/src/lib/+state/compliance-results.reducer';
 export * from './lib/compliance/src/lib/+state/compliance-results.effects';
 export * from './lib/compliance/src/lib/+state/compliance-results.facade';
 

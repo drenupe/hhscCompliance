@@ -23,22 +23,14 @@ import {
 } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { FireDrillsApi } from '@hhsc-compliance/data-access';
+import { FireDrillLogDto } from '@hhsc-compliance/shared-models';
+
 type TabKey = 'requirements' | 'logs' | 'evidence';
 
 type FireDrillOutcome = 'SUCCESS' | 'ISSUES';
 
-export type FireDrillLogDto = {
-  id: string;
-  locationId: string;
-  occurredAt: string; // ISO
-  sleepingHours: boolean;
-  staffPresent: string; // free text for now
-  evacuationTimeSec?: number | null;
-  outcome: FireDrillOutcome;
-  issues?: string | null;
-  correctiveAction?: string | null;
-  createdAt: string; // ISO
-};
+
 
 type CreateFireDrillLogInput = {
   locationId: string;
@@ -320,7 +312,7 @@ export class FireDrillsPage {
   private readonly destroyRef = inject(DestroyRef);
 
   // TODO: replace with your real API client (data-access) when you add endpoints
-  private readonly drillsApi = inject(FireDrillsApiStub);
+private readonly drillsApi = inject(FireDrillsApi);
 
   @ViewChild('focusTop', { static: true }) focusTop!: ElementRef<HTMLElement>;
 
@@ -586,27 +578,4 @@ function toIsoFromLocal(local: string): string {
  * TEMP STUB so the page compiles immediately.
  * Replace this with a real @hhsc-compliance/data-access client once backend is added.
  */
-class FireDrillsApiStub {
-  private store: FireDrillLogDto[] = [];
 
-  list(args: { locationId: string }) {
-    return of(this.store.filter((x) => x.locationId === args.locationId));
-  }
-
-  create(input: CreateFireDrillLogInput) {
-    const row: FireDrillLogDto = {
-      id: crypto.randomUUID(),
-      locationId: input.locationId,
-      occurredAt: input.occurredAt,
-      sleepingHours: input.sleepingHours,
-      staffPresent: input.staffPresent,
-      evacuationTimeSec: input.evacuationTimeSec ?? null,
-      outcome: input.outcome,
-      issues: input.issues ?? null,
-      correctiveAction: input.correctiveAction ?? null,
-      createdAt: new Date().toISOString(),
-    };
-    this.store = [row, ...this.store];
-    return of(row);
-  }
-}

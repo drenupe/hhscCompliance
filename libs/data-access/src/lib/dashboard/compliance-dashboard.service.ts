@@ -20,7 +20,7 @@ export type ChartDatum = { label: string; value: number };
 
 @Injectable({ providedIn: 'root' })
 export class ComplianceDashboardService extends BaseApiService {
-  private readonly dashboardPath = '/dashboard';
+  private readonly dashboardPath = 'v1/dashboard';
 
   /** GET /api/v1/dashboard/summary?locationId=UUID */
   getSummaryData(locationId: string): Observable<ComplianceSummaryView[]> {
