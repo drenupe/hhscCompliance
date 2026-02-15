@@ -5,7 +5,7 @@ import {
   UpsertResidentialLocationInput,
 } from '@hhsc-compliance/shared-models';
 
-import { BaseApiService } from '../../../../api-core/base-api.service';
+import { BaseApiService } from '../../../api-core/base-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class ResidentialLocationsApi extends BaseApiService {

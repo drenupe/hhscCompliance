@@ -25,7 +25,7 @@ export const RESIDENTIAL_ROUTES: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'plans' },
       { path: 'plans', loadComponent: () => import('./pages/emergency/emergency-plans.page').then(m => m.EmergencyPlansPage) }, // (f)
-      { path: 'fire-drills', loadComponent: () => import('./pages/emergency/fire-drills.page').then(m => m.FireDrillsPage) },  // (e)
+      { path: 'fire-drills', loadComponent: () => import('./pages/emergency/fire-drills/fire-drills.page').then(m => m.FireDrillsPage) },  // (e)
     ],
   },
 

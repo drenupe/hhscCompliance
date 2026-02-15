@@ -1,33 +1,42 @@
-export type FireDrillOutcome = 'SUCCESS' | 'ISSUES';
+export type DrillShift = 'DAY' | 'EVENING' | 'NIGHT';
+export type DrillType = 'FIRE' | 'SEVERE_WEATHER' | 'OTHER';
 
-export type FireDrillLogDto = {
+export interface FireDrillDto {
   id: string;
+  providerId: string;
   locationId: string;
-  occurredAt: string; // ISO
-  sleepingHours: boolean;
-  staffPresent: string; // free text for now
-  evacuationTimeSec?: number | null;
-  outcome: FireDrillOutcome;
-  issues?: string | null;
-  correctiveAction?: string | null;
-  createdAt: string; // ISO
-};
 
-export type CreateFireDrillLogInput = {
+  drillDate: string; // YYYY-MM-DD
+  shift: DrillShift;
+  drillType: DrillType;
+
+  evacuationTimeSeconds: number | null;
+
+  issuesNoted: string | null;
+  correctiveAction: string | null;
+
+  conductedBy: string | null;
+  reviewedBy: string | null;
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type CreateFireDrillInput = {
+  providerId?: string;
   locationId: string;
-  occurredAt: string; // ISO
-  sleepingHours: boolean;
-  staffPresent: string;
-  evacuationTimeSec?: number | null;
-  outcome: FireDrillOutcome;
-  issues?: string | null;
+
+  drillDate: string;
+  shift: DrillShift;
+  drillType: DrillType;
+
+  evacuationTimeSeconds?: number | null;
+
+  issuesNoted?: string | null;
   correctiveAction?: string | null;
+
+  conductedBy?: string | null;
+  reviewedBy?: string | null;
 };
 
-export type UpdateFireDrillLogInput = Partial<Omit<CreateFireDrillLogInput, 'locationId'>>;
-
-export type FireDrillsListParams = {
-  locationId?: string;
-  from?: string; // ISO optional
-  to?: string;   // ISO optional
-};
+export type UpdateFireDrillInput = Partial<CreateFireDrillInput>;

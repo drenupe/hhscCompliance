@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Provider } from '@hhsc-compliance/shared-models'; // or your actual model
 
-import { BaseApiService } from '../../../../api-core/base-api.service';
+import { BaseApiService } from '../../../api-core/base-api.service';
 
 
 @Injectable({ providedIn: 'root' })

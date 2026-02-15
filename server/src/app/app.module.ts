@@ -21,6 +21,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { RolesGuard } from './auth/roles.guard';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ComplianceResultsModule } from './compliance/compliance-results.module';
+import { ComplianceEngineModule } from './compliance-engine/compliance-engine.module';
 
 
 
@@ -56,7 +57,8 @@ const NODE_ENV = process.env.NODE_ENV ?? 'development';
     ConsumersModule,
     ProvidersModule,
     DashboardModule,
-    ComplianceResultsModule
+    ComplianceResultsModule,
+    ComplianceEngineModule
   ],
   controllers: [AppController],
   providers: [AppService,RolesGuard],

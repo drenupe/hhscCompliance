@@ -7,7 +7,7 @@ import {
 } from '@hhsc-compliance/shared-models';
 
 // ✅ add this import (adjust path to match where this actions file lives)
-import { StatusFilter } from '../+state/compliance-results.models';
+import { StatusFilter } from './compliance-results.models';
 
 export const ComplianceResultsActions = createActionGroup({
   source: 'ComplianceResults',

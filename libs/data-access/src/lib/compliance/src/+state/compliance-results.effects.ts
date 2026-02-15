@@ -10,7 +10,7 @@ import {
   COMPLIANCE_RESULTS_FEATURE_KEY,
   ComplianceResultsState,
 } from './compliance-results.models';
-import { ComplianceResultsApi } from '../services/compliance-results.api';
+import { ComplianceResultsApi } from '../lib/services/compliance-results.api';
 
 @Injectable()
 export class ComplianceResultsEffects {

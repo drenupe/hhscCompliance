@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { BaseApiService } from '../../../../api-core/base-api.service';
+import { BaseApiService } from '../../../api-core/base-api.service';
 
 import { Consumer } from '@hhsc-compliance/shared-models';
 

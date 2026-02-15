@@ -3,7 +3,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
-import { BaseApiService } from '../../../../api-core/base-api.service';
+import { BaseApiService } from '../../../api-core/base-api.service';
 import {
   StaffLog,
   WeekSummary,

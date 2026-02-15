@@ -17,7 +17,6 @@ export type ComplianceSummaryView = {
 export type ChartDatum = { label: string; value: number };
 
 // ✅ Canonical modules (source of truth)
-// Add ISS later by pushing { key:'ISS', title:'ISS' } here.
 const MODULES: Array<{ key: string; title: string }> = [
   { key: 'RESIDENTIAL', title: 'Residential Requirements' },
   { key: 'PROGRAMMATIC', title: 'Programmatic Requirements' },
@@ -35,7 +34,7 @@ export class DashboardService {
   constructor(private readonly ds: DataSource) {}
 
   /**
-   * Always returns all modules (even if there are 0 rows in DB for that module).
+   * Always returns all modules (even if 0 rows exist in DB for that module).
    * “Needs work” = status IN ('NON_COMPLIANT','UNKNOWN')
    */
   async summary(locationId: string): Promise<ComplianceSummaryView[]> {
@@ -76,8 +75,8 @@ export class DashboardService {
     );
 
     return rows.map((r: any) => {
-      const status: SummaryStatus =
-        r.max_sev >= 4 ? 'critical' : r.max_sev >= 2 ? 'warning' : 'ok';
+      const maxSev = Number(r.max_sev) || 0;
+      const status: SummaryStatus = maxSev >= 4 ? 'critical' : maxSev >= 2 ? 'warning' : 'ok';
 
       return {
         title: this.titleFor(String(r.module)),
@@ -88,7 +87,7 @@ export class DashboardService {
           ? new Date(r.last_updated).toISOString().slice(0, 10)
           : undefined,
 
-        // ✅ ONE destination: message center
+        // ✅ ONE destination: message center (drill-down)
         link: ['/', 'compliance', 'message-center'],
         queryParams: { locationId, module: String(r.module) },
       };

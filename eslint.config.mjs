@@ -6,25 +6,32 @@ import nx from '@nx/eslint-plugin';
  * using your scope/type tagging strategy.
  */
 const depConstraints = [
-  { sourceTag: 'type:app', onlyDependOnLibsWithTags: [] },
+  {
+    sourceTag: 'type:app',
+    onlyDependOnLibsWithTags: [
+      'type:feature',
+      'type:data-access',
+      'type:ui',
+      'type:util',
+      'type:shared',
+      'type:model',
+    ],
+  },
+
   {
     sourceTag: 'scope:shell',
     onlyDependOnLibsWithTags: [
-      'scope:shared',
-      'scope:ui',
-      'scope:data',
-      'scope:feature',
-      'scope:models',
+      'type:feature',
+      'type:data-access',
+      'type:ui',
+      'type:util',
+      'type:shared',
+      'type:model',
     ],
   },
   {
     sourceTag: 'scope:feature',
-    onlyDependOnLibsWithTags: [
-      'scope:shared',
-      'scope:ui',
-      'scope:data',
-      'scope:models',
-    ],
+    onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'scope:data', 'scope:models'],
   },
   {
     sourceTag: 'scope:data',
@@ -34,6 +41,7 @@ const depConstraints = [
   { sourceTag: 'scope:shared', onlyDependOnLibsWithTags: [] },
   { sourceTag: 'scope:models', onlyDependOnLibsWithTags: [] },
 ];
+
 
 export default [
   // Nx base presets

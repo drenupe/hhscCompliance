@@ -10,19 +10,19 @@ export * from './lib/api-core/tokens/environment.token';
 // =====================================
 // Residential (API + Feature State)
 // =====================================
-export * from './lib/residential/src/lib/services/residential-locations.api';
-export * from './lib/residential/src/lib/services/fire-drills.api';
+export * from './lib/residential/src/services/residential-locations.api';
+export * from './lib/residential/src/services/fire-drills.api';
 
 // Fire Drills (Feature State)
-export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.actions';
-export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.selectors';
-export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.reducer';
-export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.effects';
-export * from './lib/residential/src/lib/fire-drills/+state/fire-drills.facade';
+export * from './lib/residential/src/+state/fire-drills.actions';
+export * from './lib/residential/src/+state/fire-drills.selectors';
+export * from './lib/residential/src/+state/fire-drills.reducer';
+export * from './lib/residential/src/+state/fire-drills.effects';
+export * from './lib/residential/src/+state/fire-drills.facade';
 
 // Named re-exports (optional, but helpful for app.config.ts readability)
-export { FIRE_DRILLS_FEATURE_KEY } from './lib/residential/src/lib/fire-drills/+state/fire-drills.models';
-export { FireDrillsFacade } from './lib/residential/src/lib/fire-drills/+state/fire-drills.facade';
+export { FIRE_DRILLS_FEATURE_KEY } from './lib/residential/src/+state/fire-drills.models';
+export { FireDrillsFacade } from './lib/residential/src/+state/fire-drills.facade';
 
 // =====================================
 // Compliance domain services
@@ -41,18 +41,18 @@ export * from './lib/dashboard/compliance-dashboard.service';
 // =====================================
 // Compliance Results (API + Feature State)
 // =====================================
-export * from './lib/compliance/src/lib/services/compliance-results.api';
+export * from './lib/compliance/src/services/compliance-results.api';
 
-export * from './lib/compliance/src/lib/+state/compliance-results.reducer';
-export * from './lib/compliance/src/lib/+state/compliance-results.models';
-export * from './lib/compliance/src/lib/+state/compliance-results.actions';
-export * from './lib/compliance/src/lib/+state/compliance-results.selectors';
-export * from './lib/compliance/src/lib/+state/compliance-results.effects';
-export * from './lib/compliance/src/lib/+state/compliance-results.facade';
+export * from './lib/compliance/src/+state/compliance-results.reducer';
+export * from './lib/compliance/src/+state/compliance-results.models';
+export * from './lib/compliance/src/+state/compliance-results.actions';
+export * from './lib/compliance/src/+state/compliance-results.selectors';
+export * from './lib/compliance/src/+state/compliance-results.effects';
+export * from './lib/compliance/src/+state/compliance-results.facade';
 
 // Named re-exports (optional, but helpful for app.config.ts readability)
-export { COMPLIANCE_RESULTS_FEATURE_KEY } from './lib/compliance/src/lib/+state/compliance-results.models';
-export { ComplianceResultsFacade } from './lib/compliance/src/lib/+state/compliance-results.facade';
+export { COMPLIANCE_RESULTS_FEATURE_KEY } from './lib/compliance/src/+state/compliance-results.models';
+export { ComplianceResultsFacade } from './lib/compliance/src/+state/compliance-results.facade';
 
 // =====================================
 // Auth
@@ -72,19 +72,19 @@ export * from './lib/auth/auth-interceptor';
 // Standalone + provideStore/provideEffects does NOT need the module export.
 // export * from './lib/iss/src/lib/iss-data-access.module';
 
-export * from './lib/iss/src/lib/+state/iss.models';
-export * from './lib/iss/src/lib/+state/iss.actions';
-export * from './lib/iss/src/lib/+state/iss.selectors';
-export * from './lib/iss/src/lib/+state/iss.reducer';
-export * from './lib/iss/src/lib/+state/iss.effects';
-export * from './lib/iss/src/lib/+state/iss.facade';
+export * from './lib/iss/src/+state/iss.models';
+export * from './lib/iss/src/+state/iss.actions';
+export * from './lib/iss/src/+state/iss.selectors';
+export * from './lib/iss/src/+state/iss.reducer';
+export * from './lib/iss/src/+state/iss.effects';
+export * from './lib/iss/src/+state/iss.facade';
 
-export * from './lib/iss/src/lib/services/iss-provider.service';
-export * from './lib/iss/src/lib/services/consumers.service';
-export * from './lib/iss/src/lib/services/staff-log.service';
+export * from './lib/iss/src/services/iss-provider.service';
+export * from './lib/iss/src/services/consumers.service';
+export * from './lib/iss/src/services/staff-log.service';
 
-export { ISS_FEATURE_KEY } from './lib/iss/src/lib/+state/iss.models';
-export { IssFacade } from './lib/iss/src/lib/+state/iss.facade';
+export { ISS_FEATURE_KEY } from './lib/iss/src/+state/iss.models';
+export { IssFacade } from './lib/iss/src/+state/iss.facade';
 
 // =====================================
 // Providers (Feature)

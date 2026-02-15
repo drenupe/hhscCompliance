@@ -17,5 +17,4 @@ export * from './lib/residential/residential-location.model';
 export * from './lib/compliance/compliance-result.model';
 
 
-
-export * from './lib/residential/fire-drills.models';
+export * from './lib/fire-drills/fire-drills.models';
