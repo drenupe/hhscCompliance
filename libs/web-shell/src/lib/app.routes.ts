@@ -34,9 +34,7 @@ export const appRoutes: Routes = [
       (m: typeof import('@hhsc-compliance/compliance')) => m.COMPLIANCE_ROUTES,
     ),
 },
-
-
-   {
+ {
     path: 'compliance/residential',
     loadChildren: () =>
       import('@hhsc-compliance/residential').then(
@@ -72,11 +70,6 @@ export const appRoutes: Routes = [
   },
   {
      path: 'compliance/protective',
-   // canMatch: [raciGuard('protectiveDevices')],
-    // eslint-disable-next-line @nx/enforce-module-boundaries
-    loadComponent: () => import('@hhsc-compliance/protective-devices').then(m => m.ProtectiveDevices),
-  },
-  { path: 'compliance/prohibitions',
    // canMatch: [raciGuard('prohibitions')],
     loadComponent: () => import('@hhsc-compliance/prohibitions').then(m => m.Prohibitions),
   },

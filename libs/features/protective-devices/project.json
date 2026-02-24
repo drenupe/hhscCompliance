@@ -1,16 +1,16 @@
 {
   "name": "protective-devices",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "protective-devices/src",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/protective-devices/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:feature", "scope:feature", "feature:protective-devices", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../coverage/protective-devices"
+        "reportsDirectory": "../../../coverage/libs/features/protective-devices"
       }
     },
     "lint": {

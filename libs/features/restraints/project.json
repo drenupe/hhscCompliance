@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/restraints/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:restraints", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:restraints", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

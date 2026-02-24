@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { FireDrillsActions } from './fire-drills.actions';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { FireDrillsApi } from '../../services/fire-drills.api';
+import { FireDrillsApi } from '../services/fire-drills.api';
 
 @Injectable()
 export class FireDrillsEffects {

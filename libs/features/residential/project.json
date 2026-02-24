@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/residential/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:residential", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:residential", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/enclosed-beds/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:enclosed-beds", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:enclosed-beds", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

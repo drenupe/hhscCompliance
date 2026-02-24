@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/compliance/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:feature", "type:ui"],
+ "tags": ["type:feature", "scope:feature", "feature:compliance", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

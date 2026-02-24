@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/home/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:home", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:home", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

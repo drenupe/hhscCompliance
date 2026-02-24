@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui-kit/src",
   "projectType": "library",
-  "tags": ["type:lib", "scope:ui", "surface:web"],
+  "tags": ["type:ui", "scope:ui", "surface:web"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

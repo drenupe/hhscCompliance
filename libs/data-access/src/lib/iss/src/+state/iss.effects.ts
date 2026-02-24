@@ -3,20 +3,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import {
-  catchError,
-  map,
-  mergeMap,
-  of,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 
 import * as IssActions from './iss.actions';
-
-// Existing services (keep these so year page stays working)
-import { ConsumersService } from '../services/consumers.service';
-import { StaffLogService } from '../services/staff-log.service';
 
 // Store + selectors
 import { Store } from '@ngrx/store';
@@ -32,12 +21,16 @@ import {
   ServiceWeek,
   Consumer,
 } from '@hhsc-compliance/shared-models';
+import { ConsumersApi } from '../services/consumers.service';
+import { StaffLogsApi } from '../services/staff-log.service';
+
+// ✅ New API classes (FireDrillsApi style)
 
 @Injectable()
 export class IssEffects {
   private readonly actions$ = inject(Actions);
-  private readonly consumersService = inject(ConsumersService);
-  private readonly staffLogService = inject(StaffLogService);
+  private readonly consumersApi = inject(ConsumersApi);
+  private readonly staffLogsApi = inject(StaffLogsApi);
   private readonly store = inject<Store<IssPartialState>>(Store);
 
   // ---------- Consumers (ISS Home) ----------
@@ -45,10 +38,8 @@ export class IssEffects {
     this.actions$.pipe(
       ofType(IssActions.loadConsumers),
       switchMap(() =>
-        this.consumersService.getConsumers().pipe(
-          map((consumers) =>
-            IssActions.loadConsumersSuccess({ consumers }),
-          ),
+        this.consumersApi.list().pipe(
+          map((consumers) => IssActions.loadConsumersSuccess({ consumers })),
           catchError((err) =>
             of(
               IssActions.loadConsumersFailure({
@@ -66,7 +57,7 @@ export class IssEffects {
     this.actions$.pipe(
       ofType(IssActions.loadWeeksForConsumer),
       switchMap(({ consumerId }) =>
-        this.staffLogService.getWeeksForConsumer(consumerId).pipe(
+        this.staffLogsApi.getWeeksForConsumer(consumerId).pipe(
           map((weeks) =>
             IssActions.loadWeeksForConsumerSuccess({ consumerId, weeks }),
           ),
@@ -87,40 +78,33 @@ export class IssEffects {
     this.actions$.pipe(
       ofType(IssActions.loadLogForWeek),
       switchMap(({ consumerId, serviceDate }) =>
-        this.staffLogService
-          .getLogByServiceDate(consumerId, serviceDate)
-          .pipe(
-            switchMap((log: StaffLog | null) => {
-              if (log) {
-                // Existing log for this week
-                return of(
-                  IssActions.loadLogForWeekSuccess({ log }),
-                );
-              }
+        this.staffLogsApi.getLogByServiceDate(consumerId, serviceDate).pipe(
+          switchMap((log: StaffLog | null) => {
+            if (log) {
+              return of(IssActions.loadLogForWeekSuccess({ log }));
+            }
 
-              // No log → create a new skeleton log for this week
-              const payload: CreateStaffLogDto = {
-                consumerId,
-                providerId: 1, // TODO: derive from auth / selected provider
-                serviceDate,
-                header: {} as StaffLogHeader,
-                serviceWeek: {} as ServiceWeek,
-              };
+            // No log → create skeleton
+            const body: CreateStaffLogDto = {
+              consumerId,
+              providerId: 1, // TODO: derive from auth / selected provider
+              serviceDate,
+              header: {} as StaffLogHeader,
+              serviceWeek: {} as ServiceWeek,
+            };
 
-              return this.staffLogService.createLog(payload).pipe(
-                map((created: StaffLog) =>
-                  IssActions.loadLogForWeekSuccess({ log: created }),
-                ),
-              );
-            }),
-            catchError((err) =>
-              of(
-                IssActions.loadLogForWeekFailure({
-                  error: err?.message || 'Failed to load log for week',
-                }),
-              ),
+            return this.staffLogsApi.create(body).pipe(
+              map((created) => IssActions.loadLogForWeekSuccess({ log: created })),
+            );
+          }),
+          catchError((err) =>
+            of(
+              IssActions.loadLogForWeekFailure({
+                error: err?.message || 'Failed to load log for week',
+              }),
             ),
           ),
+        ),
       ),
     ),
   );
@@ -135,24 +119,23 @@ export class IssEffects {
         this.store.select(IssSelectors.selectSelectedConsumer),
       ),
       mergeMap(([{ logId, payload }, consumerId, serviceDate, consumer]) => {
-        // Guard — if somehow we lost route context, fail gracefully
         if (!consumerId || !serviceDate) {
-          console.warn(
-            '[ISS] Missing consumerId or serviceDate when saving log',
-            { logId, consumerId, serviceDate },
-          );
+          console.warn('[ISS] Missing consumerId or serviceDate when saving log', {
+            logId,
+            consumerId,
+            serviceDate,
+          });
+
           return of(
             IssActions.saveLogFailure({
-              error: new Error(
+              error:
                 'Missing consumer or service date when saving ISS log',
-              ) as any,
             }),
           );
         }
 
         const c = consumer as Consumer | null;
 
-        // Derive providerId from consumer, fall back to 1 (or whatever default you want)
         const providerIdFromConsumer =
           (c as any)?.issProviderId ??
           (c as any)?.providerId ??
@@ -162,10 +145,8 @@ export class IssEffects {
         const isCreate = !logId;
 
         if (isCreate) {
-          // --- New log (no id yet) ---
           const partial = payload as UpdateStaffLogDto;
 
-          // These are required by CreateStaffLogDto, so always send something
           const header: StaffLogHeader =
             (partial.header as StaffLogHeader) ?? ({} as StaffLogHeader);
 
@@ -180,10 +161,8 @@ export class IssEffects {
             serviceWeek,
           };
 
-          return this.staffLogService.createLog(body).pipe(
-            map((log: StaffLog) =>
-              IssActions.saveLogSuccess({ log }),
-            ),
+          return this.staffLogsApi.create(body).pipe(
+            map((log) => IssActions.saveLogSuccess({ log })),
             catchError((err) =>
               of(
                 IssActions.saveLogFailure({
@@ -194,21 +173,16 @@ export class IssEffects {
           );
         }
 
-        // --- Existing log (update) ---
-        return this.staffLogService
-          .updateLog(logId, payload as UpdateStaffLogDto)
-          .pipe(
-            map((log: StaffLog) =>
-              IssActions.saveLogSuccess({ log }),
+        return this.staffLogsApi.update(logId, payload as UpdateStaffLogDto).pipe(
+          map((log) => IssActions.saveLogSuccess({ log })),
+          catchError((err) =>
+            of(
+              IssActions.saveLogFailure({
+                error: err?.message || 'Failed to save log',
+              }),
             ),
-            catchError((err) =>
-              of(
-                IssActions.saveLogFailure({
-                  error: err?.message || 'Failed to save log',
-                }),
-              ),
-            ),
-          );
+          ),
+        );
       }),
     ),
   );

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/featuree/medical/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:medical", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

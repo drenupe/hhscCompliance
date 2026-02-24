@@ -5,12 +5,12 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, of, switchMap, withLatestFrom, filter } from 'rxjs';
 
-import { ComplianceResultsActions } from './compliance-results.actions';
+import { ComplianceResultsActions } from '../+state/compliance-results.actions';
 import {
   COMPLIANCE_RESULTS_FEATURE_KEY,
   ComplianceResultsState,
 } from './compliance-results.models';
-import { ComplianceResultsApi } from '../lib/services/compliance-results.api';
+import { ComplianceResultsApi } from '../services/compliance-results.api';
 
 @Injectable()
 export class ComplianceResultsEffects {

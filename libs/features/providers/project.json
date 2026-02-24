@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/providers/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:feature", "type:ui"],
+  "tags": ["type:feature", "scope:feature", "feature:providers", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/behavior/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:behavior", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:behavior", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",

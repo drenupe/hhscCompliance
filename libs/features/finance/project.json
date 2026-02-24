@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/finance/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:feature", "feature:finance", "surface:web"],
+  "tags": ["type:feature", "scope:feature", "feature:finance", "surface:web"],
   "targets": {
     "test": {
       "executor": "@nx/vite:test",
