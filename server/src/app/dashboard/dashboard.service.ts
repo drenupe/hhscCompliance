@@ -37,62 +37,54 @@ export class DashboardService {
    * Always returns all modules (even if 0 rows exist in DB for that module).
    * “Needs work” = status IN ('NON_COMPLIANT','UNKNOWN')
    */
-  async summary(locationId: string): Promise<ComplianceSummaryView[]> {
-    const keys = MODULES.map((m) => m.key);
+async summary(locationId: string): Promise<ComplianceSummaryView[]> {
+  const rows = await this.ds.query(
+    `
+    SELECT
+      cr.module,
+      COALESCE(cr.subcategory, cr.module) AS section_key,
+      COUNT(*)::int AS count,
+      MAX(CASE cr.severity
+        WHEN 'CRITICAL' THEN 4
+        WHEN 'HIGH' THEN 3
+        WHEN 'MEDIUM' THEN 2
+        WHEN 'MED' THEN 2
+        WHEN 'LOW' THEN 1
+        ELSE 0
+      END)::int AS max_sev,
+      MAX(cr.updated_at) AS last_updated
+    FROM compliance_results cr
+    WHERE cr.location_id = $1
+      AND cr.status IN ('NON_COMPLIANT', 'UNKNOWN')
+    GROUP BY cr.module, COALESCE(cr.subcategory, cr.module)
+    ORDER BY cr.module, section_key
+    `,
+    [locationId],
+  );
 
-    const rows = await this.ds.query(
-      `
-      WITH modules(module) AS (
-        SELECT * FROM unnest($2::text[])
-      ),
-      agg AS (
-        SELECT
-          cr.module,
-          COUNT(*)::int AS needs_count,
-          MAX(CASE cr.severity
-            WHEN 'CRITICAL' THEN 4
-            WHEN 'HIGH' THEN 3
-            WHEN 'MED' THEN 2
-            WHEN 'LOW' THEN 1
-            ELSE 0
-          END)::int AS max_sev,
-          MAX(cr.updated_at) AS last_updated
-        FROM compliance_results cr
-        WHERE cr.location_id = $1
-          AND cr.status IN ('NON_COMPLIANT', 'UNKNOWN')
-        GROUP BY cr.module
-      )
-      SELECT
-        m.module,
-        COALESCE(a.needs_count, 0)::int AS count,
-        COALESCE(a.max_sev, 0)::int AS max_sev,
-        a.last_updated
-      FROM modules m
-      LEFT JOIN agg a ON a.module = m.module
-      ORDER BY array_position($2::text[], m.module)
-      `,
-      [locationId, keys],
-    );
+  return rows.map((r: any) => {
+    const module = String(r.module);
+    const sectionKey = String(r.section_key);
+    const maxSev = Number(r.max_sev) || 0;
 
-    return rows.map((r: any) => {
-      const maxSev = Number(r.max_sev) || 0;
-      const status: SummaryStatus = maxSev >= 4 ? 'critical' : maxSev >= 2 ? 'warning' : 'ok';
-
-      return {
-        title: this.titleFor(String(r.module)),
-        module: String(r.module),
-        count: Number(r.count) || 0,
-        status,
-        lastUpdated: r.last_updated
-          ? new Date(r.last_updated).toISOString().slice(0, 10)
-          : undefined,
-
-        // ✅ ONE destination: message center (drill-down)
-        link: ['/', 'compliance', 'message-center'],
-        queryParams: { locationId, module: String(r.module) },
-      };
-    });
-  }
+    return {
+      title: this.titleForSection(module, sectionKey),
+      module,
+      count: Number(r.count) || 0,
+      status: maxSev >= 4 ? 'critical' : maxSev >= 2 ? 'warning' : 'ok',
+      lastUpdated: r.last_updated
+        ? new Date(r.last_updated).toISOString().slice(0, 10)
+        : undefined,
+      link: this.linkForSection(locationId, module, sectionKey),
+      queryParams: {
+        locationId,
+        module,
+        subcategory: sectionKey,
+        status: 'NON_COMPLIANT',
+      },
+    };
+  });
+}
 
   async chart(locationId: string): Promise<ChartDatum[]> {
     const rows = await this.ds.query(
@@ -115,6 +107,112 @@ export class DashboardService {
     ];
   }
 
+
+private titleForSection(
+  module: string,
+  sectionKey: string,
+): string {
+  const parentTitle = this.titleFor(module);
+
+  // Non-residential modules
+  if (module !== 'RESIDENTIAL') {
+    return parentTitle;
+  }
+
+  let sectionTitle = 'Residential Requirements';
+
+  switch (sectionKey) {
+    case 'HOME_ENVIRONMENT':
+      sectionTitle = 'Home & Environment';
+      break;
+
+    case 'HOT_WATER':
+      sectionTitle = 'Hot Water Safety';
+      break;
+
+    case 'LIFE_SAFETY':
+      sectionTitle = 'Life Safety';
+      break;
+
+    case 'FIRE_DRILLS':
+      sectionTitle = 'Fire Drills';
+      break;
+
+    case 'EMERGENCY_PLANS':
+      sectionTitle = 'Emergency Plans';
+      break;
+
+    case 'INFECTION_CONTROL':
+      sectionTitle = 'Infection Control';
+      break;
+
+    case 'MEDICATION':
+      sectionTitle = 'Medication';
+      break;
+
+    case 'FOUR_PERSON':
+      sectionTitle = 'Four-Person Residence';
+      break;
+  }
+
+  // Enterprise breadcrumb-style naming
+  return `${parentTitle} / ${sectionTitle}`;
+}
+
+private linkForSection(
+  locationId: string,
+  module: string,
+  sectionKey: string,
+): any[] {
+  if (module !== 'RESIDENTIAL') {
+    return ['/', 'compliance', 'message-center'];
+  }
+
+  switch (sectionKey) {
+    case 'HOME_ENVIRONMENT':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'home-environment'];
+
+    case 'HOT_WATER':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'hot-water'];
+
+    case 'LIFE_SAFETY':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'life-safety'];
+
+    case 'FIRE_DRILLS':
+      return [
+        '/',
+        'compliance',
+        'residential',
+        'location',
+        locationId,
+        'emergency',
+        'fire-drills',
+      ];
+
+    case 'EMERGENCY_PLANS':
+      return [
+        '/',
+        'compliance',
+        'residential',
+        'location',
+        locationId,
+        'emergency',
+        'plans',
+      ];
+
+    case 'INFECTION_CONTROL':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'infection-control'];
+
+    case 'MEDICATION':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'medication'];
+
+    case 'FOUR_PERSON':
+      return ['/', 'compliance', 'residential', 'location', locationId, 'four-person'];
+
+    default:
+      return ['/', 'compliance', 'residential', 'location', locationId, 'overview'];
+  }
+}
   private titleFor(moduleKey: string): string {
     return MODULES.find((m) => m.key === moduleKey)?.title ?? moduleKey;
   }

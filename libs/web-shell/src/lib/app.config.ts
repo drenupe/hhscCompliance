@@ -5,7 +5,7 @@ import {
   provideBrowserGlobalErrorListeners,
   importProvidersFrom,
 } from '@angular/core';
-
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -77,6 +77,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideAnimations(), // ✅ enables Angular animations app-wide
 
     provideRouter(
       appRoutes,

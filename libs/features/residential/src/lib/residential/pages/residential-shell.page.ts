@@ -27,7 +27,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
           <div class="sep"></div>
 
           <div class="cap">§565.23 Residential Requirements</div>
-          <a [routerLink]="['home']" [queryParams]="{ locationId }">Home & Environment (b)</a>
+          <a [routerLink]="['home-environment']" [queryParams]="{ locationId }">Home & Environment (b)</a>
           <a [routerLink]="['hot-water']" [queryParams]="{ locationId }">Hot Water Safety (c)</a>
           <a [routerLink]="['life-safety']" [queryParams]="{ locationId }">Life Safety (d)</a>
 

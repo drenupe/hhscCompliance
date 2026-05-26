@@ -105,3 +105,5 @@ export * from './lib/providers/src/lib/+state/providers.facade';
 // Http
 // =====================================
 export * from './lib/http/request-id.interceptor';
+
+export * from './lib/home-environment/src/services/home-environment.api';

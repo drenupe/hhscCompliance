@@ -16,7 +16,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { ComplianceResultsApi, ResidentialLocationsApi } from '@hhsc-compliance/data-access';
-import { ComplianceResultDto, ResidentialLocationDto } from '@hhsc-compliance/shared-models';
+import { ComplianceResultDto, RESIDENTIAL_REQUIREMENT_SECTIONS, ResidentialLocationDto } from '@hhsc-compliance/shared-models';
 
 type ModuleKey =
   | 'RESIDENTIAL'
@@ -435,46 +435,129 @@ export class ComplianceMessageCenterPage {
     });
   }
 
-  openDeepLink(r: ComplianceResultDto) {
-  const commands = this.buildDeepLinkCommands(r);
+openDeepLink(r: ComplianceResultDto): void {
+  const ruleCode = String((r as any).ruleCode ?? (r as any).rule ?? '').trim();
 
-  console.log('[deep-link click]', {
-    rule: r.ruleCode,
-    storedRouteCommands: r.routeCommands,
+  const locationId = String(
+    (r as any).locationId ??
+      (r as any).queryParams?.locationId ??
+      this.locationId ??
+      '',
+  ).trim();
+
+  const commands = this.buildDeepLinkCommands(r, ruleCode, locationId);
+
+  const queryParams = this.sanitizeQueryParams({
+    ...(this.isRecord((r as any).queryParams) ? (r as any).queryParams : {}),
+    ruleCode,
+    rule: ruleCode,
+    locationId,
+  });
+
+  console.log('[deep-link]', {
+    rule: ruleCode,
+    storedRouteCommands: (r as any).routeCommands ?? [],
     computedRouteCommands: commands,
-    queryParams: r.queryParams,
+    queryParams,
   });
 
   if (!commands?.length) {
-    console.warn('[deep-link] Missing/invalid deep link for', r.ruleCode);
+    console.warn('[deep-link] Missing/invalid deep link for', ruleCode);
     return;
   }
 
   this.router
-    .navigate(commands as any, { queryParams: r.queryParams ?? {} })
+    .navigate(commands, { queryParams })
     .then((ok) => {
-      if (!ok) console.error('[deep-link] Navigation failed (no matching route)', commands);
+      if (!ok) {
+        console.error('[deep-link] Navigation failed (no matching route)', commands);
+      }
     })
     .catch((err) => console.error('[deep-link] Navigation error', err));
 }
 
-private buildDeepLinkCommands(r: ComplianceResultDto): (string | number)[] | null {
-  // Only deep link residential rules here
-  if (r.entityType !== 'RESIDENTIAL') return null;
+private buildDeepLinkCommands(
+  r: ComplianceResultDto,
+  ruleCode: string,
+  locationId: string,
+): (string | number)[] {
+  const module = String((r as any).module ?? '').trim().toUpperCase();
+  const entityType = String((r as any).entityType ?? '').trim().toUpperCase();
 
-  // You MUST have a locationId if your routes are location-scoped
-  if (!r.locationId) return ['/', 'compliance', 'residential']; // safe fallback
-
-  // Rule → route mapping
-  switch (r.ruleCode) {
-    case '565.23(b)(5)':
-      // Your route is: /compliance/residential/location/:locationId/emergency/fire-drills
-      return ['/', 'compliance', 'residential', 'location', r.locationId, 'emergency', 'fire-drills'];
-
-    default:
-      return ['/', 'compliance', 'residential', 'location', r.locationId, 'overview'];
+  if (module !== 'RESIDENTIAL' && entityType !== 'RESIDENTIAL') {
+    return this.moduleRouteForResult(r);
   }
+
+  if (!locationId) {
+    return ['/', 'compliance', 'residential'];
+  }
+
+  const section = this.findResidentialSectionForRule(ruleCode);
+
+  if (!section) {
+    return ['/', 'compliance', 'residential', 'location', locationId, 'overview'];
+  }
+
+  return [
+    '/',
+    'compliance',
+    'residential',
+    'location',
+    locationId,
+    ...section.route,
+  ];
 }
+
+private findResidentialSectionForRule(
+  ruleCode: string,
+): (typeof RESIDENTIAL_REQUIREMENT_SECTIONS)[number] | null {
+  const rule = String(ruleCode ?? '').trim();
+
+  if (rule.startsWith('565.23(b)')) {
+    return this.findResidentialSectionByKey('HOME_ENVIRONMENT');
+  }
+
+  if (rule.startsWith('565.23(c)')) {
+    return this.findResidentialSectionByKey('HOT_WATER');
+  }
+
+  if (rule.startsWith('565.23(d)')) {
+    return this.findResidentialSectionByKey('LIFE_SAFETY');
+  }
+
+  if (rule.startsWith('565.23(e)')) {
+    return this.findResidentialSectionByKey('FIRE_DRILLS');
+  }
+
+  if (rule.startsWith('565.23(f)')) {
+    return this.findResidentialSectionByKey('EMERGENCY_PLANS');
+  }
+
+  if (rule.startsWith('565.23(g)')) {
+    return this.findResidentialSectionByKey('INFECTION_CONTROL');
+  }
+
+  if (rule.startsWith('565.23(h)')) {
+    return this.findResidentialSectionByKey('MEDICATION');
+  }
+
+  if (rule.startsWith('565.23(i)')) {
+    return this.findResidentialSectionByKey('FOUR_PERSON');
+  }
+
+  return null;
+}
+
+private findResidentialSectionByKey(
+  key: (typeof RESIDENTIAL_REQUIREMENT_SECTIONS)[number]['key'],
+): (typeof RESIDENTIAL_REQUIREMENT_SECTIONS)[number] | null {
+  return (
+    RESIDENTIAL_REQUIREMENT_SECTIONS.find((section) => section.key === key) ??
+    null
+  );
+}
+
+
 
 
 
@@ -517,4 +600,51 @@ private buildDeepLinkCommands(r: ComplianceResultDto): (string | number)[] | nul
     if (sev === 'LOW') return 'sev-low';
     return '';
   }
+
+
+  private isRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === 'object' && !Array.isArray(value);
+}
+
+private moduleRouteForResult(r: ComplianceResultDto): (string | number)[] {
+  const module = String((r as any).module ?? '').trim().toUpperCase();
+
+  switch (module) {
+    case 'PROGRAMMATIC':
+      return ['/', 'compliance', 'programmatic'];
+
+    case 'FINANCES_RENT':
+    case 'FINANCE':
+      return ['/', 'compliance', 'finance'];
+
+    case 'BEHAVIOR_SUPPORT':
+    case 'BEHAVIOR':
+      return ['/', 'compliance', 'behavior'];
+
+    case 'ANE':
+      return ['/', 'compliance', 'ane'];
+
+    case 'RESTRAINTS':
+      return ['/', 'compliance', 'restraints'];
+
+    case 'ENCLOSED_BEDS':
+      return ['/', 'compliance', 'enclosed-beds'];
+
+    case 'PROTECTIVE_DEVICES':
+      return ['/', 'compliance', 'protective'];
+
+    case 'PROHIBITIONS':
+      return ['/', 'compliance', 'prohibitions'];
+
+    case 'ISS':
+      return ['/', 'iss'];
+
+    default:
+      if (Array.isArray((r as any).routeCommands) && (r as any).routeCommands.length) {
+        return (r as any).routeCommands as (string | number)[];
+      }
+
+      return ['/', 'compliance', 'message-center'];
+  }
+}
 }

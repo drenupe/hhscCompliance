@@ -1,20 +1,21 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  Directive,
+  ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnDestroy,
   Output,
   SimpleChanges,
-  ElementRef,
   ViewChild,
   inject,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { A11yModule } from '@angular/cdk/a11y';
-
 import { animate, style, transition, trigger } from '@angular/animations';
 
 import {
@@ -34,6 +35,82 @@ import {
   YesNo,
 } from '@hhsc-compliance/shared-models';
 
+/**
+ * ✅ No-CDK focus trap directive (standalone)
+ * Usage:
+ *   <div libFocusTrap [libFocusTrapAutoCapture]="true">...</div>
+ */
+@Directive({
+  selector: '[libFocusTrap]',
+  standalone: true,
+})
+export class LibFocusTrapDirective implements AfterViewInit, OnDestroy {
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  @Input() libFocusTrapAutoCapture = true;
+
+  private previouslyFocused: HTMLElement | null = null;
+
+  ngAfterViewInit(): void {
+    this.previouslyFocused = document.activeElement as HTMLElement | null;
+
+    if (this.libFocusTrapAutoCapture) {
+      queueMicrotask(() => {
+        const root = this.host.nativeElement;
+        const first = this.getFocusable(root)[0];
+        (first ?? root).focus?.();
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    queueMicrotask(() => this.previouslyFocused?.focus?.());
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Tab') return;
+
+    const root = this.host.nativeElement;
+    const focusable = this.getFocusable(root);
+
+    if (!focusable.length) {
+      event.preventDefault();
+      root.focus?.();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+
+    if (event.shiftKey) {
+      if (!active || active === first) {
+        event.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  private getFocusable(root: HTMLElement): HTMLElement[] {
+    // ✅ no generic type arg (fixes "Untyped function calls may not accept type arguments")
+    const nodes = root.querySelectorAll(
+      'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])',
+    ) as unknown as NodeListOf<HTMLElement>;
+
+    return Array.from(nodes).filter((el) => this.isVisible(el) && el.tabIndex !== -1 && !el.hasAttribute('disabled'));
+  }
+
+  private isVisible(el: HTMLElement): boolean {
+    return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+  }
+}
+
 type Mode = 'create' | 'edit';
 
 function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[] {
@@ -47,18 +124,13 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
 @Component({
   standalone: true,
   selector: 'lib-fire-drill-sheet',
-  imports: [CommonModule, ReactiveFormsModule, A11yModule],
+  imports: [CommonModule, ReactiveFormsModule, LibFocusTrapDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     // Backdrop fade
     trigger('backdrop', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('160ms ease-out', style({ opacity: 1 })),
-      ]),
-      transition(':leave', [
-        animate('120ms ease-in', style({ opacity: 0 })),
-      ]),
+      transition(':enter', [style({ opacity: 0 }), animate('160ms ease-out', style({ opacity: 1 }))]),
+      transition(':leave', [animate('120ms ease-in', style({ opacity: 0 }))]),
     ]),
     // Sheet slide + fade
     trigger('sheet', [
@@ -66,204 +138,254 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
         style({ transform: 'translateX(24px)', opacity: 0 }),
         animate('220ms cubic-bezier(.2,.8,.2,1)', style({ transform: 'translateX(0)', opacity: 1 })),
       ]),
-      transition(':leave', [
-        animate('160ms ease-in', style({ transform: 'translateX(24px)', opacity: 0 })),
-      ]),
+      transition(':leave', [animate('160ms ease-in', style({ transform: 'translateX(24px)', opacity: 0 }))]),
     ]),
   ],
-  styles: [`
-    :host { color: var(--clr-text); font-family: var(--font-ui); }
+styles: [
+  `
+  :host {
+    color: var(--clr-text);
+    font-family: var(--font-ui);
+  }
 
-    /* Backdrop */
-    .backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 40;
-      border: 0;
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-    }
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 40;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
 
-    /* Sheet shell */
+  /* ✅ Sheet = header + body (form) */
+  .sheet {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: min(920px, 100vw);
+    z-index: 50;
+
+    background: radial-gradient(900px 650px at 0% 0%, rgba(34, 197, 94, 0.18), transparent 55%),
+      var(--clr-card);
+
+    border-left: 1px solid var(--clr-line);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
+
+    overflow: hidden;
+
+    display: grid;
+    grid-template-rows: auto 1fr; /* ✅ header + form */
+    padding-left: 18px;
+    padding-right: 18px;
+
+    min-height: 0; /* ✅ CRITICAL */
+  }
+
+  @media (max-width: 720px) {
     .sheet {
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100vh;
-
-      /* Desktop/tablet width */
-      width: min(920px, 100vw);
-      z-index: 50;
-
-      background:
-        radial-gradient(900px 650px at 0% 0%, rgba(34, 197, 94, 0.18), transparent 55%),
-        var(--clr-card);
-
-      border-left: 1px solid var(--clr-line);
-      box-shadow: 0 24px 64px rgba(0,0,0,.7);
-      overflow: hidden;
-
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-
-      /* This padding prevents the content from “hugging” the left edge */
-      padding-left: 18px;
-      padding-right: 18px;
+      width: 100vw;
+      padding-left: 14px;
+      padding-right: 14px;
+      border-left: 0;
     }
+  }
 
-    /* Mobile: full-width panel */
-    @media (max-width: 720px) {
-      .sheet {
-        width: 100vw;
-        padding-left: 14px;
-        padding-right: 14px;
-        border-left: 0;
-      }
+  /* ✅ Form = scroll area + footer */
+  .sheet > form {
+    min-height: 0; /* ✅ CRITICAL */
+    display: grid;
+    grid-template-rows: 1fr auto; /* ✅ content + footer */
+    overflow: hidden;            /* ✅ keep scroll only in .content */
+  }
+
+  /* ✅ ONLY scroll container */
+  .content {
+    min-height: 0;          /* ✅ CRITICAL */
+    overflow-y: auto;       /* ✅ SCROLL */
+    padding: 14px 0 18px;
+
+    /* nicer UX on trackpads */
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 8px 6px 18px;
+  }
+
+  /* Header (NOT sticky; it’s already pinned by grid) */
+  .sheetHead {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--clr-line);
+    background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.1) 14%);
+    z-index: 2;
+  }
+
+  /* Footer pinned by form grid (NOT sticky) */
+  .sheetFoot {
+    padding: 12px 0;
+    border-top: 1px solid var(--clr-line);
+    background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.1) 14%);
+    z-index: 2;
+  }
+
+  .titleRow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--clr-text-strong);
+    margin: 0;
+  }
+
+  .subtle {
+    color: var(--clr-text-muted);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .group {
+    border: 1px solid var(--clr-line);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    margin: 14px 0;
+    background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.06) 14%);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .groupTitle {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--clr-text-strong);
+    margin-bottom: 10px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .row3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 720px) {
+    .row,
+    .row3 {
+      grid-template-columns: 1fr;
     }
+  }
 
-    /* Centered content column */
-    .content {
-      height: 100%;
-      overflow: auto;
-      padding: 14px 0 18px;
-    }
+  label {
+    display: grid;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--clr-text-muted);
+  }
 
-    .container {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 8px 6px 18px;
-    }
+  input,
+  textarea,
+  select {
+    background: var(--clr-muted-surface);
+    color: var(--clr-text);
+    border: 1px solid var(--clr-line);
+    border-radius: var(--radius-sm);
+    padding: 0.55rem 0.7rem;
+    outline: none;
+    box-sizing: border-box;
+  }
 
-    /* Header */
-    .sheetHead {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--clr-line);
-      background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.10) 14%);
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
 
-    .titleRow {
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: var(--ring);
+    outline-offset: 2px;
+  }
 
-    .h2 { font-size: 18px; font-weight: 800; color: var(--clr-text-strong); margin: 0; }
-    .subtle { color: var(--clr-text-muted); font-size: 12px; margin-top: 2px; }
+  .checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 
-    /* Sections */
-    .group {
-      border: 1px solid var(--clr-line);
-      border-radius: var(--radius-md);
-      padding: 12px;
-      margin: 14px 0;
-      background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.06) 14%);
-      box-shadow: var(--shadow-sm);
-    }
-    .groupTitle {
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--clr-text-strong);
-      margin-bottom: 10px;
-    }
+  .check {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--clr-text);
+    padding: 6px 10px;
+    border: 1px solid color-mix(in srgb, var(--clr-line) 70%, transparent);
+    border-radius: var(--radius-pill);
+    background: rgba(15, 23, 42, 0.18);
+    user-select: none;
+  }
 
-    /* Rows */
-    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .row3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .check input {
+    transform: translateY(1px);
+  }
 
-    @media (max-width: 720px) {
-      .row, .row3 { grid-template-columns: 1fr; }
-    }
+  .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
-    /* Inputs */
-    label { display:grid; gap: 6px; font-size: 12px; color: var(--clr-text-muted); }
-    input, textarea, select {
-      background: var(--clr-muted-surface);
-      color: var(--clr-text);
-      border: 1px solid var(--clr-line);
-      border-radius: var(--radius-sm);
-      padding: .55rem .7rem;
-      outline: none;
-      box-sizing: border-box;
-    }
-    textarea { min-height: 100px; resize: vertical; }
+  button {
+    padding: 0.55rem 0.85rem;
+    border-radius: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--clr-line) 80%, transparent);
+    background: rgba(15, 23, 42, 0.25);
+    color: var(--clr-text);
+    cursor: pointer;
+  }
 
-    input:focus-visible, textarea:focus-visible, select:focus-visible {
-      outline: var(--ring);
-      outline-offset: 2px;
-    }
+  button:hover {
+    background: color-mix(in srgb, var(--clr-card) 88%, var(--clr-accent) 12%);
+  }
 
-    /* Checkbox layout */
-    .checks { display:flex; flex-wrap: wrap; gap: 10px; }
-    .check {
-      display:flex;
-      gap: 8px;
-      align-items:center;
-      font-size: 13px;
-      color: var(--clr-text);
-      padding: 6px 10px;
-      border: 1px solid color-mix(in srgb, var(--clr-line) 70%, transparent);
-      border-radius: var(--radius-pill);
-      background: rgba(15, 23, 42, 0.18);
-      user-select: none;
-    }
-    .check input { transform: translateY(1px); }
+  button:focus-visible {
+    outline: var(--ring);
+    outline-offset: 2px;
+  }
 
-    /* Footer actions (sticky) */
-    .sheetFoot {
-      padding: 12px 0;
-      border-top: 1px solid var(--clr-line);
-      background: color-mix(in srgb, var(--clr-card) 86%, rgba(34, 197, 94, 0.10) 14%);
-      position: sticky;
-      bottom: 0;
-      z-index: 2;
-    }
+  button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 
-    .actions {
-      display:flex;
-      gap: 10px;
-      justify-content:flex-end;
-      align-items:center;
-    }
-
-    button {
-      padding: .55rem .85rem;
-      border-radius: .85rem;
-      border: 1px solid color-mix(in srgb, var(--clr-line) 80%, transparent);
-      background: rgba(15, 23, 42, 0.25);
-      color: var(--clr-text);
-      cursor: pointer;
-    }
-    button:hover { background: color-mix(in srgb, var(--clr-card) 88%, var(--clr-accent) 12%); }
-    button:focus-visible { outline: var(--ring); outline-offset: 2px; }
-    button[disabled] { opacity: .6; cursor: not-allowed; }
-
-    .primary {
-      background: color-mix(in srgb, var(--clr-accent) 20%, rgba(15, 23, 42, 0.35));
-      border-color: color-mix(in srgb, var(--clr-accent) 60%, var(--clr-line));
-    }
-
-    /* Visually-hidden helper */
-    .srOnly {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-  `],
+  .primary {
+    background: color-mix(in srgb, var(--clr-accent) 20%, rgba(15, 23, 42, 0.35));
+    border-color: color-mix(in srgb, var(--clr-accent) 60%, var(--clr-line));
+  }
+  `,
+],
   template: `
-    <!-- Backdrop (fade) -->
+    <!-- Backdrop -->
     <button
       @backdrop
       type="button"
@@ -272,16 +394,18 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
       (click)="requestClose()"
     ></button>
 
-    <!-- Sheet (slide) -->
+    <!-- Sheet -->
     <div
+      #sheetRoot
       @sheet
       class="sheet"
       role="dialog"
       aria-modal="true"
       aria-label="Fire drill form (4719)"
+      tabindex="-1"
+      libFocusTrap
+      [libFocusTrapAutoCapture]="true"
       (keydown)="onKeydown($event)"
-      cdkTrapFocus
-      [cdkTrapFocusAutoCapture]="true"
     >
       <!-- Header -->
       <div class="sheetHead">
@@ -590,19 +714,6 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
                 <textarea formControlName="participantsNames"></textarea>
               </label>
 
-              <div class="group">
-                <div class="groupTitle">Staff areas checks (Q15)</div>
-                <div class="checks">
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('hearAlarm')" (change)="toggleStaffCheck('hearAlarm')" /> Hear alarm</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('respondPromptly')" (change)="toggleStaffCheck('respondPromptly')" /> Respond promptly</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('followAcceptedProceduresCalmly')" (change)="toggleStaffCheck('followAcceptedProceduresCalmly')" /> Follow calmly / efficiently</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('knowProperProcedures')" (change)="toggleStaffCheck('knowProperProcedures')" /> Know proper procedures</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('returnToStations')" (change)="toggleStaffCheck('returnToStations')" /> Return to stations</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('standByUntilAllClear')" (change)="toggleStaffCheck('standByUntilAllClear')" /> Stand by until all clear</label>
-                  <label class="check"><input type="checkbox" [checked]="staffCheck('hearAllClear')" (change)="toggleStaffCheck('hearAllClear')" /> Hear all clear</label>
-                </div>
-              </div>
-
               <div class="row">
                 <label>
                   Report completed by
@@ -617,7 +728,7 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
           </div>
         </div>
 
-        <!-- Sticky footer actions -->
+        <!-- Footer -->
         <div class="sheetFoot">
           <div class="container">
             <div class="actions">
@@ -632,16 +743,16 @@ function toggleInArray<T extends string>(arr: T[] | null | undefined, v: T): T[]
     </div>
   `,
 })
-export class FireDrillSheetComponent implements OnChanges, OnDestroy {
+export class FireDrillSheetComponent implements OnChanges, OnDestroy, AfterViewInit {
   @Input({ required: true }) locationId!: string;
   @Input() row: FireDrillDto | null = null;
 
   @Output() closed = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<{ id?: string; payload: CreateFireDrillInput | UpdateFireDrillInput }>();
 
+  @ViewChild('sheetRoot', { static: true }) sheetRoot!: ElementRef<HTMLElement>;
   @ViewChild('closeBtn', { static: true }) closeBtn!: ElementRef<HTMLButtonElement>;
 
-  private readonly host = inject(ElementRef<HTMLElement>);
   private previousActive: HTMLElement | null = null;
 
   get mode(): Mode {
@@ -697,16 +808,6 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
     emergencyPlanExecutedCorrectly: new FormControl<YesNo | null>(null),
     staffCarriedOutResponsibilities: new FormControl<YesNo | null>(null),
 
-    staffAreasChecks: new FormControl<FireDrillDto['staffAreasChecks']>({
-      hearAlarm: false,
-      respondPromptly: false,
-      followAcceptedProceduresCalmly: false,
-      knowProperProcedures: false,
-      returnToStations: false,
-      standByUntilAllClear: false,
-      hearAllClear: false,
-    }, { nonNullable: true }),
-
     commentsProblems: new FormControl<string | null>(null),
     participantsNames: new FormControl<string | null>(null),
 
@@ -714,21 +815,16 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
     reportCompletedByTitle: new FormControl<string | null>(null),
   });
 
+  ngAfterViewInit(): void {
+    this.previousActive = document.activeElement as HTMLElement | null;
+    queueMicrotask(() => (this.closeBtn?.nativeElement ?? this.sheetRoot?.nativeElement)?.focus?.());
+  }
+
   ngOnDestroy(): void {
-    // Restore focus to whatever opened the sheet
-    if (this.previousActive && typeof this.previousActive.focus === 'function') {
-      queueMicrotask(() => this.previousActive?.focus());
-    }
+    queueMicrotask(() => this.previousActive?.focus?.());
   }
 
   ngOnChanges(_: SimpleChanges): void {
-    // Capture prior focus once, on first render
-    if (!this.previousActive) {
-      this.previousActive = document.activeElement as HTMLElement | null;
-      // Put focus on Close button (trap will keep it inside)
-      queueMicrotask(() => this.closeBtn?.nativeElement?.focus());
-    }
-
     if (this.row) {
       this.form.patchValue({
         dateDrillConducted: this.row.dateDrillConducted,
@@ -779,8 +875,6 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
         emergencyPlanExecutedCorrectly: this.row.emergencyPlanExecutedCorrectly ?? null,
         staffCarriedOutResponsibilities: this.row.staffCarriedOutResponsibilities ?? null,
 
-        staffAreasChecks: this.row.staffAreasChecks ?? FIRE_DRILL_4719_DEFAULTS.staffAreasChecks,
-
         commentsProblems: this.row.commentsProblems ?? null,
         participantsNames: this.row.participantsNames ?? null,
 
@@ -794,7 +888,6 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
     this.form.reset(d as any);
   }
 
-  // ESC close + prevent scroll keys from escaping focus context
   onKeydown(e: KeyboardEvent): void {
     if (e.key === 'Escape') {
       e.preventDefault();
@@ -807,32 +900,47 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
     this.closed.emit();
   }
 
-  // Array checkbox helpers
-  hasSim(v: SimulatedSituation) { return this.form.controls.simulatedSituations.value.includes(v); }
-  toggleSim(v: SimulatedSituation) { this.form.controls.simulatedSituations.setValue(toggleInArray(this.form.controls.simulatedSituations.value, v)); }
-
-  hasLoc(v: DrillLocation) { return this.form.controls.locations.value.includes(v); }
-  toggleLoc(v: DrillLocation) { this.form.controls.locations.setValue(toggleInArray(this.form.controls.locations.value, v)); }
-
-  hasExit(v: ExitUsed) { return this.form.controls.exitsUsed.value.includes(v); }
-  toggleExit(v: ExitUsed) { this.form.controls.exitsUsed.setValue(toggleInArray(this.form.controls.exitsUsed.value, v)); }
-
-  hasFireType(v: FireType) { return this.form.controls.fireTypes.value.includes(v); }
-  toggleFireType(v: FireType) { this.form.controls.fireTypes.setValue(toggleInArray(this.form.controls.fireTypes.value, v)); }
-
-  hasEOF(v: ExtentOfFire) { return this.form.controls.extentOfFire.value.includes(v); }
-  toggleEOF(v: ExtentOfFire) { this.form.controls.extentOfFire.setValue(toggleInArray(this.form.controls.extentOfFire.value, v)); }
-
-  hasEOS(v: ExtentOfSmoke) { return this.form.controls.extentOfSmoke.value.includes(v); }
-  toggleEOS(v: ExtentOfSmoke) { this.form.controls.extentOfSmoke.setValue(toggleInArray(this.form.controls.extentOfSmoke.value, v)); }
-
-  // staff checks stored as object
-  staffCheck(k: keyof FireDrillDto['staffAreasChecks']) {
-    return !!this.form.controls.staffAreasChecks.value?.[k];
+  // Array checkbox helpers (only the ones used by template above)
+  hasSim(v: SimulatedSituation) {
+    return this.form.controls.simulatedSituations.value.includes(v);
   }
-  toggleStaffCheck(k: keyof FireDrillDto['staffAreasChecks']) {
-    const cur = this.form.controls.staffAreasChecks.value ?? FIRE_DRILL_4719_DEFAULTS.staffAreasChecks;
-    this.form.controls.staffAreasChecks.setValue({ ...cur, [k]: !cur[k] });
+  toggleSim(v: SimulatedSituation) {
+    this.form.controls.simulatedSituations.setValue(toggleInArray(this.form.controls.simulatedSituations.value, v));
+  }
+
+  hasLoc(v: DrillLocation) {
+    return this.form.controls.locations.value.includes(v);
+  }
+  toggleLoc(v: DrillLocation) {
+    this.form.controls.locations.setValue(toggleInArray(this.form.controls.locations.value, v));
+  }
+
+  hasExit(v: ExitUsed) {
+    return this.form.controls.exitsUsed.value.includes(v);
+  }
+  toggleExit(v: ExitUsed) {
+    this.form.controls.exitsUsed.setValue(toggleInArray(this.form.controls.exitsUsed.value, v));
+  }
+
+  hasFireType(v: FireType) {
+    return this.form.controls.fireTypes.value.includes(v);
+  }
+  toggleFireType(v: FireType) {
+    this.form.controls.fireTypes.setValue(toggleInArray(this.form.controls.fireTypes.value, v));
+  }
+
+  hasEOF(v: ExtentOfFire) {
+    return this.form.controls.extentOfFire.value.includes(v);
+  }
+  toggleEOF(v: ExtentOfFire) {
+    this.form.controls.extentOfFire.setValue(toggleInArray(this.form.controls.extentOfFire.value, v));
+  }
+
+  hasEOS(v: ExtentOfSmoke) {
+    return this.form.controls.extentOfSmoke.value.includes(v);
+  }
+  toggleEOS(v: ExtentOfSmoke) {
+    this.form.controls.extentOfSmoke.setValue(toggleInArray(this.form.controls.extentOfSmoke.value, v));
   }
 
   submit(): void {
@@ -890,8 +998,6 @@ export class FireDrillSheetComponent implements OnChanges, OnDestroy {
 
       emergencyPlanExecutedCorrectly: v.emergencyPlanExecutedCorrectly ?? null,
       staffCarriedOutResponsibilities: v.staffCarriedOutResponsibilities ?? null,
-
-      staffAreasChecks: v.staffAreasChecks ?? FIRE_DRILL_4719_DEFAULTS.staffAreasChecks,
 
       commentsProblems: (v.commentsProblems ?? null)?.trim() || null,
       participantsNames: (v.participantsNames ?? null)?.trim() || null,

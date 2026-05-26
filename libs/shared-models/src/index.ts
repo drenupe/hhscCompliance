@@ -13,8 +13,14 @@ export * from './lib/iss/iss.models';
 export * from './lib/providers/provider.model';
 export * from './lib/residential/residential-location.model';
 
-// ✅ Compliance
-export * from './lib/compliance/compliance-result.model';
-
 
 export * from './lib/fire-drills/fire-drills.models';
+
+// ✅ Compliance
+export * from './lib/compliance/compliance-result.model';
+export * from './lib/residential/residential-requirements.constants';
+
+
+export * from './lib/compliance/home-environment';
+export * from './lib/compliance/home-environment/home-environment.models';
+export * from './lib/compliance/home-environment/home-environment.requirements';
