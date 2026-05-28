@@ -8,28 +8,33 @@ import { TlsOptions } from 'node:tls';
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
   useFactory: async (cfg: ConfigService): Promise<TypeOrmModuleOptions> => {
-    const nodeEnv = String(cfg.get('env') ?? cfg.get('NODE_ENV') ?? 'development').toLowerCase();
+    const nodeEnv = String(
+      cfg.get('env') ?? cfg.get('NODE_ENV') ?? 'development'
+    ).toLowerCase();
 
-    // ✅ IMPORTANT: treat empty-string as "not set" so we correctly fall back to DATABASE_URL
     const urlFromCfg = String(cfg.get<string>('database.url') ?? '').trim();
     const urlFromEnv = String(cfg.get<string>('DATABASE_URL') ?? '').trim();
 
     const url = urlFromCfg.length > 0 ? urlFromCfg : urlFromEnv;
     const useUrl = url.length > 0;
 
-    // SSL toggle from config/env or sslmode=require in the URL
-    const dbSslFlag =
-      (cfg.get<boolean>('database.ssl') as boolean | undefined) ??
-      /^true$/i.test(String(cfg.get('DB_SSL') ?? ''));
-
     const sslFromUrl = /[?&]sslmode=require/i.test(url);
-    const sslOn = Boolean(dbSslFlag || sslFromUrl);
+    const sslFromEnv =
+      /^true$/i.test(String(cfg.get('DB_SSL') ?? '')) ||
+      nodeEnv === 'staging' ||
+      nodeEnv === 'production';
 
-    // CA: inline or file path
-    const caInline = cfg.get<string>('database.caCert') ?? cfg.get<string>('PG_CA_CERT');
-    const caPath = cfg.get<string>('database.caCertPath') ?? cfg.get<string>('PG_CA_CERT_PATH');
+    const sslOn = Boolean(sslFromUrl || sslFromEnv);
+
+    const caInline =
+      cfg.get<string>('database.caCert') ?? cfg.get<string>('PG_CA_CERT');
+
+    const caPath =
+      cfg.get<string>('database.caCertPath') ??
+      cfg.get<string>('PG_CA_CERT_PATH');
 
     let caPem: string | undefined;
+
     if (caInline) {
       caPem = caInline.replace(/\\n/g, '\n').trim();
     } else if (caPath && existsSync(caPath)) {
@@ -42,46 +47,44 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         : { rejectUnauthorized: false }
       : false;
 
-    const base: TypeOrmModuleOptions = {
+    const discrete = {
+      host: cfg.get<string>('database.host') ?? cfg.get<string>('DB_HOST') ?? 'localhost',
+      port: parseInt(
+        String(cfg.get('database.port') ?? cfg.get('DB_PORT') ?? '5432'),
+        10
+      ),
+      username:
+        cfg.get<string>('database.user') ?? cfg.get<string>('DB_USER') ?? 'postgres',
+      password:
+        cfg.get<string>('database.pass') ?? cfg.get<string>('DB_PASS') ?? 'postgres',
+      database:
+        cfg.get<string>('database.name') ?? cfg.get<string>('DB_NAME') ?? 'postgres',
+    };
+
+    console.log(
+      `[DB] env=${nodeEnv} mode=${useUrl ? 'url' : 'discrete'} sslOn=${sslOn} host=${
+        useUrl ? '(from url)' : String(discrete.host)
+      }`
+    );
+
+    const options: TypeOrmModuleOptions = {
       type: 'postgres',
       autoLoadEntities: true,
-
-      // ✅ Important: use migrations only (no runtime schema sync)
       synchronize: false,
-
       ssl: sslConfig,
+
       extra: {
-        ...(sslOn ? { ssl: sslConfig } : {}),
         keepAlive: true,
         connectionTimeoutMillis: 10_000,
         statement_timeout: 30_000,
         query_timeout: 30_000,
       },
 
-      // For programmatic migration runs (if you ever call dataSource.runMigrations())
       migrations: [resolve(process.cwd(), 'dist/api/migrations/*.js')],
-    };
 
-    const discrete = {
-      host: cfg.get('database.host') ?? cfg.get('DB_HOST') ?? 'localhost',
-      port: parseInt(String(cfg.get('database.port') ?? cfg.get('DB_PORT') ?? '5432'), 10),
-      username: cfg.get('database.user') ?? cfg.get('DB_USER') ?? 'postgres',
-      password: cfg.get('database.pass') ?? cfg.get('DB_PASS') ?? 'postgres',
-      database: cfg.get('database.name') ?? cfg.get('DB_NAME') ?? 'postgres',
-    };
-
-    // ✅ tiny boot log to confirm mode on Render (safe: does not print credentials)
-    // Remove later if you want.
-    // eslint-disable-next-line no-console
-    console.log(
-      `[DB] env=${nodeEnv} mode=${useUrl ? 'url' : 'discrete'} sslOn=${sslOn} host=${
-        useUrl ? '(from url)' : String(discrete.host)
-      }`,
-    );
-
-    return {
-      ...base,
       ...(useUrl ? { url } : discrete),
     };
+
+    return options;
   },
 };
