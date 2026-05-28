@@ -77,6 +77,7 @@ async function bootstrap() {
     const port = Number(process.env.PORT ?? 3000);
     const host = '0.0.0.0';
 
+    Logger.log('✅ Nest initialization complete');
     await app.listen(port, host);
 
     Logger.log(`🚀 API listening on ${host}:${port}`);
@@ -90,5 +91,13 @@ async function bootstrap() {
     process.exit(1);
   }
 }
+
+process.on('unhandledRejection', (reason) => {
+  console.error('UNHANDLED REJECTION', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION', err);
+});
 
 bootstrap();
