@@ -1,5 +1,5 @@
+import { CreateProviderDto, ProviderDto, UpdateProviderDto } from '@hhsc-compliance/shared-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { CreateProviderDto, ProviderDto, UpdateProviderDto } from '../services/providers.api';
 
 export const ProvidersActions = createActionGroup({
   source: 'Providers',
