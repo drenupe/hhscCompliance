@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import {
   ResidentialLocationDto,
   UpsertResidentialLocationInput,
@@ -9,25 +10,39 @@ import { BaseApiService } from '../../../api-core/base-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class ResidentialLocationsApi extends BaseApiService {
-  private readonly resource = 'v1/residential-locations';
+  /**
+   * Maps to:
+   * /api/v1/residential/locations
+   */
+  private readonly base = 'v1/residential';
 
   list(): Observable<ResidentialLocationDto[]> {
-    return this.get<ResidentialLocationDto[]>(this.buildUrl(this.resource));
+    const url = this.buildUrl(`${this.base}/locations`);
+    return this.get<ResidentialLocationDto[]>(url);
   }
 
   getOne(id: string): Observable<ResidentialLocationDto> {
-    return this.get<ResidentialLocationDto>(this.buildUrl(`${this.resource}/${id}`));
+    const url = this.buildUrl(`${this.base}/locations/${id}`);
+    return this.get<ResidentialLocationDto>(url);
   }
 
-  create(payload: UpsertResidentialLocationInput): Observable<ResidentialLocationDto> {
-    return this.post<ResidentialLocationDto>(this.buildUrl(this.resource), payload);
+  create(
+    payload: UpsertResidentialLocationInput,
+  ): Observable<ResidentialLocationDto> {
+    const url = this.buildUrl(`${this.base}/locations`);
+    return this.post<ResidentialLocationDto>(url, payload);
   }
 
-  update(id: string, payload: Partial<UpsertResidentialLocationInput>): Observable<ResidentialLocationDto> {
-    return this.patch<ResidentialLocationDto>(this.buildUrl(`${this.resource}/${id}`), payload);
+  update(
+    id: string,
+    payload: Partial<UpsertResidentialLocationInput>,
+  ): Observable<ResidentialLocationDto> {
+    const url = this.buildUrl(`${this.base}/locations/${id}`);
+    return this.patch<ResidentialLocationDto>(url, payload);
   }
 
   remove(id: string): Observable<{ id: string }> {
-    return this.delete<{ id: string }>(this.buildUrl(`${this.resource}/${id}`));
+    const url = this.buildUrl(`${this.base}/locations/${id}`);
+    return this.delete<{ id: string }>(url);
   }
 }
