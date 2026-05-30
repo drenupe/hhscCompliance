@@ -1,33 +1,60 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { ProvidersPartialState } from './providers.models';
-import * as ProvidersSelectors from './providers.selectors';
+import { UpsertProviderInput } from '@hhsc-compliance/shared-models';
+
 import { ProvidersActions } from './providers.actions';
-import { CreateProviderDto, UpdateProviderDto } from '../services/providers.api';
+import * as ProvidersSelectors from './providers.selectors';
+
 @Injectable({ providedIn: 'root' })
 export class ProvidersFacade {
-  private readonly store = inject<Store<ProvidersPartialState>>(Store);
+  private readonly store = inject(Store);
 
-  readonly items$ = this.store.select(ProvidersSelectors.selectProvidersItems);
-  readonly loading$ = this.store.select(ProvidersSelectors.selectProvidersLoading);
-  readonly saving$ = this.store.select(ProvidersSelectors.selectProvidersSaving);
-  readonly error$ = this.store.select(ProvidersSelectors.selectProvidersError);
-  readonly count$ = this.store.select(ProvidersSelectors.selectProvidersCount);
+  readonly providers$ = this.store.select(
+    ProvidersSelectors.selectAllProviders
+  );
+
+  readonly selectedProvider$ = this.store.select(
+    ProvidersSelectors.selectSelectedProvider
+  );
+
+  readonly loading$ = this.store.select(
+    ProvidersSelectors.selectProvidersLoading
+  );
+
+  readonly saving$ = this.store.select(
+    ProvidersSelectors.selectProvidersSaving
+  );
+
+  readonly error$ = this.store.select(
+    ProvidersSelectors.selectProvidersError
+  );
 
   load(): void {
-    this.store.dispatch(ProvidersActions.load());
+    this.store.dispatch(ProvidersActions.loadProviders());
   }
 
-  create(input: CreateProviderDto): void {
-    this.store.dispatch(ProvidersActions.create({ input }));
+  select(providerId: string | null): void {
+    this.store.dispatch(
+      ProvidersActions.selectProvider({ providerId })
+    );
   }
 
-  update(id: string, changes: UpdateProviderDto): void {
-    this.store.dispatch(ProvidersActions.update({ id, changes }));
+  create(input: UpsertProviderInput): void {
+    this.store.dispatch(
+      ProvidersActions.createProvider({ input })
+    );
+  }
+
+  update(id: string, input: UpsertProviderInput): void {
+    this.store.dispatch(
+      ProvidersActions.updateProvider({ id, input })
+    );
   }
 
   delete(id: string): void {
-    this.store.dispatch(ProvidersActions.delete({ id }));
+    this.store.dispatch(
+      ProvidersActions.deleteProvider({ id })
+    );
   }
 }

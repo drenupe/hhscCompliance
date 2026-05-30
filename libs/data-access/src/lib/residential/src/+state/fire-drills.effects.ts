@@ -13,7 +13,7 @@ export class FireDrillsEffects {
     this.actions$.pipe(
       ofType(FireDrillsActions.load),
       switchMap(({ locationId }) =>
-        this.api.list({ locationId }).pipe(
+        this.api.list(locationId).pipe(
           map((rows) => FireDrillsActions.loadSuccess({ locationId, rows })),
           catchError((error) => of(FireDrillsActions.loadFailure({ locationId, error }))),
         ),

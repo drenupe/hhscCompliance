@@ -1,20 +1,40 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { PROVIDERS_FEATURE_KEY, ProvidersState } from './providers.models';
+import {
+  PROVIDERS_FEATURE_KEY,
+  ProvidersState,
+} from './providers.models';
 
 export const selectProvidersState =
   createFeatureSelector<ProvidersState>(PROVIDERS_FEATURE_KEY);
 
-export const selectProvidersItems = createSelector(selectProvidersState, (s) => s.items);
-export const selectProvidersLoading = createSelector(selectProvidersState, (s) => s.loading);
-export const selectProvidersSaving = createSelector(selectProvidersState, (s) => s.saving);
-export const selectProvidersError = createSelector(selectProvidersState, (s) => s.error);
+export const selectAllProviders = createSelector(
+  selectProvidersState,
+  (state) => state.items
+);
 
-export const selectProvidersCount = createSelector(selectProvidersItems, (items) => items.length);
-
-export const selectSelectedProviderId = createSelector(selectProvidersState, (s) => s.selectedProviderId);
+export const selectSelectedProviderId = createSelector(
+  selectProvidersState,
+  (state) => state.selectedProviderId
+);
 
 export const selectSelectedProvider = createSelector(
-  selectProvidersItems,
+  selectAllProviders,
   selectSelectedProviderId,
-  (items, id) => items.find((p) => p.id === id) ?? null,
+  (providers, selectedProviderId) =>
+    providers.find((p) => p.id === selectedProviderId) ?? null
+);
+
+export const selectProvidersLoading = createSelector(
+  selectProvidersState,
+  (state) => state.loading
+);
+
+export const selectProvidersSaving = createSelector(
+  selectProvidersState,
+  (state) => state.saving
+);
+
+export const selectProvidersError = createSelector(
+  selectProvidersState,
+  (state) => state.error
 );

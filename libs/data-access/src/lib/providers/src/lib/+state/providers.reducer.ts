@@ -5,30 +5,84 @@ import { initialProvidersState } from './providers.models';
 export const providersReducer = createReducer(
   initialProvidersState,
 
-  on(ProvidersActions.load, (s) => ({ ...s, loading: true, error: null })),
-  on(ProvidersActions.loadSuccess, (s, { items }) => ({ ...s, items, loading: false })),
-  on(ProvidersActions.loadFailure, (s, { error }) => ({ ...s, loading: false, error })),
-
-  on(ProvidersActions.select, (s, { providerId }) => ({ ...s, selectedProviderId: providerId })),
-
-  // ✅ pessimistic: update store only on success
-  on(ProvidersActions.create, (s) => ({ ...s, saving: true, error: null })),
-  on(ProvidersActions.createSuccess, (s, { item }) => ({ ...s, saving: false, items: [item, ...s.items] })),
-  on(ProvidersActions.createFailure, (s, { error }) => ({ ...s, saving: false, error })),
-
-  on(ProvidersActions.update, (s) => ({ ...s, saving: true, error: null })),
-  on(ProvidersActions.updateSuccess, (s, { item }) => ({
-    ...s,
-    saving: false,
-    items: s.items.map((p) => (p.id === item.id ? item : p)),
+  on(ProvidersActions.loadProviders, (state) => ({
+    ...state,
+    loading: true,
+    error: null,
   })),
-  on(ProvidersActions.updateFailure, (s, { error }) => ({ ...s, saving: false, error })),
 
-  on(ProvidersActions.delete, (s) => ({ ...s, saving: true, error: null })),
-  on(ProvidersActions.deleteSuccess, (s, { id }) => ({
-    ...s,
-    saving: false,
-    items: s.items.filter((p) => p.id !== id),
+  on(ProvidersActions.loadProvidersSuccess, (state, { providers }) => ({
+    ...state,
+    items: providers,
+    loading: false,
   })),
-  on(ProvidersActions.deleteFailure, (s, { error }) => ({ ...s, saving: false, error })),
+
+  on(ProvidersActions.loadProvidersFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+
+  on(ProvidersActions.selectProvider, (state, { providerId }) => ({
+    ...state,
+    selectedProviderId: providerId,
+  })),
+
+  on(ProvidersActions.createProvider, (state) => ({
+    ...state,
+    saving: true,
+    error: null,
+  })),
+
+  on(ProvidersActions.createProviderSuccess, (state, { provider }) => ({
+    ...state,
+    saving: false,
+    items: [provider, ...state.items],
+  })),
+
+  on(ProvidersActions.createProviderFailure, (state, { error }) => ({
+    ...state,
+    saving: false,
+    error,
+  })),
+
+  on(ProvidersActions.updateProvider, (state) => ({
+    ...state,
+    saving: true,
+    error: null,
+  })),
+
+  on(ProvidersActions.updateProviderSuccess, (state, { provider }) => ({
+    ...state,
+    saving: false,
+    items: state.items.map((p) =>
+      p.id === provider.id ? provider : p
+    ),
+  })),
+
+  on(ProvidersActions.updateProviderFailure, (state, { error }) => ({
+    ...state,
+    saving: false,
+    error,
+  })),
+
+  on(ProvidersActions.deleteProvider, (state) => ({
+    ...state,
+    saving: true,
+    error: null,
+  })),
+
+  on(ProvidersActions.deleteProviderSuccess, (state, { id }) => ({
+    ...state,
+    saving: false,
+    items: state.items.filter((p) => p.id !== id),
+    selectedProviderId:
+      state.selectedProviderId === id ? null : state.selectedProviderId,
+  })),
+
+  on(ProvidersActions.deleteProviderFailure, (state, { error }) => ({
+    ...state,
+    saving: false,
+    error,
+  })),
 );

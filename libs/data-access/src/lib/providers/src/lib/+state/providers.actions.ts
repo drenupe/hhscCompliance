@@ -1,25 +1,25 @@
-import { CreateProviderDto, ProviderDto, UpdateProviderDto } from '@hhsc-compliance/shared-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { ProviderDto, UpsertProviderInput } from '@hhsc-compliance/shared-models';
 
 export const ProvidersActions = createActionGroup({
   source: 'Providers',
   events: {
-    Load: emptyProps(),
-    'Load Success': props<{ items: ProviderDto[] }>(),
-    'Load Failure': props<{ error: string }>(),
+    'Load Providers': emptyProps(),
+    'Load Providers Success': props<{ providers: ProviderDto[] }>(),
+    'Load Providers Failure': props<{ error: string }>(),
 
-    Select: props<{ providerId: string }>(),
+    'Select Provider': props<{ providerId: string | null }>(),
 
-    Create: props<{ input: CreateProviderDto }>(),
-    'Create Success': props<{ item: ProviderDto }>(),
-    'Create Failure': props<{ error: string }>(),
+    'Create Provider': props<{ input: UpsertProviderInput }>(),
+    'Create Provider Success': props<{ provider: ProviderDto }>(),
+    'Create Provider Failure': props<{ error: string }>(),
 
-    Update: props<{ id: string; changes: UpdateProviderDto }>(),
-    'Update Success': props<{ item: ProviderDto }>(),
-    'Update Failure': props<{ error: string }>(),
+    'Update Provider': props<{ id: string; input: UpsertProviderInput }>(),
+    'Update Provider Success': props<{ provider: ProviderDto }>(),
+    'Update Provider Failure': props<{ error: string }>(),
 
-    Delete: props<{ id: string }>(),
-    'Delete Success': props<{ id: string }>(),
-    'Delete Failure': props<{ error: string }>(),
+    'Delete Provider': props<{ id: string }>(),
+    'Delete Provider Success': props<{ id: string }>(),
+    'Delete Provider Failure': props<{ error: string }>(),
   },
 });

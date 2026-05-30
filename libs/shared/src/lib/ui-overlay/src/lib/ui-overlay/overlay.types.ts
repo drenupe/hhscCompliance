@@ -1,4 +1,5 @@
 // libs/shared/src/lib/ui-overlay/src/lib/overlay/overlay.types.ts
+
 import { Type } from '@angular/core';
 import { OverlayRef } from './overlay-ref';
 
@@ -13,15 +14,25 @@ export interface OverlayOpenOptions<TData = unknown> {
 }
 
 /**
- * One entry in the overlay stack
+ * Public typed overlay entry.
  */
 export interface OverlayEntry<TData = unknown, TResult = unknown> {
   id: string;
-  component: Type<unknown> | any;
+  component: Type<unknown>;
   ref: OverlayRef<TResult>;
+
   size: OverlaySize;
   ariaLabel?: string;
   data?: TData;
+
   closeOnBackdrop: boolean;
   closeOnEscape: boolean;
 }
+
+/**
+ * Internal stack type.
+ * 
+ * Use this inside OverlayService to avoid generic variance issues
+ * from mixed OverlayRef<TResult> instances.
+ */
+export type AnyOverlayEntry = OverlayEntry<any, any>;

@@ -1,4 +1,4 @@
-import { ProviderDto } from "../services/providers.api";
+import { ProviderDto } from "@hhsc-compliance/shared-models";
 
 export const PROVIDERS_FEATURE_KEY = 'providers';
 

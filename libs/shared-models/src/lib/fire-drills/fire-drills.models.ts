@@ -185,4 +185,14 @@ export const FIRE_DRILL_4719_DEFAULTS: FireDrillForm4719 = {
 
   reportCompletedBy: null,
   reportCompletedByTitle: null,
+
+
 };
+
+
+export type FireDrillLogDto = FireDrillDto;
+
+export type CreateFireDrillLogInput = CreateFireDrillInput;
+
+export type UpdateFireDrillLogInput = UpdateFireDrillInput;
+

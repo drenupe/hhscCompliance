@@ -23,24 +23,8 @@ export interface ProviderDto {
   updatedAt: string;
 }
 
-export interface CreateProviderDto {
+export interface UpsertProviderInput {
   name: string;
-
-  contractNumber?: string | null;
-  componentCode?: string | null;
-  npi?: string | null;
-  ein?: string | null;
-
-  address?: string | null;
-  city?: string | null;
-  state?: string | null;
-  zip?: string | null;
-
-  status?: ProviderStatus;
-}
-
-export interface UpdateProviderDto {
-  name?: string;
 
   contractNumber?: string | null;
   componentCode?: string | null;
