@@ -1,3 +1,5 @@
+// libs/data-access/src/lib/residential/src/lib/services/residential-locations.api.ts
+
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,37 +14,44 @@ import { BaseApiService } from '../../../api-core/base-api.service';
 export class ResidentialLocationsApi extends BaseApiService {
   /**
    * Maps to:
-   * /api/v1/residential/locations
+   * /api/v1/residential-locations
    */
-  private readonly base = 'v1/residential';
+  private readonly resource = 'v1/residential-locations';
 
   list(): Observable<ResidentialLocationDto[]> {
-    const url = this.buildUrl(`${this.base}/locations`);
-    return this.get<ResidentialLocationDto[]>(url);
+    return this.get<ResidentialLocationDto[]>(
+      this.buildUrl(this.resource),
+    );
   }
 
   getOne(id: string): Observable<ResidentialLocationDto> {
-    const url = this.buildUrl(`${this.base}/locations/${id}`);
-    return this.get<ResidentialLocationDto>(url);
+    return this.get<ResidentialLocationDto>(
+      this.buildUrl(`${this.resource}/${id}`),
+    );
   }
 
   create(
     payload: UpsertResidentialLocationInput,
   ): Observable<ResidentialLocationDto> {
-    const url = this.buildUrl(`${this.base}/locations`);
-    return this.post<ResidentialLocationDto>(url, payload);
+    return this.post<ResidentialLocationDto>(
+      this.buildUrl(this.resource),
+      payload,
+    );
   }
 
   update(
     id: string,
     payload: Partial<UpsertResidentialLocationInput>,
   ): Observable<ResidentialLocationDto> {
-    const url = this.buildUrl(`${this.base}/locations/${id}`);
-    return this.patch<ResidentialLocationDto>(url, payload);
+    return this.patch<ResidentialLocationDto>(
+      this.buildUrl(`${this.resource}/${id}`),
+      payload,
+    );
   }
 
   remove(id: string): Observable<{ id: string }> {
-    const url = this.buildUrl(`${this.base}/locations/${id}`);
-    return this.delete<{ id: string }>(url);
+    return this.delete<{ id: string }>(
+      this.buildUrl(`${this.resource}/${id}`),
+    );
   }
 }
