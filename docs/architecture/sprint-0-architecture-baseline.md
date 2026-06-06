@@ -1,0 +1,385 @@
+# Sprint 0 Entity Purpose Map
+
+## Purpose
+
+This document explains why each entity exists, the business problem it solves, and which future HHSC Compliance Platform modules depend on it.
+
+The purpose of this document is to preserve architectural intent and prevent future development from becoming disconnected from the original design goals.
+
+---
+
+# ProviderEntity
+
+## Purpose
+
+Represents the licensed HCS provider organization.
+
+## Business Reason
+
+All compliance activity ultimately belongs to a provider.
+
+A provider operates residential locations, employs staff, serves consumers, and is responsible for compliance.
+
+## Future Dependencies
+
+* Dashboard
+* Compliance Engine
+* Survey Binder
+* Provider Reporting
+* Multi-Provider Support
+
+---
+
+# ResidentialLocationEntity
+
+## Purpose
+
+Represents a physical residential service location.
+
+## Business Reason
+
+Most residential compliance findings occur at a specific location.
+
+Examples:
+
+* Fire Drills
+* Emergency Plans
+* Home Environment
+* Infection Control
+* Hot Water
+* Life Safety
+
+## Future Dependencies
+
+* Residential Dashboard
+* Fire Drill Module
+* Emergency Preparedness
+* Infection Control
+* Home Environment
+* Residential Compliance Rules
+
+---
+
+# PersonEntity
+
+## Purpose
+
+Represents the master human record.
+
+## Business Reason
+
+The same person may appear in multiple roles throughout the system.
+
+Examples:
+
+* Consumer
+* Employee
+* RN
+* Physician
+* Guardian
+* Case Manager
+
+The Person record prevents duplicate demographic information.
+
+## Future Dependencies
+
+* Authentication
+* Employee Management
+* Consumer Management
+* Clinical Contacts
+* Survey Binder
+
+---
+
+# ConsumerRecordEntity
+
+## Purpose
+
+Represents an individual receiving HCS services.
+
+## Business Reason
+
+A Consumer is more than demographic information.
+
+A Consumer has:
+
+* Diagnoses
+* Medicaid Eligibility
+* Guardianship
+* Residential Placement
+* Care Team
+* Compliance History
+
+## Future Dependencies
+
+* Nursing
+* Medication
+* BSP
+* ISS
+* ANE
+* Protective Devices
+* Restraints
+* Survey Binder
+
+---
+
+# EmployeeProfileEntity
+
+## Purpose
+
+Represents an employee linked to a Person.
+
+## Business Reason
+
+Employees require operational information separate from demographic information.
+
+Examples:
+
+* Position
+* Hire Date
+* Credentials
+* Training
+* Background Checks
+
+## Future Dependencies
+
+* Permission Matrix
+* Staff Training
+* RN Delegation
+* Nursing Oversight
+* Compliance Tracking
+
+---
+
+# ClinicalContactProfileEntity
+
+## Purpose
+
+Represents non-employee professionals involved in care.
+
+## Business Reason
+
+Many clinical professionals participate in services but are not employees.
+
+Examples:
+
+* Physician
+* Psychiatrist
+* Psychologist
+* Therapist
+* Pharmacist
+
+## Future Dependencies
+
+* Care Team
+* Nursing
+* Medication Reviews
+* Clinical Documentation
+
+---
+
+# ResidentialAssignmentEntity
+
+## Purpose
+
+Connects a Consumer to a Residential Location.
+
+## Business Reason
+
+Consumers move over time.
+
+The system must maintain current and historical placement.
+
+## Key Rule
+
+Only one ACTIVE residential assignment may exist at a time.
+
+## Future Dependencies
+
+* Residential Compliance
+* Census Reporting
+* Historical Placement Tracking
+* Survey Review
+
+---
+
+# ConsumerCareTeamAssignmentEntity
+
+## Purpose
+
+Connects a Consumer to Employees and Clinical Contacts.
+
+## Business Reason
+
+Each consumer has multiple responsible parties.
+
+Examples:
+
+* RN
+* LVN
+* Case Manager
+* Program Manager
+* Physician
+
+## Future Dependencies
+
+* Accountability
+* Nursing Oversight
+* Case Management
+* Survey Binder
+
+---
+
+# ConsumerDiagnosisEntity
+
+## Purpose
+
+Stores consumer diagnoses.
+
+## Business Reason
+
+Diagnoses drive service delivery.
+
+Examples:
+
+* Nursing Services
+* Medication Management
+* BSP Requirements
+* Emergency Planning
+
+## Future Dependencies
+
+* Nursing Module
+* Medication Module
+* BSP Module
+* Protective Devices
+* Restraints
+* Compliance Rules
+
+---
+
+# ConsumerGuardianEntity
+
+## Purpose
+
+Stores guardian and representative information.
+
+## Business Reason
+
+The system must know who may be contacted and who has authority to act on behalf of the consumer.
+
+## Future Dependencies
+
+* Consent Management
+* Emergency Contacts
+* Survey Binder
+* Rights Documentation
+
+---
+
+# ConsumerLegalStatusEntity
+
+## Purpose
+
+Stores legal authority status.
+
+## Business Reason
+
+Guardian information and legal authority are not the same concept.
+
+Examples:
+
+* SELF
+* FULL_GUARDIANSHIP
+* LIMITED_GUARDIANSHIP
+* STATE_GUARDIANSHIP
+
+## Future Dependencies
+
+* Rights Restrictions
+* Consent Rules
+* Survey Documentation
+* Compliance Rules
+
+---
+
+# MedicaidBenefitsEntity
+
+## Purpose
+
+Stores Medicaid eligibility and waiver information.
+
+## Business Reason
+
+HCS services require active eligibility.
+
+Examples:
+
+* Medicaid Number
+* Waiver Program
+* MCO
+* Renewal Date
+
+## Future Dependencies
+
+* Case Management
+* IPC Reviews
+* Eligibility Monitoring
+* Dashboard Alerts
+* Compliance Rules
+
+---
+
+# ComplianceResultEntity
+
+## Purpose
+
+Stores findings generated by compliance evaluators.
+
+## Business Reason
+
+All compliance modules must report findings in a consistent format.
+
+ComplianceResult is the central compliance object of the platform.
+
+## Compliance Flow
+
+Evaluator
+↓
+Compliance Result
+↓
+Dashboard
+↓
+Message Center
+↓
+Remediation
+↓
+Re-Evaluation
+
+## Future Dependencies
+
+* Dashboard
+* Message Center
+* Survey Binder
+* Compliance Engine
+* TAC Rule Library
+
+---
+
+# Sprint 0 Summary
+
+Sprint 0 established the enterprise domain architecture for the HHSC Compliance Platform.
+
+Provider
+↓
+Residential Location
+↓
+Person
+↓
+Consumer Record
+↓
+Consumer Domains
+↓
+Compliance Results
+
+Future development should build upon this architecture rather than introducing parallel consumer, employee, or compliance models.
