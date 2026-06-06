@@ -12,7 +12,7 @@ type GalleryNote = {
 };
 
 @Component({
-  selector: 'iss-notes-gallery-page',
+  selector: 'lib-iss-notes-gallery-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `

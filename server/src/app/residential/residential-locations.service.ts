@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, IsNull, Repository } from 'typeorm';
 
 import { ResidentialLocationEntity } from './residential-location.entity';
 import { ProviderEntity } from '../providers/provider.entity';
@@ -29,18 +29,21 @@ export class ResidentialLocationsService {
     private readonly audit: AuditService,
   ) {}
 
-  async list(): Promise<ResidentialLocationEntity[]> {
-    return this.repo.find({
-      where: { deletedAt: null },
-      order: { name: 'ASC' },
-    });
-  }
+ async list(): Promise<ResidentialLocationEntity[]> {
+  return this.repo.find({
+    where: { deletedAt: IsNull() },
+    order: { name: 'ASC' },
+  });
+}
 
-  async get(id: string): Promise<ResidentialLocationEntity> {
-    const row = await this.repo.findOne({ where: { id, deletedAt: null } });
-    if (!row) throw new NotFoundException('Residence not found');
-    return row;
-  }
+async get(id: string): Promise<ResidentialLocationEntity> {
+  const row = await this.repo.findOne({
+    where: { id, deletedAt: IsNull() },
+  });
+
+  if (!row) throw new NotFoundException('Residence not found');
+  return row;
+}
 
   private async resolveProviderId(maybeProviderId?: string): Promise<string> {
     if (maybeProviderId) return maybeProviderId;
