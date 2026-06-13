@@ -2,11 +2,21 @@
 
 ## Priority 1
 
-Permission Matrix
+Authorization Architecture
+
+- Role Entity
+- Permission Entity
+- Role Permission Entity
+- User Permission Entity
 
 ## Priority 2
 
-MFA
+HIPAA Security Controls
+
+- Audit Logging
+- MFA
+- Backup Codes
+- PHI Access Monitoring
 
 ## Priority 3
 

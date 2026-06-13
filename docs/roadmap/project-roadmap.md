@@ -7,6 +7,8 @@ Sprint 0
 Sprint 1
     Authorization
     TAC Rule Foundation
+    HIPAA Security Controls
+    
 
 Sprint 2
     Residential Compliance

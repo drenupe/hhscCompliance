@@ -35,3 +35,20 @@ message
 routeCommands
 
 queryParams
+
+
+All compliance actions involving protected health information must be audit logged.
+
+Examples:
+
+View
+
+Create
+
+Update
+
+Delete
+
+Export
+
+Print

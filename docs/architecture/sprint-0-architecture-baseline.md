@@ -383,3 +383,14 @@ Consumer Domains
 Compliance Results
 
 Future development should build upon this architecture rather than introducing parallel consumer, employee, or compliance models.
+## HIPAA First Design
+
+The platform is designed to support:
+
+- HIPAA Security Rule
+- HHSC Regulatory Compliance
+- Principle of Least Privilege
+- Minimum Necessary Standard
+- Full Auditability
+
+Protected Health Information access must be authenticated, authorized, encrypted, and auditable.
