@@ -30,17 +30,26 @@ export class LifeSafetyComplianceEvaluator {
     private readonly compliance: ComplianceResultsService,
   ) {}
 
-  private async resolveProviderId(): Promise<string> {
-    const provider = await this.providers.findOne({
-      order: { createdAt: 'ASC' } as any,
-    });
+private async resolveProviderId(): Promise<string> {
+  const where: Record<string, unknown> = {};
 
-    if (!provider) {
-      throw new BadRequestException('No Provider exists yet. Create Provider first.');
-    }
+  const columns = this.providers.metadata.columns.map((c) => c.propertyName);
 
-    return (provider as any).id;
+  if (columns.includes('deletedAt')) {
+    where.deletedAt = null;
   }
+
+  const provider = await this.providers.findOne({
+    where: where as any,
+    order: { createdAt: 'ASC' } as any,
+  });
+
+  if (!provider) {
+    throw new BadRequestException('No Provider exists yet. Create Provider first.');
+  }
+
+  return (provider as any).id;
+}
 
   private unknown(message: string, severity: ComplianceSeverity): EvaluationResult {
     return {
