@@ -2,36 +2,35 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
 
-import { ProviderEntity } from '../providers/provider.entity';
 import { AuditService } from '../audit/audit.service';
-import { ComplianceResultEntity, ComplianceSeverity } from './entities/compliance-result.entity';
+import { ProviderEntity } from '../providers/provider.entity';
+import {
+  ComplianceEntityType,
+  ComplianceQueryParams,
+  ComplianceResultEntity,
+  ComplianceRouteCommands,
+  ComplianceSeverity,
+  ComplianceStatus,
+} from './entities/compliance-result.entity';
 
 type Actor = { id?: string; email?: string; roles?: string[] };
 type ReqMeta = { ip?: string; userAgent?: string; requestId?: string };
 
-type ComplianceStatus = 'COMPLIANT' | 'NON_COMPLIANT' | 'UNKNOWN';
-type ComplianceEntityType = 'RESIDENTIAL' | 'CONSUMER' | 'EMPLOYEE' | 'PROVIDER';
-
-function normalizeModule(v: any): string {
-  return String(v ?? '').trim().toUpperCase();
-}
-
-function normalizeRuleCode(v: any): string {
-  return String(v ?? '').trim();
-}
-
-function normalizeText(v: any): string | null {
-  const s = String(v ?? '').trim();
-  if (!s) return null;
-  const low = s.toLowerCase();
-  if (low === 'undefined' || low === 'null') return null;
-  return s;
-}
-
-function normalizeStatus(v: any): ComplianceStatus | null {
-  const up = String(v ?? '').trim().toUpperCase();
-  return up === 'COMPLIANT' || up === 'NON_COMPLIANT' || up === 'UNKNOWN' ? (up as ComplianceStatus) : null;
-}
+type ComplianceResultInput = {
+  providerId?: string;
+  locationId?: string | null;
+  entityType: ComplianceEntityType;
+  entityId: string;
+  module: string;
+  subcategory?: string | null;
+  ruleCode: string;
+  status: ComplianceStatus;
+  severity: ComplianceSeverity;
+  message?: string | null;
+  routeCommands?: ComplianceRouteCommands;
+  queryParams?: ComplianceQueryParams;
+  lastCheckedAt?: Date | string | null;
+};
 
 type NaturalKey = {
   providerId: string;
@@ -41,84 +40,230 @@ type NaturalKey = {
   ruleCode: string;
 };
 
+const SYSTEM_ACTOR: Actor = {
+  id: 'system',
+  email: 'system@hhsc-compliance.local',
+  roles: ['SYSTEM'],
+};
+
+const SYSTEM_META: ReqMeta = {
+  ip: '127.0.0.1',
+  userAgent: 'compliance-engine',
+  requestId: 'engine',
+};
+
+function normalizeModule(value: unknown): string {
+  return String(value ?? '').trim().toUpperCase();
+}
+
+function normalizeRuleCode(value: unknown): string {
+  return String(value ?? '').trim();
+}
+
+function normalizeText(value: unknown): string | null {
+  const text = String(value ?? '').trim();
+  if (!text) return null;
+
+  const low = text.toLowerCase();
+  if (low === 'undefined' || low === 'null') return null;
+
+  return text;
+}
+
+function normalizeStatus(value: unknown): ComplianceStatus | null {
+  const status = String(value ?? '').trim().toUpperCase();
+
+  if (
+    status === 'COMPLIANT' ||
+    status === 'NON_COMPLIANT' ||
+    status === 'UNKNOWN'
+  ) {
+    return status;
+  }
+
+  return null;
+}
+
+function normalizeSeverity(value: unknown): ComplianceSeverity | null {
+  const severity = String(value ?? '').trim().toUpperCase();
+
+  if (
+    severity === 'LOW' ||
+    severity === 'MED' ||
+    severity === 'HIGH' ||
+    severity === 'CRITICAL'
+  ) {
+    return severity;
+  }
+
+  return null;
+}
+
+function normalizeEntityType(value: unknown): ComplianceEntityType | null {
+  const entityType = String(value ?? '').trim().toUpperCase();
+
+  if (
+    entityType === 'RESIDENTIAL' ||
+    entityType === 'CONSUMER' ||
+    entityType === 'EMPLOYEE' ||
+    entityType === 'PROVIDER'
+  ) {
+    return entityType;
+  }
+
+  return null;
+}
+
 @Injectable()
 export class ComplianceResultsService {
   constructor(
     @InjectRepository(ComplianceResultEntity)
     private readonly repo: Repository<ComplianceResultEntity>,
+
     @InjectRepository(ProviderEntity)
     private readonly providers: Repository<ProviderEntity>,
+
     private readonly audit: AuditService,
   ) {}
 
-  private async resolveProviderId(maybeProviderId?: string): Promise<string> {
-    if (maybeProviderId) return maybeProviderId;
+  private async resolveProviderId(providerId?: string): Promise<string> {
+    if (providerId) return providerId;
 
     const where: FindOptionsWhere<ProviderEntity> = {} as any;
 
-    const cols = this.providers.metadata.columns.map((c) => c.propertyName);
-    if (cols.includes('deletedAt')) (where as any).deletedAt = null;
+    const columns = this.providers.metadata.columns.map((column) => column.propertyName);
+    if (columns.includes('deletedAt')) {
+      (where as any).deletedAt = null;
+    }
 
-    const p = await this.providers.findOne({
+    const provider = await this.providers.findOne({
       where,
       order: { createdAt: 'ASC' } as any,
     });
 
-    if (!p) throw new BadRequestException('No Provider exists yet. Create Provider first.');
-    return (p as any).id;
+    if (!provider) {
+      throw new BadRequestException('No Provider exists yet. Create Provider first.');
+    }
+
+    return (provider as any).id;
   }
 
-  private assertCreateDto(dto: any) {
-    const ruleCode = normalizeRuleCode(dto?.ruleCode);
+  private validateInput(input: ComplianceResultInput): Required<
+    Pick<
+      ComplianceResultInput,
+      'entityType' | 'entityId' | 'module' | 'ruleCode' | 'status' | 'severity'
+    >
+  > {
+    const ruleCode = normalizeRuleCode(input.ruleCode);
     if (!ruleCode) throw new BadRequestException('ruleCode is required');
 
-    const module = normalizeModule(dto?.module);
+    const module = normalizeModule(input.module);
     if (!module) throw new BadRequestException('module is required');
 
-    const entityType = String(dto?.entityType ?? '').trim().toUpperCase();
-    if (!entityType) throw new BadRequestException('entityType is required');
+    const entityType = normalizeEntityType(input.entityType);
+    if (!entityType) {
+      throw new BadRequestException(
+        'entityType must be RESIDENTIAL, CONSUMER, EMPLOYEE, or PROVIDER',
+      );
+    }
 
-    const entityId = String(dto?.entityId ?? '').trim();
+    const entityId = String(input.entityId ?? '').trim();
     if (!entityId) throw new BadRequestException('entityId is required');
 
-    const st = normalizeStatus(dto?.status);
-    if (!st) throw new BadRequestException('status must be COMPLIANT, NON_COMPLIANT, or UNKNOWN');
+    const status = normalizeStatus(input.status);
+    if (!status) {
+      throw new BadRequestException(
+        'status must be COMPLIANT, NON_COMPLIANT, or UNKNOWN',
+      );
+    }
 
-    const sev = String(dto?.severity ?? '').trim().toUpperCase();
-    if (!sev) throw new BadRequestException('severity is required');
+    const severity = normalizeSeverity(input.severity);
+    if (!severity) {
+      throw new BadRequestException(
+        'severity must be LOW, MED, HIGH, or CRITICAL',
+      );
+    }
 
     return {
       ruleCode,
       module,
-      entityType: entityType as ComplianceEntityType,
+      entityType,
       entityId,
-      status: st,
-      severity: sev as ComplianceSeverity,
+      status,
+      severity,
     };
   }
 
-  private naturalKeyWhere(k: NaturalKey): FindOptionsWhere<ComplianceResultEntity> {
+  private naturalKeyWhere(
+    key: NaturalKey,
+  ): FindOptionsWhere<ComplianceResultEntity> {
     return {
-      providerId: k.providerId,
-      locationId: k.locationId ?? null,
-      entityType: k.entityType,
-      entityId: k.entityId,
-      ruleCode: k.ruleCode,
+      providerId: key.providerId,
+      locationId: key.locationId,
+      entityType: key.entityType,
+      entityId: key.entityId,
+      ruleCode: key.ruleCode,
     } as any;
   }
 
-  async list(params: { locationId?: string; module?: string; subcategory?: string; status?: string } = {}) {
+  private buildPayload(
+    input: ComplianceResultInput,
+    providerId: string,
+  ): DeepPartial<ComplianceResultEntity> {
+    const validated = this.validateInput(input);
+
+    return {
+      providerId,
+      locationId: input.locationId ?? null,
+      entityType: validated.entityType,
+      entityId: validated.entityId,
+      module: validated.module,
+      subcategory: normalizeText(input.subcategory),
+      ruleCode: validated.ruleCode,
+      status: validated.status,
+      severity: validated.severity,
+      message: normalizeText(input.message),
+      routeCommands: input.routeCommands ?? null,
+      queryParams: input.queryParams ?? null,
+      lastCheckedAt: input.lastCheckedAt
+        ? new Date(input.lastCheckedAt)
+        : new Date(),
+    };
+  }
+
+  async list(
+    params: {
+      locationId?: string;
+      module?: string;
+      subcategory?: string;
+      status?: string;
+    } = {},
+  ) {
     const qb = this.repo.createQueryBuilder('r');
 
-    if (params.locationId) qb.andWhere('r.locationId = :locationId', { locationId: params.locationId });
-    if (params.module) qb.andWhere('r.module = :module', { module: normalizeModule(params.module) });
+    if (params.locationId) {
+      qb.andWhere('r.locationId = :locationId', {
+        locationId: params.locationId,
+      });
+    }
 
-    const sub = normalizeText(params.subcategory);
-    if (sub) qb.andWhere('r.subcategory = :subcategory', { subcategory: sub });
+    if (params.module) {
+      qb.andWhere('r.module = :module', {
+        module: normalizeModule(params.module),
+      });
+    }
 
-    const st = normalizeStatus(params.status);
-    if (st) qb.andWhere('r.status = :status', { status: st });
-    else qb.andWhere('r.status != :ok', { ok: 'COMPLIANT' });
+    const subcategory = normalizeText(params.subcategory);
+    if (subcategory) {
+      qb.andWhere('r.subcategory = :subcategory', { subcategory });
+    }
+
+    const status = normalizeStatus(params.status);
+    if (status) {
+      qb.andWhere('r.status = :status', { status });
+    } else {
+      qb.andWhere('r.status != :compliant', { compliant: 'COMPLIANT' });
+    }
 
     qb.addSelect(
       `
@@ -140,35 +285,23 @@ export class ComplianceResultsService {
 
   async get(id: string) {
     const row = await this.repo.findOne({ where: { id } });
-    if (!row) throw new NotFoundException('Compliance result not found');
+
+    if (!row) {
+      throw new NotFoundException('Compliance result not found');
+    }
+
     return row;
   }
 
-  async create(dto: any, actor?: Actor, meta?: ReqMeta) {
-    const providerId = await this.resolveProviderId(dto?.providerId);
-    const validated = this.assertCreateDto(dto);
+  async create(dto: ComplianceResultInput, actor?: Actor, meta?: ReqMeta) {
+    const providerId = await this.resolveProviderId(dto.providerId);
+    const payload = this.buildPayload(dto, providerId);
 
-    const payload: DeepPartial<ComplianceResultEntity> = {
-      providerId,
-      locationId: dto?.locationId ?? null,
-      entityType: validated.entityType,
-      entityId: validated.entityId,
+    payload.lastCheckedAt = dto.lastCheckedAt
+      ? new Date(dto.lastCheckedAt)
+      : null;
 
-      module: validated.module,
-      subcategory: normalizeText(dto?.subcategory),
-
-      ruleCode: validated.ruleCode,
-      status: validated.status,
-      severity: validated.severity,
-      message: normalizeText(dto?.message),
-
-      routeCommands: dto?.routeCommands ?? null,
-      queryParams: dto?.queryParams ?? null,
-      lastCheckedAt: dto?.lastCheckedAt ? new Date(dto.lastCheckedAt) : null,
-    };
-
-    const row = this.repo.create(payload);
-    const saved = await this.repo.save(row);
+    const saved = await this.repo.save(this.repo.create(payload));
 
     await this.audit.log({
       entityType: 'ComplianceResult',
@@ -186,22 +319,42 @@ export class ComplianceResultsService {
     return saved;
   }
 
-  async update(id: string, dto: any, actor?: Actor, meta?: ReqMeta) {
+  async update(
+    id: string,
+    dto: Partial<ComplianceResultInput>,
+    actor?: Actor,
+    meta?: ReqMeta,
+  ) {
     const row = await this.get(id);
     const before = { ...row };
 
-    if (dto?.status !== undefined) {
-      const st = normalizeStatus(dto.status);
-      if (!st) throw new BadRequestException('status must be COMPLIANT, NON_COMPLIANT, or UNKNOWN');
-      row.status = st;
+    if (dto.status !== undefined) {
+      const status = normalizeStatus(dto.status);
+      if (!status) {
+        throw new BadRequestException(
+          'status must be COMPLIANT, NON_COMPLIANT, or UNKNOWN',
+        );
+      }
+      row.status = status;
     }
 
-    if (dto?.severity !== undefined) row.severity = String(dto.severity).trim().toUpperCase() as any;
-    if (dto?.message !== undefined) row.message = normalizeText(dto.message);
-    if (dto?.subcategory !== undefined) row.subcategory = normalizeText(dto.subcategory);
-    if (dto?.routeCommands !== undefined) row.routeCommands = dto.routeCommands ?? null;
-    if (dto?.queryParams !== undefined) row.queryParams = dto.queryParams ?? null;
-    if (dto?.lastCheckedAt !== undefined) row.lastCheckedAt = dto.lastCheckedAt ? new Date(dto.lastCheckedAt) : null;
+    if (dto.severity !== undefined) {
+      const severity = normalizeSeverity(dto.severity);
+      if (!severity) {
+        throw new BadRequestException(
+          'severity must be LOW, MED, HIGH, or CRITICAL',
+        );
+      }
+      row.severity = severity;
+    }
+
+    if (dto.message !== undefined) row.message = normalizeText(dto.message);
+    if (dto.subcategory !== undefined) row.subcategory = normalizeText(dto.subcategory);
+    if (dto.routeCommands !== undefined) row.routeCommands = dto.routeCommands ?? null;
+    if (dto.queryParams !== undefined) row.queryParams = dto.queryParams ?? null;
+    if (dto.lastCheckedAt !== undefined) {
+      row.lastCheckedAt = dto.lastCheckedAt ? new Date(dto.lastCheckedAt) : null;
+    }
 
     const saved = await this.repo.save(row);
 
@@ -244,98 +397,52 @@ export class ComplianceResultsService {
     return { id };
   }
 
-  /**
-   * ✅ Engine primitive: idempotent upsert by natural key.
-   * Can be called by evaluators (system) or by users (manual run).
-   */
   async upsertResult(
-    input: {
-      providerId?: string;
-
-      locationId?: string | null;
-      entityType: ComplianceEntityType;
-      entityId: string;
-
-      module: string;
-      ruleCode: string;
-
-      status: ComplianceStatus;
-      severity: ComplianceSeverity;
-
-      message?: string | null;
-      subcategory?: string | null;
-
-      routeCommands?: any[] | null;
-      queryParams?: Record<string, any> | null;
-
-      lastCheckedAt?: Date | string | null;
-    },
+    input: ComplianceResultInput,
     actor?: Actor,
     meta?: ReqMeta,
   ) {
     const providerId = await this.resolveProviderId(input.providerId);
-
-    const ruleCode = normalizeRuleCode(input.ruleCode);
-    if (!ruleCode) throw new BadRequestException('ruleCode is required');
-
-    const module = normalizeModule(input.module);
-    if (!module) throw new BadRequestException('module is required');
-
-    const status = normalizeStatus(input.status);
-    if (!status) throw new BadRequestException('status must be COMPLIANT, NON_COMPLIANT, or UNKNOWN');
-
-    const severity = String(input.severity ?? '').trim().toUpperCase() as ComplianceSeverity;
-    if (!severity) throw new BadRequestException('severity is required');
-
-    const entityId = String(input.entityId ?? '').trim();
-    if (!entityId) throw new BadRequestException('entityId is required');
-
-    const entityType = String(input.entityType ?? '').trim().toUpperCase() as ComplianceEntityType;
-    if (!entityType) throw new BadRequestException('entityType is required');
+    const payload = this.buildPayload(input, providerId);
 
     const naturalKey: NaturalKey = {
       providerId,
-      locationId: input.locationId ?? null,
-      entityType,
-      entityId,
-      ruleCode,
+      locationId: payload.locationId ?? null,
+      entityType: payload.entityType as ComplianceEntityType,
+      entityId: payload.entityId as string,
+      ruleCode: payload.ruleCode as string,
     };
 
-    const existing = await this.repo.findOne({ where: this.naturalKeyWhere(naturalKey) });
-    const before = existing ? { ...existing } : null;
+    const existing = await this.repo.findOne({
+      where: this.naturalKeyWhere(naturalKey),
+    });
 
-    const payload: DeepPartial<ComplianceResultEntity> = {
-      providerId: naturalKey.providerId,
-      locationId: naturalKey.locationId,
-      entityType: naturalKey.entityType,
-      entityId: naturalKey.entityId,
-      ruleCode: naturalKey.ruleCode,
-
-      module,
-      status,
-      severity,
-
-      message: normalizeText(input.message),
-      subcategory: normalizeText(input.subcategory),
-
-      routeCommands: input.routeCommands ?? null,
-      queryParams: input.queryParams ?? null,
-      lastCheckedAt: input.lastCheckedAt ? new Date(input.lastCheckedAt as any) : new Date(),
-    };
+    const before = existing ? { ...existing } : undefined;
 
     await this.repo.upsert(payload as any, {
-      conflictPaths: ['providerId', 'locationId', 'entityType', 'entityId', 'ruleCode'] as any,
+      conflictPaths: [
+        'providerId',
+        'locationId',
+        'entityType',
+        'entityId',
+        'ruleCode',
+      ] as any,
       skipUpdateIfNoValuesChanged: true as any,
     } as any);
 
-    const saved = await this.repo.findOne({ where: this.naturalKeyWhere(naturalKey) });
-    if (!saved) throw new BadRequestException('Upsert failed unexpectedly');
+    const saved = await this.repo.findOne({
+      where: this.naturalKeyWhere(naturalKey),
+    });
+
+    if (!saved) {
+      throw new BadRequestException('Upsert failed unexpectedly');
+    }
 
     await this.audit.log({
       entityType: 'ComplianceResult',
       entityId: saved.id,
       action: existing ? 'UPDATE' : 'CREATE',
-      before: before ?? undefined,
+      before,
       after: saved,
       actorUserId: actor?.id ?? null,
       actorEmail: actor?.email ?? null,
@@ -348,38 +455,7 @@ export class ComplianceResultsService {
     return saved;
   }
 
-
-    /**
-   * ✅ Convenience wrapper for evaluators.
-   * Uses a SYSTEM actor/meta by default so audit logs clearly show
-   * that the write came from the compliance engine (not a user action).
-   */
-  async upsertSystemResult(input: {
-    providerId?: string;
-
-    locationId?: string | null;
-    entityType: ComplianceEntityType;
-    entityId: string;
-
-    module: string;
-    ruleCode: string;
-
-    status: ComplianceStatus;
-    severity: ComplianceSeverity;
-
-    message?: string | null;
-    subcategory?: string | null;
-
-    routeCommands?: any[] | null;
-    queryParams?: Record<string, any> | null;
-
-    lastCheckedAt?: Date | string | null;
-  }) {
-    return this.upsertResult(
-      input,
-      { id: 'system', email: 'system@hhsc-compliance.local', roles: ['SYSTEM'] },
-      { ip: '127.0.0.1', userAgent: 'compliance-engine', requestId: 'engine' },
-    );
+  async upsertSystemResult(input: ComplianceResultInput) {
+    return this.upsertResult(input, SYSTEM_ACTOR, SYSTEM_META);
   }
-
 }

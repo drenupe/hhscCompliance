@@ -22,6 +22,10 @@ import { MfaSecretEntity } from './entities/mfa-secret.entity';
 import { MfaController } from './controllers/mfa.controller';
 import { MfaService } from './services/mfa.service';
 
+import { PermissionsGuard } from './guards/permissions.guard';
+
+import { SecurityTestController } from './controllers/security-test.controller';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -34,8 +38,8 @@ import { MfaService } from './services/mfa.service';
       MfaSecretEntity,
     ]),
   ],
-  controllers: [RolesController, PermissionsController,AuditLogsController,MfaController],
-  providers: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService],
+  controllers: [RolesController, PermissionsController,AuditLogsController,MfaController, SecurityTestController],
+  providers: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService, PermissionsGuard],
   exports: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService],
 })
 export class SecurityModule {}

@@ -1,26 +1,83 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+
+import { UsersService } from '../users/services/users.service';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { PasswordService } from './services/password.service';
+import { TokensService } from './services/tokens.service';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly passwordService: PasswordService,
+    private readonly tokensService: TokensService,
+  ) {}
+
+  async register(dto: RegisterDto) {
+    const existingUser = await this.usersService.findByEmail(dto.email);
+
+    if (existingUser) {
+      throw new ConflictException('Email already registered');
+    }
+
+    const passwordHash = await this.passwordService.hash(dto.password);
+
+    const user = await this.usersService.create({
+      email: dto.email,
+      passwordHash,
+      roles: [],
+    });
+
+    const accessToken = await this.tokensService.signAccessToken({
+      userId: user.id,
+      email: user.email,
+      roles: user.roles,
+    });
+
+    return {
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+      },
+    };
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login(dto: LoginDto) {
+    const user = await this.usersService.findByEmail(dto.email);
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    const validPassword = await this.passwordService.compare(
+      dto.password,
+      user.passwordHash,
+    );
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    if (!validPassword) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const accessToken = await this.tokensService.signAccessToken({
+      userId: user.id,
+      email: user.email,
+      roles: user.roles,
+    });
+
+    return {
+      accessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+      },
+    };
   }
 }

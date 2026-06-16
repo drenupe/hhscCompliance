@@ -10,7 +10,7 @@ import { ComplianceResultEntity } from './entities/compliance-result.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([ComplianceResultEntity, ProviderEntity]), AuditModule],
   controllers: [ComplianceResultsController],
-  providers: [ComplianceResultsService],
+  providers: [ComplianceResultsService ],
   exports: [ComplianceResultsService],
 })
 export class ComplianceResultsModule {}
