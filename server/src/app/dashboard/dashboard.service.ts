@@ -1,4 +1,3 @@
-// apps/api/src/app/dashboard/dashboard.service.ts
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
@@ -7,6 +6,7 @@ export type SummaryStatus = 'ok' | 'warning' | 'critical';
 export type ComplianceSummaryView = {
   title: string;
   module: string;
+  subcategory: string | null;
   count: number;
   status: SummaryStatus;
   lastUpdated?: string;
@@ -14,9 +14,11 @@ export type ComplianceSummaryView = {
   queryParams?: Record<string, any>;
 };
 
-export type ChartDatum = { label: string; value: number };
+export type ChartDatum = {
+  label: string;
+  value: number;
+};
 
-// ✅ Canonical modules (source of truth)
 const MODULES: Array<{ key: string; title: string }> = [
   { key: 'RESIDENTIAL', title: 'Residential Requirements' },
   { key: 'PROGRAMMATIC', title: 'Programmatic Requirements' },
@@ -33,58 +35,56 @@ const MODULES: Array<{ key: string; title: string }> = [
 export class DashboardService {
   constructor(private readonly ds: DataSource) {}
 
-  /**
-   * Always returns all modules (even if 0 rows exist in DB for that module).
-   * “Needs work” = status IN ('NON_COMPLIANT','UNKNOWN')
-   */
-async summary(locationId: string): Promise<ComplianceSummaryView[]> {
-  const rows = await this.ds.query(
-    `
-    SELECT
-      cr.module,
-      COALESCE(cr.subcategory, cr.module) AS section_key,
-      COUNT(*)::int AS count,
-      MAX(CASE cr.severity
-        WHEN 'CRITICAL' THEN 4
-        WHEN 'HIGH' THEN 3
-        WHEN 'MEDIUM' THEN 2
-        WHEN 'MED' THEN 2
-        WHEN 'LOW' THEN 1
-        ELSE 0
-      END)::int AS max_sev,
-      MAX(cr.updated_at) AS last_updated
-    FROM compliance_results cr
-    WHERE cr.location_id = $1
-      AND cr.status IN ('NON_COMPLIANT', 'UNKNOWN')
-    GROUP BY cr.module, COALESCE(cr.subcategory, cr.module)
-    ORDER BY cr.module, section_key
-    `,
-    [locationId],
-  );
+  async summary(locationId: string): Promise<ComplianceSummaryView[]> {
+    const rows = await this.ds.query(
+      `
+      SELECT
+        cr.module,
+        cr.subcategory,
+        COALESCE(cr.subcategory, cr.module) AS section_key,
+        COUNT(*)::int AS count,
+        MAX(CASE cr.severity
+          WHEN 'CRITICAL' THEN 4
+          WHEN 'HIGH' THEN 3
+          WHEN 'MEDIUM' THEN 2
+          WHEN 'MED' THEN 2
+          WHEN 'LOW' THEN 1
+          ELSE 0
+        END)::int AS max_sev,
+        MAX(cr.updated_at) AS last_updated
+      FROM compliance_results cr
+      WHERE cr.location_id = $1
+        AND cr.status IN ('NON_COMPLIANT', 'UNKNOWN')
+      GROUP BY cr.module, cr.subcategory, COALESCE(cr.subcategory, cr.module)
+      ORDER BY cr.module, section_key
+      `,
+      [locationId],
+    );
 
-  return rows.map((r: any) => {
-    const module = String(r.module);
-    const sectionKey = String(r.section_key);
-    const maxSev = Number(r.max_sev) || 0;
+    return rows.map((row: any) => {
+      const module = String(row.module);
+      const sectionKey = String(row.section_key);
+      const subcategory = row.subcategory ? String(row.subcategory) : null;
+      const maxSeverity = Number(row.max_sev) || 0;
 
-    return {
-      title: this.titleForSection(module, sectionKey),
-      module,
-      count: Number(r.count) || 0,
-      status: maxSev >= 4 ? 'critical' : maxSev >= 2 ? 'warning' : 'ok',
-      lastUpdated: r.last_updated
-        ? new Date(r.last_updated).toISOString().slice(0, 10)
-        : undefined,
-      link: this.linkForSection(locationId, module, sectionKey),
-      queryParams: {
-        locationId,
+      return {
+        title: this.titleForSection(module, sectionKey),
         module,
-        subcategory: sectionKey,
-        status: 'NON_COMPLIANT',
-      },
-    };
-  });
-}
+        subcategory,
+        count: Number(row.count) || 0,
+        status: this.statusFromSeverityRank(maxSeverity),
+        lastUpdated: row.last_updated
+          ? new Date(row.last_updated).toISOString().slice(0, 10)
+          : undefined,
+        link: this.linkForSection(locationId, module, sectionKey),
+        queryParams: {
+          locationId,
+          module,
+          subcategory: sectionKey,
+        },
+      };
+    });
+  }
 
   async chart(locationId: string): Promise<ChartDatum[]> {
     const rows = await this.ds.query(
@@ -98,7 +98,10 @@ async summary(locationId: string): Promise<ComplianceSummaryView[]> {
     );
 
     const map = new Map<string, number>();
-    for (const r of rows) map.set(String(r.status), Number(r.count));
+
+    for (const row of rows) {
+      map.set(String(row.status), Number(row.count));
+    }
 
     return [
       { label: 'Compliant', value: map.get('COMPLIANT') ?? 0 },
@@ -107,113 +110,178 @@ async summary(locationId: string): Promise<ComplianceSummaryView[]> {
     ];
   }
 
-
-private titleForSection(
-  module: string,
-  sectionKey: string,
-): string {
-  const parentTitle = this.titleFor(module);
-
-  // Non-residential modules
-  if (module !== 'RESIDENTIAL') {
-    return parentTitle;
+  private statusFromSeverityRank(rank: number): SummaryStatus {
+    if (rank >= 4) return 'critical';
+    if (rank >= 2) return 'warning';
+    return 'ok';
   }
 
-  let sectionTitle = 'Residential Requirements';
+  private titleForSection(module: string, sectionKey: string): string {
+    const parentTitle = this.titleFor(module);
 
-  switch (sectionKey) {
-    case 'HOME_ENVIRONMENT':
-      sectionTitle = 'Home & Environment';
-      break;
+    if (module !== 'RESIDENTIAL') {
+      return parentTitle;
+    }
 
-    case 'HOT_WATER':
-      sectionTitle = 'Hot Water Safety';
-      break;
+    let sectionTitle = 'Residential Requirements';
 
-    case 'LIFE_SAFETY':
-      sectionTitle = 'Life Safety';
-      break;
+    switch (sectionKey) {
+      case 'HOME_ENVIRONMENT':
+        sectionTitle = 'Home & Environment';
+        break;
 
-    case 'FIRE_DRILLS':
-      sectionTitle = 'Fire Drills';
-      break;
+      case 'HOT_WATER':
+        sectionTitle = 'Hot Water Safety';
+        break;
 
-    case 'EMERGENCY_PLANS':
-      sectionTitle = 'Emergency Plans';
-      break;
+      case 'LIFE_SAFETY':
+        sectionTitle = 'Life Safety';
+        break;
 
-    case 'INFECTION_CONTROL':
-      sectionTitle = 'Infection Control';
-      break;
+      case 'FIRE_DRILLS':
+        sectionTitle = 'Fire Drills';
+        break;
 
-    case 'MEDICATION':
-      sectionTitle = 'Medication';
-      break;
+      case 'EMERGENCY_PLANS':
+        sectionTitle = 'Emergency Plans';
+        break;
 
-    case 'FOUR_PERSON':
-      sectionTitle = 'Four-Person Residence';
-      break;
+      case 'INFECTION_CONTROL':
+        sectionTitle = 'Infection Control';
+        break;
+
+      case 'MEDICATION':
+        sectionTitle = 'Medication';
+        break;
+
+      case 'NURSING':
+        sectionTitle = 'Nursing';
+        break;
+
+      case 'FOUR_PERSON':
+        sectionTitle = 'Four-Person Residence';
+        break;
+    }
+
+    return `${parentTitle} / ${sectionTitle}`;
   }
 
-  // Enterprise breadcrumb-style naming
-  return `${parentTitle} / ${sectionTitle}`;
-}
+  private linkForSection(
+    locationId: string,
+    module: string,
+    sectionKey: string,
+  ): any[] {
+    if (module !== 'RESIDENTIAL') {
+      return ['/', 'compliance', 'message-center'];
+    }
 
-private linkForSection(
-  locationId: string,
-  module: string,
-  sectionKey: string,
-): any[] {
-  if (module !== 'RESIDENTIAL') {
-    return ['/', 'compliance', 'message-center'];
+    switch (sectionKey) {
+      case 'HOME_ENVIRONMENT':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'home-environment',
+        ];
+
+      case 'HOT_WATER':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'home-environment',
+          'hot-water',
+        ];
+
+      case 'LIFE_SAFETY':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'life-safety',
+        ];
+
+      case 'FIRE_DRILLS':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'emergency',
+          'fire-drills',
+        ];
+
+      case 'EMERGENCY_PLANS':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'emergency',
+          'plans',
+        ];
+
+      case 'INFECTION_CONTROL':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'infection-control',
+        ];
+
+      case 'MEDICATION':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'medication',
+        ];
+
+      case 'NURSING':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'nursing',
+        ];
+
+      case 'FOUR_PERSON':
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'four-person',
+        ];
+
+      default:
+        return [
+          '/',
+          'compliance',
+          'residential',
+          'location',
+          locationId,
+          'overview',
+        ];
+    }
   }
 
-  switch (sectionKey) {
-    case 'HOME_ENVIRONMENT':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'home-environment'];
-
-    case 'HOT_WATER':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'hot-water'];
-
-    case 'LIFE_SAFETY':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'life-safety'];
-
-    case 'FIRE_DRILLS':
-      return [
-        '/',
-        'compliance',
-        'residential',
-        'location',
-        locationId,
-        'emergency',
-        'fire-drills',
-      ];
-
-    case 'EMERGENCY_PLANS':
-      return [
-        '/',
-        'compliance',
-        'residential',
-        'location',
-        locationId,
-        'emergency',
-        'plans',
-      ];
-
-    case 'INFECTION_CONTROL':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'infection-control'];
-
-    case 'MEDICATION':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'medication'];
-
-    case 'FOUR_PERSON':
-      return ['/', 'compliance', 'residential', 'location', locationId, 'four-person'];
-
-    default:
-      return ['/', 'compliance', 'residential', 'location', locationId, 'overview'];
-  }
-}
   private titleFor(moduleKey: string): string {
-    return MODULES.find((m) => m.key === moduleKey)?.title ?? moduleKey;
+    return MODULES.find((module) => module.key === moduleKey)?.title ?? moduleKey;
   }
 }
