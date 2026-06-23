@@ -40,6 +40,6 @@ import { SecurityTestController } from './controllers/security-test.controller';
   ],
   controllers: [RolesController, PermissionsController,AuditLogsController,MfaController, SecurityTestController],
   providers: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService, PermissionsGuard],
-  exports: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService],
+  exports: [RolesService, PermissionsService, AuthorizationService, AuditLogsService, MfaService,TypeOrmModule],
 })
 export class SecurityModule {}

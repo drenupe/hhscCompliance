@@ -1,52 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { In, Repository } from 'typeorm';
 
-import { RoleEntity } from '../../security/entities/role.entity';
+type JwtPayload = {
+  sub: string;
+  email: string;
+  roles?: string[];
+  roleIds?: string[];
+};
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-  constructor(
-    private readonly configService: ConfigService,
-
-    @InjectRepository(RoleEntity)
-    private readonly rolesRepo: Repository<RoleEntity>,
-  ) {
+  constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey:
-        configService.get<string>('JWT_SECRET') ??
-        process.env.JWT_SECRET ??
-        'dev-secret-change-me',
+      secretOrKey: process.env.JWT_SECRET ?? 'super-long-random-string',
     });
   }
 
-  async validate(payload: {
-    sub: string;
-    email: string;
-    roles?: string[];
-  }) {
-    const roles = payload.roles ?? [];
-
-    const roleEntities = roles.length
-      ? await this.rolesRepo.find({
-          where: {
-            name: In(roles),
-            status: 'ACTIVE',
-          },
-        })
-      : [];
-
+  async validate(payload: JwtPayload) {
     return {
-      id: payload.sub,
       sub: payload.sub,
+      userId: payload.sub,
+      id: payload.sub,
       email: payload.email,
-      roles,
-      roleIds: roleEntities.map((role) => role.id),
+      roles: payload.roles ?? [],
+      roleIds: payload.roleIds ?? payload.roles ?? [],
     };
   }
 }

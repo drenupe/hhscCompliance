@@ -1,0 +1,61 @@
+<section class="workbench" *ngIf="data as vm">
+  <header class="workbench__header">
+    <div>
+      <h2>{{ vm.title }}</h2>
+
+      <p>
+        {{ vm.totalEntities }} entities requiring attention •
+        {{ vm.totalFindings }} findings
+      </p>
+    </div>
+  </header>
+
+  <section class="workbench__entities">
+    <button
+      type="button"
+      class="entity-card"
+      *ngFor="let group of vm.groups"
+      (click)="openEntity(group)"
+    >
+      <div class="entity-card__top">
+        <div>
+          <h3>{{ group.entityName }}</h3>
+
+          <div class="entity-card__type">
+            {{ group.entityType }}
+          </div>
+        </div>
+
+        <div class="entity-card__count">
+          {{ group.findingCount }}
+        </div>
+      </div>
+
+      <div class="entity-card__stats">
+        <span class="critical" *ngIf="group.criticalCount > 0">
+          Critical: {{ group.criticalCount }}
+        </span>
+
+        <span class="high" *ngIf="group.highCount > 0">
+          High: {{ group.highCount }}
+        </span>
+      </div>
+
+      <div class="entity-card__preview">
+        <div class="preview-row" *ngFor="let finding of previewFindings(group)">
+          <span>{{ finding.ruleCode }}</span>
+        </div>
+
+        <div class="preview-more" *ngIf="group.findings.length > 3">
+          +{{ group.findings.length - 3 }} more findings
+        </div>
+      </div>
+    </button>
+  </section>
+</section>
+
+<div class="state" *ngIf="loading">Loading module workbench...</div>
+
+<div class="state state--error" *ngIf="error">
+  {{ error }}
+</div>

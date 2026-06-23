@@ -1,6 +1,12 @@
 <section class="dash">
   <header class="dash__header">
-    <h2>Compliance Dashboard</h2>
+    <div>
+      <h2>Compliance Dashboard</h2>
+      <p>
+        Out-of-compliance areas first. Click a card to fix the finding, add CAPs,
+        upload evidence, or complete review.
+      </p>
+    </div>
 
     <label class="dash__loc">
       <span>Location</span>
@@ -24,6 +30,7 @@
   <div class="msg" *ngIf="message">{{ message }}</div>
 
   <div class="msg" *ngIf="loadingLocations">Loading residences…</div>
+
   <div class="msg" *ngIf="!loadingLocations && !locations.length">
     Create 1 residence first — then the dashboard will populate.
   </div>
@@ -44,6 +51,13 @@
       </ul>
     </div>
   </section>
+
+  <lib-case-manager-work-queue
+    *ngIf="locations.length"
+    [queue]="workQueue"
+    [loading]="loadingData"
+    (viewItem)="navigateToWorkQueueItem($event)"
+  ></lib-case-manager-work-queue>
 
   <section class="dash__chart" *ngIf="locations.length">
     <lib-compliance-chart [data]="chartData"></lib-compliance-chart>

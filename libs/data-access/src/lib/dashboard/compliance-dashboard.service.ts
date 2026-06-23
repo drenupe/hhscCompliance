@@ -3,12 +3,12 @@ import { Observable } from 'rxjs';
 
 import { BaseApiService } from '../api-core/base-api.service';
 
-// Match what your API returns (includes deep link fields)
 export type SummaryStatus = 'ok' | 'warning' | 'critical';
 
 export interface ComplianceSummaryView {
   title: string;
   module: string;
+  subcategory?: string | null;
   count: number;
   status: SummaryStatus;
   lastUpdated?: string;
@@ -16,21 +16,55 @@ export interface ComplianceSummaryView {
   queryParams?: Record<string, any>;
 }
 
-export type ChartDatum = { label: string; value: number };
+export type ChartDatum = {
+  label: string;
+  value: number;
+};
+
+export type WorkQueueSeverity = 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
+
+export interface CaseManagerWorkQueueItem {
+  id: string;
+  title: string;
+  status: string;
+  severity: WorkQueueSeverity;
+  module?: string | null;
+  subcategory?: string | null;
+  ruleCode?: string | null;
+  message?: string | null;
+  dueDate?: string | null;
+  locationId?: string | null;
+  routeCommands?: any[] | null;
+  queryParams?: Record<string, any> | null;
+}
+
+export interface CaseManagerWorkQueueView {
+  openCaps: CaseManagerWorkQueueItem[];
+  readyForReview: CaseManagerWorkQueueItem[];
+  overdueCaps: CaseManagerWorkQueueItem[];
+  highSeverityFindings: CaseManagerWorkQueueItem[];
+  evidenceMissing: CaseManagerWorkQueueItem[];
+  recheckQueue: CaseManagerWorkQueueItem[];
+}
 
 @Injectable({ providedIn: 'root' })
 export class ComplianceDashboardService extends BaseApiService {
   private readonly dashboardPath = 'v1/dashboard';
 
-  /** GET /api/v1/dashboard/summary?locationId=UUID */
   getSummaryData(locationId: string): Observable<ComplianceSummaryView[]> {
     const url = this.buildUrl(`${this.dashboardPath}/summary`);
     return this.get<ComplianceSummaryView[]>(url, { locationId });
   }
 
-  /** GET /api/v1/dashboard/chart?locationId=UUID */
   getChartData(locationId: string): Observable<ChartDatum[]> {
     const url = this.buildUrl(`${this.dashboardPath}/chart`);
     return this.get<ChartDatum[]>(url, { locationId });
+  }
+
+  getCaseManagerWorkQueue(
+    locationId: string,
+  ): Observable<CaseManagerWorkQueueView> {
+    const url = this.buildUrl(`${this.dashboardPath}/case-manager/work-queue`);
+    return this.get<CaseManagerWorkQueueView>(url, { locationId });
   }
 }

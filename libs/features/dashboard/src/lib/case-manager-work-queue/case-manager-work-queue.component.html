@@ -1,0 +1,44 @@
+<section class="workq">
+  <header class="workq__header">
+    <h3>Case Manager Work Queue</h3>
+    <p>Daily operational follow-up for CAPs, evidence, rechecks, and high-risk findings.</p>
+  </header>
+
+  <div class="workq__loading" *ngIf="loading">
+    Loading work queue…
+  </div>
+
+  <div class="workq__grid" *ngIf="!loading">
+    <article class="queue" *ngFor="let section of sections()">
+      <header class="queue__header">
+        <h4>{{ section.title }}</h4>
+        <span>{{ section.items.length }}</span>
+      </header>
+
+      <div class="queue__empty" *ngIf="!section.items.length">
+        {{ section.empty }}
+      </div>
+
+      <button
+        type="button"
+        *ngFor="let item of section.items"
+        [class]="itemClass(item)"
+        (click)="open(item)"
+      >
+        <span class="item__top">
+          <strong>{{ item.title }}</strong>
+          <em>{{ item.severity }}</em>
+        </span>
+
+        <span class="item__message">
+          {{ item.message || item.ruleCode || 'Open compliance item' }}
+        </span>
+
+        <span class="item__meta">
+          <span>{{ item.status }}</span>
+          <span>{{ dueLabel(item) }}</span>
+        </span>
+      </button>
+    </article>
+  </div>
+</section>

@@ -24,6 +24,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { ComplianceResultsModule } from './compliance/compliance-results.module';
 import { ComplianceEngineModule } from './compliance/engine/compliance-engine.module';
 import { PeopleModule } from './people/people.module';
+import { SurveyModule } from './survey/survey.module';
+import { RemediationModule } from './remediation/remediation.module';
+import { ComplianceRecheckModule } from './compliance-recheck/compliance-recheck.module';
 
 
 
@@ -61,7 +64,10 @@ const NODE_ENV = process.env.NODE_ENV ?? 'development';
     PeopleModule,
     ProvidersModule,
     SecurityModule,
+    SurveyModule,
+    RemediationModule,
     DashboardModule,
+    ComplianceRecheckModule,
     ComplianceResultsModule,
     ComplianceEngineModule
   ],

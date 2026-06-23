@@ -1,5 +1,5 @@
 // libs/data-access/src/index.ts
-// ✅ Clean barrel exports (grouped, no duplicates)
+// Clean barrel exports grouped by domain.
 
 // =====================================
 // API Core
@@ -8,24 +8,22 @@ export * from './lib/api-core/base-api.service';
 export * from './lib/api-core/tokens/environment.token';
 
 // =====================================
-// Residential (API + Feature State)
+// Residential API + State
 // =====================================
 export * from './lib/residential/src/services/residential-locations.api';
 export * from './lib/residential/src/services/fire-drills.api';
 
-// Fire Drills (Feature State)
 export * from './lib/residential/src/+state/fire-drills.actions';
 export * from './lib/residential/src/+state/fire-drills.selectors';
 export * from './lib/residential/src/+state/fire-drills.reducer';
 export * from './lib/residential/src/+state/fire-drills.effects';
 export * from './lib/residential/src/+state/fire-drills.facade';
 
-// Named re-exports (optional, but helpful for app.config.ts readability)
 export { FIRE_DRILLS_FEATURE_KEY } from './lib/residential/src/+state/fire-drills.models';
 export { FireDrillsFacade } from './lib/residential/src/+state/fire-drills.facade';
 
 // =====================================
-// Compliance domain services
+// Compliance Domain Services
 // =====================================
 export * from './lib/programmatic/programmatic.service';
 export * from './lib/finance/finance.service';
@@ -36,10 +34,23 @@ export * from './lib/enclosed-beds/enclosed-beds.service';
 export * from './lib/protective-devices/protective-devices.service';
 export * from './lib/prohibitions/prohibitions.service';
 
+// =====================================
+// Dashboard
+// =====================================
 export * from './lib/dashboard/compliance-dashboard.service';
 
+export * from './lib/dashboard/models/module-workbench.model';
+export * from './lib/dashboard/models/entity-workbench.model';
+export * from './lib/dashboard/services/module-workbench.service';
+
 // =====================================
-// Compliance Results (API + Feature State)
+// Remediation
+// =====================================
+export * from './lib/remediation/models/finding-workspace.model';
+export * from './lib/remediation/services/finding-workspace.service';
+
+// =====================================
+// Compliance Results API + State
 // =====================================
 export * from './lib/compliance/src/services/compliance-results.api';
 
@@ -50,7 +61,6 @@ export * from './lib/compliance/src/+state/compliance-results.selectors';
 export * from './lib/compliance/src/+state/compliance-results.effects';
 export * from './lib/compliance/src/+state/compliance-results.facade';
 
-// Named re-exports (optional, but helpful for app.config.ts readability)
 export { COMPLIANCE_RESULTS_FEATURE_KEY } from './lib/compliance/src/+state/compliance-results.models';
 export { ComplianceResultsFacade } from './lib/compliance/src/+state/compliance-results.facade';
 
@@ -66,12 +76,8 @@ export * from './lib/auth/role-guard';
 export * from './lib/auth/auth-interceptor';
 
 // =====================================
-// ISS (Feature)
+// ISS
 // =====================================
-// NOTE: only export the module if you actually use NgModule imports somewhere.
-// Standalone + provideStore/provideEffects does NOT need the module export.
-// export * from './lib/iss/src/lib/iss-data-access.module';
-
 export * from './lib/iss/src/+state/iss.models';
 export * from './lib/iss/src/+state/iss.actions';
 export * from './lib/iss/src/+state/iss.selectors';
@@ -87,7 +93,7 @@ export { ISS_FEATURE_KEY } from './lib/iss/src/+state/iss.models';
 export { IssFacade } from './lib/iss/src/+state/iss.facade';
 
 // =====================================
-// Providers (Feature)
+// Providers
 // =====================================
 export * from './lib/providers/src/lib/services/providers.api';
 
@@ -98,12 +104,12 @@ export * from './lib/providers/src/lib/+state/providers.reducer';
 export * from './lib/providers/src/lib/+state/providers.effects';
 export * from './lib/providers/src/lib/+state/providers.facade';
 
-// optional (module-style feature registration)
-// export * from './lib/providers/src/lib/providers-data-access.module';
-
 // =====================================
-// Http
+// HTTP
 // =====================================
 export * from './lib/http/request-id.interceptor';
 
+// =====================================
+// Home Environment
+// =====================================
 export * from './lib/home-environment/src/services/home-environment.api';

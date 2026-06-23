@@ -1,0 +1,63 @@
+<section class="entity" *ngIf="data as vm">
+  <header class="entity__header">
+    <div>
+      <h2>{{ vm.entityName }}</h2>
+      <p>
+        {{ vm.moduleTitle }} • {{ vm.totalFindings }} findings requiring correction
+      </p>
+    </div>
+  </header>
+
+  <section class="entity__sections">
+    <article
+      class="section-card"
+      *ngFor="let section of vm.sections"
+      [class.section-card--critical]="sectionSeverity(section) === 'critical'"
+      [class.section-card--high]="sectionSeverity(section) === 'high'"
+    >
+      <header class="section-card__header">
+        <div>
+          <h3>{{ section.title }}</h3>
+          <p>
+            {{ section.findingCount }} findings
+            <span *ngIf="section.criticalCount > 0">
+              • {{ section.criticalCount }} critical
+            </span>
+            <span *ngIf="section.highCount > 0">
+              • {{ section.highCount }} high
+            </span>
+          </p>
+        </div>
+      </header>
+
+      <div class="findings">
+        <button
+          type="button"
+          class="finding-row"
+          *ngFor="let finding of previewFindings(section)"
+          (click)="openFinding(finding)"
+        >
+          <span class="finding-row__rule">{{ finding.ruleCode }}</span>
+          <span class="finding-row__message">
+            {{ finding.message || 'Compliance finding requires review.' }}
+          </span>
+          <span class="finding-row__meta">
+            {{ finding.severity }} • {{ finding.status }}
+          </span>
+        </button>
+
+        <div class="section-card__more" *ngIf="section.findings.length > 4">
+          +{{ section.findings.length - 4 }} more findings
+        </div>
+      </div>
+    </article>
+  </section>
+</section>
+
+<div class="state" *ngIf="loading">
+  Loading entity workbench...
+</div>
+
+<div class="state state--error" *ngIf="error">
+  {{ error }}
+</div>

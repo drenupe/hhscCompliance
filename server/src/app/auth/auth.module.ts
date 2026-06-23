@@ -30,7 +30,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         'dev-secret-change-me',
 
       signOptions: {
-        expiresIn: '15m',
+        expiresIn: '8h',
       },
     }),
   ],

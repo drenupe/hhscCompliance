@@ -24,11 +24,19 @@ export type ComplianceSeverity =
   | 'HIGH'
   | 'CRITICAL';
 
-export type ComplianceRouteCommands = unknown[] | null;
+export type ComplianceRouteCommands = string[] | null;
 
 export type ComplianceQueryParams =
   | Record<string, string | number | boolean | null>
   | null;
+
+export type ComplianceCapStatus =
+  | 'NONE'
+  | 'OPEN'
+  | 'IN_PROGRESS'
+  | 'READY_FOR_REVIEW'
+  | 'RESOLVED'
+  | 'CLOSED';
 
 @Entity({ name: 'compliance_results' })
 @Index(
@@ -41,6 +49,7 @@ export type ComplianceQueryParams =
 @Index('ix_compliance_results_module', ['module'])
 @Index('ix_compliance_results_provider', ['providerId'])
 @Index('ix_compliance_results_entity', ['entityType', 'entityId'])
+@Index('ix_compliance_results_cap_status', ['capStatus'])
 export class ComplianceResultEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -57,21 +66,10 @@ export class ComplianceResultEntity {
   @Column({ type: 'uuid', name: 'entity_id' })
   entityId!: string;
 
-  /**
-   * Canonical module key.
-   *
-   * Examples:
-   * RESIDENTIAL
-   * MEDICATION
-   * NURSING
-   * EMERGENCY_PLANS
-   * FIRE_DRILLS
-   * ISS
-   */
   @Column({ type: 'text' })
   module!: string;
 
-  @Column({ type: 'text', name: 'subcategory', nullable: true })
+  @Column({ type: 'text', nullable: true })
   subcategory!: string | null;
 
   @Column({ type: 'text', name: 'rule_code' })
@@ -86,24 +84,21 @@ export class ComplianceResultEntity {
   @Column({ type: 'text', nullable: true })
   message!: string | null;
 
-  /**
-   * Angular router commands used by dashboard findings
-   * to deep-link users into the remediation screen.
-   *
-   * Example:
-   * ['/residential', locationId, 'fire-drills']
-   */
   @Column({ type: 'jsonb', name: 'route_commands', nullable: true })
   routeCommands!: ComplianceRouteCommands;
 
-  /**
-   * Optional route query params for remediation screens.
-   *
-   * Example:
-   * { tab: 'missing-drills', ruleCode: 'FIRE_DRILL_MONTHLY' }
-   */
   @Column({ type: 'jsonb', name: 'query_params', nullable: true })
   queryParams!: ComplianceQueryParams;
+
+  /**
+   * Quick dashboard indicator showing whether this finding has CAP activity.
+   * Source of truth remains corrective_action_plans.
+   */
+  @Column({ type: 'text', name: 'cap_status', default: 'NONE' })
+  capStatus!: ComplianceCapStatus;
+
+  @Column({ type: 'int', name: 'cap_count', default: 0 })
+  capCount!: number;
 
   @Column({ type: 'timestamptz', name: 'last_checked_at', nullable: true })
   lastCheckedAt!: Date | null;
@@ -113,4 +108,18 @@ export class ComplianceResultEntity {
 
   @UpdateDateColumn({ type: 'timestamptz', name: 'updated_at' })
   updatedAt!: Date;
+
+  @Column({ type: 'boolean', name: 'needs_recheck', default: false })
+  needsRecheck!: boolean;
+
+  @Column({ type: 'timestamptz', name: 'next_check_at', nullable: true })
+  nextCheckAt!: Date | null;
+
+  @Column({ type: 'timestamptz', name: 'last_rechecked_at', nullable: true })
+  lastRecheckedAt!: Date | null;
+
+  @Column({ type: 'text', name: 'recheck_reason', nullable: true })
+  recheckReason!: string | null;
+
+  
 }

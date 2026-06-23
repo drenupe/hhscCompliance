@@ -2,90 +2,110 @@
   display: block;
 }
 
+.dash {
+  display: grid;
+  gap: 1rem;
+}
+
+.dash__header {
+  display: grid;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  p {
+    margin: 0.25rem 0 0;
+    color: var(--text-muted, #6b7280);
+    font-size: 0.92rem;
+  }
+}
+
+.dash__loc {
+  display: grid;
+  gap: 0.35rem;
+
+  span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted, #6b7280);
+  }
+
+  select {
+    width: 100%;
+    min-height: 2.65rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--glass-line, #e5e7eb);
+    border-radius: 12px;
+    background: var(--surface-card, #fff);
+    color: var(--text, #111827);
+  }
+}
+
+.msg {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--glass-line, #e5e7eb);
+  border-radius: 12px;
+  background: var(--surface-card, #fff);
+  color: var(--text-muted, #6b7280);
+}
 
 .dash__grid {
   display: grid;
   gap: 1rem;
-
-  /* responsive columns */
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: 1fr;
   align-items: stretch;
 }
 
-/* critical: allow children to shrink inside grid */
 .dash__grid > * {
   min-width: 0;
 }
 
-/* ===== Card (local to component) ===== */
-.card {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  gap: .6rem;
+.dash__alert {
+  display: block;
+}
+
+.alert {
   padding: 1rem;
-  background: var(--surface-card, var(--clr-card, #fff));
-  color: var(--text, var(--clr-text, #111827));
-  border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
-  border-radius: 12px;
-  min-height: 168px;
-  transition: background-color .15s ease, box-shadow .15s ease, transform .05s ease;
+  border: 1px solid var(--clr-error, #dc2626);
+  border-left: 5px solid var(--clr-error, #dc2626);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface-card, #fff) 92%, var(--clr-error, #dc2626) 8%);
 
-  &:hover {
-    background: color-mix(in srgb, var(--surface-card, #fff) 92%, var(--brand, #8ab4ff) 8%);
-    box-shadow: 0 8px 20px rgba(0,0,0,.08);
-    transform: translateY(-1px);
+  strong {
+    display: block;
+    margin-bottom: 0.5rem;
   }
 
-  &:focus-within {
-    box-shadow: 0 0 0 3px rgba(138,180,255,.25);
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
   }
-}
 
-.card__icon {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.card__title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-strong, var(--clr-text, #111827));
-}
-
-.card__meta {
-  color: var(--text-muted, var(--clr-muted, #6b7280));
-  font-size: .85rem;
-}
-
-/* ✅ the COUNT */
-.card__value {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-}
-
-/* actions */
-.card__actions {
-  display: flex;
-  justify-content: flex-end;
-
-  button {
-    border: 1px solid var(--glass-line, var(--clr-line, #e5e7eb));
-    background: transparent;
-    border-radius: 10px;
-    padding: .45rem .7rem;
-    cursor: pointer;
-
-    &:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
+  li + li {
+    margin-top: 0.35rem;
   }
 }
 
-/* Status rails */
-.card.is-ok       { border-left: 4px solid var(--clr-success, var(--success, #16a34a)); }
-.card.is-warning  { border-left: 4px solid var(--clr-warn,    var(--warn,    #f59e0b)); }
-.card.is-critical { border-left: 4px solid var(--clr-error,   var(--danger,  #dc2626)); }
+.dash__chart {
+  min-width: 0;
+}
+
+@media (min-width: 760px) {
+  .dash__header {
+    grid-template-columns: 1fr minmax(260px, 360px);
+    align-items: end;
+  }
+
+  .dash__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .dash__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
