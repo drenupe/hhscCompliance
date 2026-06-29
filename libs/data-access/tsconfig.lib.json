@@ -23,5 +23,5 @@
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx"
   ],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../shared-models/src/lib/dashboard/module-workbench.model.ts", "../shared-models/src/lib/dashboard/entity-workbench.model.ts"]
 }

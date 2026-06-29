@@ -1,0 +1,64 @@
+<article class="heat-map">
+  <header class="heat-map__header">
+    <p>{{ kicker }}</p>
+    <h3>{{ title }}</h3>
+    <span>{{ summary }}</span>
+  </header>
+
+  <div class="heat-map__legend">
+    <span class="legend legend--low">Low</span>
+    <span class="legend legend--moderate">Moderate</span>
+    <span class="legend legend--high">High</span>
+    <span class="legend legend--critical">Critical</span>
+  </div>
+
+  <div class="heat-map__table" *ngIf="rows.length; else empty">
+    <div class="heat-map__row heat-map__row--head">
+      <div>Module</div>
+      <div *ngFor="let location of locations">{{ location }}</div>
+      <div>Overall</div>
+    </div>
+
+    <div class="heat-map__row" *ngFor="let row of rows">
+      <div class="heat-map__module">
+        <strong>{{ row.title }}</strong>
+        <span>{{ row.module }}</span>
+        <small>Highest risk: {{ worstLocation(row) }}</small>
+      </div>
+
+      <button
+        type="button"
+        class="heat-map__cell"
+        *ngFor="let cell of row.cells"
+        [class.heat-map__cell--low]="cell.level === 'LOW'"
+        [class.heat-map__cell--moderate]="cell.level === 'MODERATE'"
+        [class.heat-map__cell--high]="cell.level === 'HIGH'"
+        [class.heat-map__cell--critical]="cell.level === 'CRITICAL'"
+        (click)="openCell(cell)"
+      >
+        <strong>{{ cell.score }}</strong>
+        <span>{{ cell.findingCount }} findings</span>
+        <small *ngIf="cell.criticalCount || cell.highCount">
+          {{ cell.criticalCount ?? 0 }} critical • {{ cell.highCount ?? 0 }} high
+        </small>
+      </button>
+
+      <div
+        class="heat-map__overall"
+        [class.heat-map__overall--low]="overallLevel(row) === 'LOW'"
+        [class.heat-map__overall--moderate]="overallLevel(row) === 'MODERATE'"
+        [class.heat-map__overall--high]="overallLevel(row) === 'HIGH'"
+        [class.heat-map__overall--critical]="overallLevel(row) === 'CRITICAL'"
+      >
+        <strong>{{ overallScore(row) }}</strong>
+        <span>{{ overallLevel(row) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="heat-map__empty">
+      No heat map data is currently available.
+    </div>
+  </ng-template>
+</article>

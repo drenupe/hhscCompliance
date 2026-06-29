@@ -4,8 +4,24 @@ import { Routes } from '@angular/router';
 export const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'operations',
     pathMatch: 'full',
+  },
+
+  {
+  path: 'operations/executive',
+  loadComponent: () =>
+    import('@hhsc-compliance/operations').then(
+      (m) => m.ExecutiveDashboardComponent,
+    ),
+},
+
+  {
+    path: 'operations',
+    loadComponent: () =>
+      import('@hhsc-compliance/dashboard').then(
+        (m) => m.OperationsCommandCenterComponent,
+      ),
   },
 
   {
@@ -23,7 +39,7 @@ export const appRoutes: Routes = [
   },
 
   {
-    path: 'dashboard/modules/:module/entities/:entityId',
+    path: 'dashboard/modules/:module/entities/:entityType/:entityId',
     loadComponent: () =>
       import('@hhsc-compliance/dashboard').then(
         (m) => m.EntityWorkbenchComponent,

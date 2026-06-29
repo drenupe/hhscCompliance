@@ -1,0 +1,92 @@
+<section class="executive-page">
+
+  <div class="loading" *ngIf="loading">
+    Loading Executive Intelligence...
+  </div>
+
+  <div class="error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="dashboard as d">
+
+    <header class="hero">
+
+      <div>
+
+        <p class="eyebrow">
+          HHSC Provider Intelligence Platform
+        </p>
+
+        <h1>
+          Executive Intelligence
+        </h1>
+
+        <p>
+          Agency-wide intelligence for executive decision making.
+        </p>
+
+      </div>
+
+    </header>
+
+    <section class="score-grid">
+
+      <article class="score-card">
+        <small>Agency Health</small>
+        <strong>{{ d.agencyHealth.value }}%</strong>
+      </article>
+
+      <article class="score-card">
+        <small>Survey Readiness</small>
+        <strong>{{ d.surveyReadiness.value }}%</strong>
+      </article>
+
+      <article class="score-card">
+        <small>Provider Score</small>
+        <strong>{{ d.providerScore.value }}%</strong>
+      </article>
+
+      <article class="score-card">
+        <small>Staff Readiness</small>
+        <strong>{{ d.staffReadiness.value }}%</strong>
+      </article>
+
+      <article class="score-card">
+        <small>Billing Health</small>
+        <strong>{{ d.billingHealth.value }}%</strong>
+      </article>
+
+      <article class="score-card">
+        <small>CAP Completion</small>
+        <strong>{{ d.capCompletion.value }}%</strong>
+      </article>
+
+    </section>
+
+    <section class="risk-panel">
+
+      <h2>
+        Executive Risks
+      </h2>
+
+      <article
+        *ngFor="let risk of d.risks"
+        class="risk-card"
+      >
+
+        <h3>
+          {{ risk.title }}
+        </h3>
+
+        <p>
+          {{ risk.summary }}
+        </p>
+
+      </article>
+
+    </section>
+
+  </ng-container>
+
+</section>

@@ -1,0 +1,259 @@
+:host {
+  display: block;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(24, 216, 255, 0.13), transparent 30rem),
+    radial-gradient(circle at 90% 6%, rgba(0, 208, 132, 0.1), transparent 28rem),
+    linear-gradient(180deg, #06131f 0%, #071622 48%, #06111b 100%);
+}
+
+.command-center {
+  color: var(--hhsc-text-primary);
+}
+
+.state-card {
+  display: flex;
+  align-items: center;
+  padding: var(--hhsc-space-5);
+  border-radius: var(--hhsc-radius-md);
+  background: rgba(10, 30, 45, 0.82);
+  border: 1px solid rgba(24, 216, 255, 0.22);
+}
+
+.state-card--error {
+  color: var(--hhsc-danger);
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background: var(--hhsc-primary);
+  box-shadow: 0 0 18px rgba(24, 216, 255, 0.55);
+}
+
+/* HERO - temporary until lib-hero exists */
+
+.hero-shell {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 34px;
+  border-radius: 32px;
+  background:
+    linear-gradient(135deg, rgba(9, 32, 48, 0.92), rgba(11, 46, 66, 0.76)),
+    rgba(7, 22, 34, 0.92);
+  border: 1px solid rgba(24, 216, 255, 0.16);
+  box-shadow: var(--hhsc-shadow-panel);
+  overflow: hidden;
+}
+
+.hero-copy {
+  max-width: 760px;
+}
+
+.eyebrow,
+.panel-kicker {
+  margin: 0 0 8px;
+  color: var(--hhsc-primary);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-shell h1 {
+  margin: 0;
+  color: var(--hhsc-text-primary);
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.provider-name {
+  margin: 14px 0 0;
+  color: #baf4ff;
+  font-size: 18px;
+  font-weight: 850;
+}
+
+.hero-tagline {
+  max-width: 620px;
+  margin: 14px 0 0;
+  color: var(--hhsc-text-secondary);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.hero-score {
+  width: 230px;
+  text-align: center;
+}
+
+.hero-score p {
+  margin: 12px 0 0;
+  color: var(--hhsc-text-primary);
+  font-weight: 900;
+}
+
+.hero-score small {
+  display: block;
+  margin-top: 6px;
+  color: var(--hhsc-text-muted);
+  line-height: 1.45;
+}
+
+/* MISSION */
+
+.mission-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 22px 24px;
+  border-radius: 26px;
+  background:
+    linear-gradient(135deg, rgba(10, 30, 45, 0.88), rgba(11, 43, 60, 0.74)),
+    rgba(10, 30, 45, 0.82);
+  border: 1px solid rgba(24, 216, 255, 0.12);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+}
+
+.mission-strip h2 {
+  margin: 0;
+  color: var(--hhsc-text-primary);
+  font-size: 20px;
+  letter-spacing: -0.04em;
+}
+
+.mission-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.mission-stats span {
+  min-width: 104px;
+  padding: 12px 14px;
+  border-radius: var(--hhsc-radius-md);
+  color: var(--hhsc-text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--hhsc-border);
+}
+
+.mission-stats strong {
+  display: block;
+  color: var(--hhsc-text-primary);
+  font-size: 26px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+}
+
+/* LAYOUT */
+
+.kpi-grid {
+  display: block;
+  margin-top: 18px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(340px, 0.8fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.panel--wide {
+  min-width: 0;
+}
+
+.panel--engine {
+  display: block;
+  min-height: 560px;
+}
+
+.dashboard-grid > lib-panel {
+  min-height: 100%;
+}
+
+lib-operations-engine-card {
+  display: block;
+  min-height: 460px;
+}
+
+.panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: -56px 0 18px auto;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1280px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-actions {
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-shell {
+    flex-direction: column;
+    padding: 26px;
+    border-radius: 26px;
+  }
+
+  .hero-shell h1 {
+    font-size: 42px;
+    line-height: 1;
+  }
+
+  .hero-score {
+    width: 100%;
+    text-align: left;
+  }
+
+  .mission-strip {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mission-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-shell,
+  .mission-strip {
+    border-radius: 22px;
+  }
+
+  .hero-shell {
+    padding: 22px;
+  }
+
+  .hero-shell h1 {
+    font-size: 34px;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-tagline {
+    font-size: 15px;
+  }
+
+  .mission-stats {
+    grid-template-columns: 1fr;
+  }
+}

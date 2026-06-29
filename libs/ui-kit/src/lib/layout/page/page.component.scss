@@ -1,0 +1,31 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+.lib-page {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+}
+
+.lib-page--fluid {
+  max-width: none;
+}
+
+.lib-page--padded {
+  padding: var(--hhsc-space-7);
+}
+
+@media (max-width: 900px) {
+  .lib-page--padded {
+    padding: var(--hhsc-space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .lib-page--padded {
+    padding: var(--hhsc-space-4);
+  }
+}

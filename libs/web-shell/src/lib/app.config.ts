@@ -1,73 +1,72 @@
-// libs/web-shell/src/lib/app.config.ts
 import {
   ApplicationConfig,
-  provideZoneChangeDetection,
-  provideBrowserGlobalErrorListeners,
   importProvidersFrom,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
 } from '@angular/core';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore } from '@ngrx/router-store';
+import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-
-import { appRoutes } from './app.routes';
 
 import {
   AUTH_STATE_OPTIONS,
+  AuthTokenInterceptor,
+  COMPLIANCE_RESULTS_FEATURE_KEY,
+  ComplianceResultsEffects,
+  complianceResultsReducer,
   DEV_AUTH_OPTIONS,
   ENVIRONMENT,
   EnvironmentConfig,
-
-  // ISS
   ISS_FEATURE_KEY,
-  issReducer,
   IssEffects,
-
-  // Providers
+  issReducer,
+  OPERATIONS_FEATURE_KEY,
+  OperationsEffects,
+  operationsReducer,
   PROVIDERS_FEATURE_KEY,
-  providersReducer,
   ProvidersEffects,
-
-  // ✅ Compliance Results (ADD THESE EXPORTS IN @hhsc-compliance/data-access index.ts)
-  COMPLIANCE_RESULTS_FEATURE_KEY,
-  complianceResultsReducer,
-  ComplianceResultsEffects,
-
-  // Interceptor
+  providersReducer,
   RequestIdInterceptor,
 } from '@hhsc-compliance/data-access';
 
 import {
-  LucideAngularModule,
-  LayoutDashboard,
-  Home,
-  Users,
+  Activity,
+  Ban,
+  Bed,
   Briefcase,
-  GraduationCap,
   ChevronLeft,
   ChevronRight,
-  Menu,
-  Activity,
-  Stethoscope,
-  Shield,
-  ShieldCheck,
-  Ban,
-  Pill,
-  UserRound,
-  UserCog,
   FileSpreadsheet,
-  ListChecks,
-  Wallet,
-  ShieldAlert,
-  Hand,
-  Bed,
   FileText,
+  GraduationCap,
+  Hand,
+  Home,
   Images,
+  LayoutDashboard,
+  ListChecks,
+  LucideAngularModule,
+  Menu,
+  Pill,
+  Shield,
+  ShieldAlert,
+  ShieldCheck,
+  Stethoscope,
+  UserCog,
+  UserRound,
+  Users,
+  Wallet,
 } from 'lucide-angular';
+
+import { appRoutes } from './app.routes';
 
 const environment: EnvironmentConfig = {
   apiBaseUrl: '/api',
@@ -77,7 +76,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideAnimations(), // ✅ enables Angular animations app-wide
+    provideAnimations(),
 
     provideRouter(
       appRoutes,
@@ -88,24 +87,34 @@ export const appConfig: ApplicationConfig = {
     ),
 
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: RequestIdInterceptor, multi: true },
 
-    // 🧠 NgRx (root registration)
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RequestIdInterceptor,
+      multi: true,
+    },
+
     provideStore({
       [ISS_FEATURE_KEY]: issReducer,
       [PROVIDERS_FEATURE_KEY]: providersReducer,
-
-      // ✅ add compliance results
+      [OPERATIONS_FEATURE_KEY]: operationsReducer,
       [COMPLIANCE_RESULTS_FEATURE_KEY]: complianceResultsReducer,
     }),
+
     provideEffects([
       IssEffects,
       ProvidersEffects,
-
-      // ✅ add compliance results effects
+      OperationsEffects,
       ComplianceResultsEffects,
     ]),
+
     provideRouterStore(),
+
     provideStoreDevtools({
       maxAge: 25,
       logOnly: false,
@@ -123,6 +132,7 @@ export const appConfig: ApplicationConfig = {
         defaultRole: 'DirectCareStaff',
       },
     },
+
     {
       provide: DEV_AUTH_OPTIONS,
       useValue: {
@@ -133,30 +143,30 @@ export const appConfig: ApplicationConfig = {
 
     importProvidersFrom(
       LucideAngularModule.pick({
-        LayoutDashboard,
-        Home,
-        Users,
+        Activity,
+        Ban,
+        Bed,
         Briefcase,
-        GraduationCap,
         ChevronLeft,
         ChevronRight,
-        Menu,
-        Activity,
-        Stethoscope,
-        Shield,
-        ShieldCheck,
-        Ban,
-        Pill,
-        UserRound,
-        UserCog,
         FileSpreadsheet,
-        ListChecks,
-        Wallet,
-        ShieldAlert,
-        Hand,
-        Bed,
         FileText,
+        GraduationCap,
+        Hand,
+        Home,
         Images,
+        LayoutDashboard,
+        ListChecks,
+        Menu,
+        Pill,
+        Shield,
+        ShieldAlert,
+        ShieldCheck,
+        Stethoscope,
+        UserCog,
+        UserRound,
+        Users,
+        Wallet,
       }),
     ),
   ],

@@ -13,6 +13,7 @@ import {
   EntityWorkbenchFinding,
   EntityWorkbenchSection,
   EntityWorkbenchView,
+  ModuleCorrectionEntityType,
   ModuleWorkbenchService,
 } from '@hhsc-compliance/data-access';
 
@@ -34,18 +35,53 @@ export class EntityWorkbenchComponent implements OnInit {
   error = '';
   data: EntityWorkbenchView | null = null;
 
-  ngOnInit(): void {
-    const module = this.route.snapshot.paramMap.get('module');
-    const entityId = this.route.snapshot.paramMap.get('entityId');
+ngOnInit(): void {
+  const module = this.route.snapshot.paramMap.get('module');
+  const entityType = this.route.snapshot.paramMap.get(
+    'entityType',
+  ) as ModuleCorrectionEntityType | null;
+  const entityId = this.route.snapshot.paramMap.get('entityId');
 
-    if (!module || !entityId) {
-      this.error = 'Module and entity are required.';
-      return;
-    }
-
-    this.load(module, entityId);
+  if (!module || !entityType || !entityId) {
+    this.error = 'Module, entity type, and entity are required.';
+    return;
   }
 
+  this.load(module, entityType, entityId);
+}
+
+  private load(
+  module: string,
+  entityType: ModuleCorrectionEntityType,
+  entityId: string,
+): void {
+  this.loading = true;
+  this.error = '';
+  this.cdr.markForCheck();
+
+  this.api
+    .getEntityWorkbench(module, entityType, entityId)
+    .pipe(
+      take(1),
+      catchError((err: unknown) => {
+        const code =
+          typeof err === 'object' && err !== null && 'status' in err
+            ? String((err as { status?: unknown }).status ?? 'unknown')
+            : 'unknown';
+
+        this.error = `Failed to load entity workbench (${code}).`;
+        this.loading = false;
+        this.cdr.markForCheck();
+
+        return of(null);
+      }),
+    )
+    .subscribe((result) => {
+      this.data = result;
+      this.loading = false;
+      this.cdr.markForCheck();
+    });
+}
   openFinding(finding: EntityWorkbenchFinding): void {
     this.router.navigate(['/', 'remediation', 'findings', finding.id]);
   }
@@ -62,32 +98,5 @@ export class EntityWorkbenchComponent implements OnInit {
     return section.findings.slice(0, 4);
   }
 
-  private load(module: string, entityId: string): void {
-    this.loading = true;
-    this.error = '';
-    this.cdr.markForCheck();
 
-    this.api
-      .getEntityWorkbench(module, entityId)
-      .pipe(
-        take(1),
-        catchError((err: unknown) => {
-          const code =
-            typeof err === 'object' && err !== null && 'status' in err
-              ? String((err as { status?: unknown }).status ?? 'unknown')
-              : 'unknown';
-
-          this.error = `Failed to load entity workbench (${code}).`;
-          this.loading = false;
-          this.cdr.markForCheck();
-
-          return of(null);
-        }),
-      )
-      .subscribe((result) => {
-        this.data = result;
-        this.loading = false;
-        this.cdr.markForCheck();
-      });
-  }
 }

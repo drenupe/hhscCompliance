@@ -1,0 +1,42 @@
+<article
+  class="analytics-card"
+  [class.analytics-card--healthy]="tone === 'healthy'"
+  [class.analytics-card--attention]="tone === 'attention'"
+  [class.analytics-card--critical]="tone === 'critical'"
+  [class.analytics-card--neutral]="tone === 'neutral'"
+>
+  <header class="analytics-card__header">
+    <div>
+      <p class="analytics-card__kicker" *ngIf="kicker">{{ kicker }}</p>
+      <h3>{{ title }}</h3>
+      <p class="analytics-card__summary" *ngIf="summary">{{ summary }}</p>
+    </div>
+
+    <div class="analytics-card__value" *ngIf="value !== ''">
+      <strong>{{ value }}</strong>
+      <span *ngIf="detail">{{ detail }}</span>
+    </div>
+  </header>
+
+  <div class="analytics-card__bars" *ngIf="data.length">
+    <div class="analytics-card__bar-row" *ngFor="let item of data">
+      <div class="analytics-card__bar-label">
+        <span>{{ item.label }}</span>
+        <strong>{{ item.value }}</strong>
+      </div>
+
+      <div class="analytics-card__track">
+        <div
+          class="analytics-card__bar"
+          [class.analytics-card__bar--healthy]="item.tone === 'healthy'"
+          [class.analytics-card__bar--attention]="item.tone === 'attention'"
+          [class.analytics-card__bar--critical]="item.tone === 'critical'"
+          [class.analytics-card__bar--neutral]="!item.tone || item.tone === 'neutral'"
+          [style.width]="widthFor(item.value)"
+        ></div>
+      </div>
+
+      <small *ngIf="item.helper">{{ item.helper }}</small>
+    </div>
+  </div>
+</article>

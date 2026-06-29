@@ -6,6 +6,7 @@
 // =====================================
 export * from './lib/api-core/base-api.service';
 export * from './lib/api-core/tokens/environment.token';
+//export * from './lib/auth/interceptors/auth-token.interceptor';
 
 // =====================================
 // Residential API + State
@@ -37,11 +38,9 @@ export * from './lib/prohibitions/prohibitions.service';
 // =====================================
 // Dashboard
 // =====================================
-export * from './lib/dashboard/compliance-dashboard.service';
+export * from './lib/dashboard/src/services/compliance-dashboard.service';
 
-export * from './lib/dashboard/models/module-workbench.model';
-export * from './lib/dashboard/models/entity-workbench.model';
-export * from './lib/dashboard/services/module-workbench.service';
+export * from './lib/dashboard/src/services/module-workbench.service';
 
 // =====================================
 // Remediation
@@ -104,6 +103,18 @@ export * from './lib/providers/src/lib/+state/providers.reducer';
 export * from './lib/providers/src/lib/+state/providers.effects';
 export * from './lib/providers/src/lib/+state/providers.facade';
 
+// =====================================
+// Operations
+// =====================================
+export * from './lib/operations/types/operations.types';
+export * from './lib/operations/services/operations.service';
+
+export * from './lib/operations/+state/operations.actions';
+export * from './lib/operations/+state/operations.effects';
+export * from './lib/operations/+state/operations.models';
+export * from './lib/operations/+state/operations.reducer';
+export * from './lib/operations/+state/operations.selectors';
+export * from './lib/operations/+state/operations-state.module';
 // =====================================
 // HTTP
 // =====================================

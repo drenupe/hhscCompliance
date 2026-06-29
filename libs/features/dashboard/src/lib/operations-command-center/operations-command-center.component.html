@@ -1,0 +1,120 @@
+<lib-page [fluid]="true">
+  <section class="command-center">
+    <ng-container *ngIf="vm$ | async as vm">
+      <div class="state-card" *ngIf="vm.loading">
+        <span class="pulse-dot"></span>
+        Loading Provider Intelligence Center...
+      </div>
+
+      <div
+        class="state-card state-card--error"
+        *ngIf="vm.loading === false && vm.error"
+      >
+        {{ vm.error }}
+      </div>
+
+      <ng-container *ngIf="vm.loading === false && vm.view as view">
+        <lib-hero
+          eyebrow="Provider Intelligence Engine"
+          [title]="view.title"
+          [subtitle]="view.subtitle"
+          [statusLabel]="view.riskLevel + ' Risk'"
+          [statusTone]="
+            view.riskLevel === 'LOW'
+              ? 'healthy'
+              : view.riskLevel === 'MODERATE'
+                ? 'warning'
+                : 'danger'
+          "
+          primaryMetricLabel="Provider Health"
+          [primaryMetricValue]="view.providerHealthScore + '%'"
+          primaryMetricHelper="Calculated by Provider Intelligence Engine"
+          [metrics]="view.heroMetrics"
+          [actions]="heroActions"
+          (actionSelected)="onHeroAction($event)"
+        ></lib-hero>
+
+        <section class="mission-strip">
+          <div>
+            <p class="panel-kicker">Today’s Mission</p>
+            <h2>Operate the provider while reducing survey risk.</h2>
+          </div>
+
+          <div class="mission-stats">
+            <span><strong>{{ view.criticalItems }}</strong> Critical</span>
+            <span><strong>{{ view.dueSoon }}</strong> Due Soon</span>
+            <span><strong>{{ view.openTasks }}</strong> Open Work</span>
+          </div>
+        </section>
+
+        <lib-grid [columns]="4" gap="16px" class="kpi-grid">
+          <lib-metric-card
+            *ngFor="let metric of view.kpiMetrics"
+            [label]="metric.label"
+            [value]="metric.value"
+            [detail]="metric.detail"
+            [status]="
+              metric.status === 'healthy'
+                ? 'HEALTHY'
+                : metric.status === 'attention'
+                  ? 'ATTENTION'
+                  : metric.status === 'critical'
+                    ? 'CRITICAL'
+                    : 'HEALTHY'
+            "
+          ></lib-metric-card>
+        </lib-grid>
+
+        <section class="dashboard-grid">
+          <lib-panel
+            class="panel--wide panel--engine"
+            kicker="Provider Intelligence"
+            title="Run the Provider"
+            variant="highlight"
+          >
+            <lib-operations-engine-card
+              [serviceLines]="view.serviceLines"
+              (open)="openServiceLine($event)"
+            ></lib-operations-engine-card>
+          </lib-panel>
+
+          <lib-panel
+            id="priorityQueue"
+            kicker="Intelligence Queue"
+            title="Today’s Priorities"
+          >
+            <lib-priority-list
+              [priorities]="view.priorities"
+              (open)="openPriority($event)"
+            ></lib-priority-list>
+          </lib-panel>
+
+          <lib-panel
+            id="modules"
+            class="panel--wide"
+            kicker="HHSC Compliance Engine"
+            title="Core Compliance Modules"
+          >
+            <div class="panel-actions">
+              <lib-button
+                variant="ghost"
+                label="View All Modules →"
+              ></lib-button>
+            </div>
+
+            <lib-compliance-module-grid
+              [modules]="view.coreModules"
+              (open)="openCoreModule($event)"
+            ></lib-compliance-module-grid>
+          </lib-panel>
+
+          <lib-panel kicker="Live Intelligence" title="Recent Activity">
+            <lib-activity-feed
+              [items]="view.recentActivity"
+            ></lib-activity-feed>
+          </lib-panel>
+        </section>
+      </ng-container>
+    </ng-container>
+  </section>
+</lib-page>

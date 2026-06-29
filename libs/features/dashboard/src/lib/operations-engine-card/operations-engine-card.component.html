@@ -1,0 +1,84 @@
+<div class="engine-card">
+  <ng-container *ngIf="activeServiceLine() as line">
+    <button
+      type="button"
+      class="engine-viewer"
+      (click)="openServiceLine(line)"
+      (mouseenter)="pauseRotation()"
+      (mouseleave)="resumeRotation()"
+      (focus)="pauseRotation()"
+      (blur)="resumeRotation()"
+    >
+      <div class="engine-viewer__content">
+        <lib-status-chip
+          [label]="statusLabel(line.status)"
+          [variant]="statusVariant(line.status)"
+        ></lib-status-chip>
+
+        <h3>{{ line.title }}</h3>
+        <p>{{ line.subtitle }}</p>
+
+        <div class="engine-viewer__metrics">
+          <div>
+            <strong>{{ line.surveyReadiness }}%</strong>
+            <small>Survey Ready</small>
+          </div>
+
+          <div>
+            <strong>{{ line.activeConsumers }}</strong>
+            <small>Consumers</small>
+          </div>
+
+          <div>
+            <strong>{{ line.openTasks }}</strong>
+            <small>Open Work</small>
+          </div>
+
+          <div>
+            <strong>{{ line.criticalItems }}</strong>
+            <small>Critical</small>
+          </div>
+        </div>
+
+        <span class="card-link">Open Workspace →</span>
+      </div>
+
+      <lib-score-ring
+        class="engine-viewer__score"
+        [value]="line.surveyReadiness"
+        label="Ready"
+        size="md"
+      ></lib-score-ring>
+    </button>
+
+    <div class="engine-card__footer" *ngIf="serviceLines.length > 1">
+      <button
+        type="button"
+        class="engine-card__arrow"
+        aria-label="Previous service line"
+        (click)="previousServiceLine()"
+      >
+        ←
+      </button>
+
+      <div class="carousel-dots">
+        <button
+          *ngFor="let item of serviceLines; let i = index"
+          type="button"
+          [class.active]="i === currentServiceLineIndex % serviceLines.length"
+          (click)="selectServiceLine(i)"
+          [attr.aria-label]="'Show ' + item.title"
+        ></button>
+      </div>
+
+      <button
+        type="button"
+        class="engine-card__arrow"
+        aria-label="Next service line"
+        (click)="nextServiceLine()"
+      >
+        →
+      </button>
+    </div>
+  </ng-container>
+</div>

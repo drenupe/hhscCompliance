@@ -1,0 +1,29 @@
+<article
+  class="briefing-card"
+  [class.briefing-card--healthy]="tone === 'healthy'"
+  [class.briefing-card--attention]="tone === 'attention'"
+  [class.briefing-card--critical]="tone === 'critical'"
+  [class.briefing-card--neutral]="tone === 'neutral'"
+>
+  <header class="briefing-card__header">
+    <p>{{ kicker }}</p>
+    <h3>{{ title }}</h3>
+  </header>
+
+  <p class="briefing-card__summary" *ngIf="summary">
+    {{ summary }}
+  </p>
+
+  <div class="briefing-card__items" *ngIf="items.length">
+    <div
+      class="briefing-card__item"
+      *ngFor="let item of items"
+      [class.briefing-card__item--healthy]="item.tone === 'healthy'"
+      [class.briefing-card__item--attention]="item.tone === 'attention'"
+      [class.briefing-card__item--critical]="item.tone === 'critical'"
+    >
+      <span>{{ item.label }}</span>
+      <strong *ngIf="item.value !== undefined">{{ item.value }}</strong>
+    </div>
+  </div>
+</article>

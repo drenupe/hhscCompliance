@@ -1,0 +1,72 @@
+:host {
+  display: inline-block;
+}
+
+.score-ring {
+  --score: 0;
+
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--hhsc-text-primary);
+  background:
+    linear-gradient(var(--hhsc-surface-app), var(--hhsc-surface-app)) padding-box,
+    conic-gradient(
+      var(--hhsc-primary) 0 calc(var(--score) * 1%),
+      rgba(255, 255, 255, 0.13) calc(var(--score) * 1%) 100%
+    )
+    border-box;
+  border: 10px solid transparent;
+  box-shadow:
+    0 0 50px rgba(79, 215, 255, 0.18),
+    inset 0 0 26px rgba(0, 0, 0, 0.42);
+}
+
+.score-ring--sm {
+  width: 104px;
+  height: 104px;
+  border-width: 8px;
+}
+
+.score-ring--md {
+  width: 150px;
+  height: 150px;
+}
+
+.score-ring--lg {
+  width: 178px;
+  height: 178px;
+  border-width: 12px;
+}
+
+.score-ring strong {
+  margin-top: 16px;
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+}
+
+.score-ring small {
+  margin-top: -44px;
+  color: var(--hhsc-text-muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.score-ring--sm strong {
+  font-size: 24px;
+}
+
+.score-ring--sm small {
+  margin-top: -30px;
+  font-size: 10px;
+}
+
+.score-ring--lg strong {
+  font-size: 44px;
+}
+
+.score-ring--lg small {
+  margin-top: -54px;
+}

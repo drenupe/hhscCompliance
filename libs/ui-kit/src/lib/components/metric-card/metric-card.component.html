@@ -1,0 +1,5 @@
+<article class="metric-card" [ngClass]="'metric-card--' + status">
+  <p>{{ label }}</p>
+  <strong>{{ value }}</strong>
+  <small *ngIf="detail">{{ detail }}</small>
+</article>

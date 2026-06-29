@@ -1,0 +1,53 @@
+<article class="provider-health">
+
+  <header>
+    <p>{{ subtitle }}</p>
+    <h3>{{ title }}</h3>
+  </header>
+
+  <div class="provider-health__gauge">
+
+    <svg viewBox="0 0 120 120">
+
+      <circle
+        class="track"
+        cx="60"
+        cy="60"
+        r="52"
+      />
+
+      <circle
+        class="progress"
+        cx="60"
+        cy="60"
+        r="52"
+        [attr.stroke-dasharray]="circumference"
+        [attr.stroke-dashoffset]="dashOffset"
+      />
+
+    </svg>
+
+    <div class="provider-health__center">
+      <strong>{{ score }}%</strong>
+      <span>{{ label }}</span>
+    </div>
+
+  </div>
+
+  <div class="provider-health__trend">
+    {{ trend }}
+  </div>
+
+  <div class="provider-health__metrics">
+
+    <div
+      *ngFor="let metric of metrics"
+      class="provider-health__metric"
+    >
+      <span>{{ metric.label }}</span>
+      <strong>{{ metric.value }}</strong>
+    </div>
+
+  </div>
+
+</article>

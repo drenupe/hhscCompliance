@@ -1,61 +1,71 @@
-<section class="workbench" *ngIf="data as vm">
-  <header class="workbench__header">
-    <div>
-      <h2>{{ vm.title }}</h2>
+<section class="module-workbench">
+  <button type="button" class="back-btn" (click)="goBack()">
+    ← Back to Dashboard
+  </button>
 
-      <p>
-        {{ vm.totalEntities }} entities requiring attention •
-        {{ vm.totalFindings }} findings
-      </p>
-    </div>
-  </header>
-
-  <section class="workbench__entities">
-    <button
-      type="button"
-      class="entity-card"
-      *ngFor="let group of vm.groups"
-      (click)="openEntity(group)"
-    >
-      <div class="entity-card__top">
-        <div>
-          <h3>{{ group.entityName }}</h3>
-
-          <div class="entity-card__type">
-            {{ group.entityType }}
-          </div>
-        </div>
-
-        <div class="entity-card__count">
-          {{ group.findingCount }}
-        </div>
-      </div>
-
-      <div class="entity-card__stats">
-        <span class="critical" *ngIf="group.criticalCount > 0">
-          Critical: {{ group.criticalCount }}
-        </span>
-
-        <span class="high" *ngIf="group.highCount > 0">
-          High: {{ group.highCount }}
-        </span>
-      </div>
-
-      <div class="entity-card__preview">
-        <div class="preview-row" *ngFor="let finding of previewFindings(group)">
-          <span>{{ finding.ruleCode }}</span>
-        </div>
-
-        <div class="preview-more" *ngIf="group.findings.length > 3">
-          +{{ group.findings.length - 3 }} more findings
-        </div>
-      </div>
-    </button>
+  <section *ngIf="loading" class="state-card">
+    Loading module...
   </section>
+
+  <section *ngIf="error" class="state-card state-card--error">
+    {{ error }}
+  </section>
+
+  <ng-container *ngIf="!loading && !error && data as workbench">
+    <header class="module-workbench__header">
+      <div>
+        <h1>{{ workbench.title || workbench.module }}</h1>
+        <p>
+          {{ workbench.totalFindings }} findings across
+          {{ workbench.totalAreas }} correction areas.
+        </p>
+      </div>
+    </header>
+
+    <section class="entity-selector">
+      <h2>Affected Locations</h2>
+
+      <button
+        type="button"
+        class="entity-chip"
+        *ngFor="let entity of affectedEntities"
+        (click)="openEntity(entity)"
+      >
+        <strong>{{ entity.entityLabel }}</strong>
+        <span>{{ entity.findingCount }} findings</span>
+      </button>
+    </section>
+
+    <section class="areas">
+      <h2>Correction Areas</h2>
+
+      <button
+        type="button"
+        class="area-card"
+        *ngFor="let area of workbench.areas"
+        (click)="openCorrectionArea(area)"
+      >
+        <div>
+          <h3>{{ area.title }}</h3>
+
+          <p>
+            {{ area.findingCount }} findings
+            <span *ngIf="area.criticalCount">
+              · {{ area.criticalCount }} critical
+            </span>
+            <span *ngIf="area.highCount">
+              · {{ area.highCount }} high
+            </span>
+            <span *ngIf="area.mediumCount">
+              · {{ area.mediumCount }} medium
+            </span>
+          </p>
+        </div>
+
+        <span class="area-card__action">
+          Open Correction Workspace →
+        </span>
+      </button>
+    </section>
+  </ng-container>
 </section>
-
-<div class="state" *ngIf="loading">Loading module workbench...</div>
-
-<div class="state state--error" *ngIf="error">
-  {{ error }}
-</div>

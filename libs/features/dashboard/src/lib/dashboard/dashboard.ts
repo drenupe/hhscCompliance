@@ -6,60 +6,35 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, finalize, forkJoin, of, take, tap } from 'rxjs';
-
-import {
-  ComplianceChart,
-  ChartDatum,
-} from '../components/compliance-chart/compliance-chart';
-import {
-  ComplianceSummaryCard,
-  ComplianceSummaryView,
-} from '../components/compliance-summary-card/compliance-summary-card';
-import {
-  CaseManagerWorkQueueComponent,
-  CaseManagerWorkQueueItem,
-  CaseManagerWorkQueueView,
-} from '../case-manager-work-queue/case-manager-work-queue.component';
+import { catchError, finalize, of, take } from 'rxjs';
 
 import {
   ComplianceDashboardService,
-  ResidentialLocationsApi,
+  ComplianceSummaryView,
 } from '@hhsc-compliance/data-access';
-import { ResidentialLocationDto } from '@hhsc-compliance/shared-models';
+
+import { ComplianceSummaryCard } from '../components/compliance-summary-card/compliance-summary-card';
+
+const DEFAULT_LOCATION_ID = '160f46b1-9494-4bdd-b9df-53d7d73df091';
 
 @Component({
   selector: 'lib-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ComplianceSummaryCard,
-    ComplianceChart,
-    CaseManagerWorkQueueComponent,
-  ],
+  imports: [CommonModule, ComplianceSummaryCard],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dashboard implements OnInit {
   private readonly dashboard = inject(ComplianceDashboardService);
-  private readonly locationsApi = inject(ResidentialLocationsApi);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  locations: ResidentialLocationDto[] = [];
-  selectedLocationId = '';
-
-  loadingLocations = false;
   loadingData = false;
   message = '';
 
   summaryData: ComplianceSummaryView[] = [];
-  chartData: ChartDatum[] = [];
-  workQueue: CaseManagerWorkQueueView | null = null;
   alerts: string[] = [];
 
   get hasUrgentAlerts(): boolean {
@@ -67,139 +42,78 @@ export class Dashboard implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadLocations();
+    this.ensureLocationId();
+    this.loadDashboard();
   }
 
-  onLocationChange(locationId: string): void {
-    this.selectedLocationId = locationId;
-    this.loadDashboard(locationId);
+  navigateTo(s: ComplianceSummaryView): void {
+    if (!s?.module) {
+      return;
+    }
+
+    this.router.navigate(['/', 'dashboard', 'modules', s.module]);
   }
 
-  private loadLocations(): void {
-    this.message = '';
-    this.loadingLocations = true;
-    this.cdr.markForCheck();
-
-    this.locationsApi
-      .list()
-      .pipe(
-        take(1),
-        tap((rows) => {
-          this.locations = Array.isArray(rows) ? rows : [];
-
-          if (!this.selectedLocationId && this.locations.length) {
-            this.selectedLocationId = this.locations[0].id;
-            this.loadDashboard(this.selectedLocationId);
-          }
-
-          if (!this.locations.length) {
-            this.message = 'No residences found. Create one location first.';
-            this.clearDashboard();
-          }
-
-          this.cdr.markForCheck();
-        }),
-        catchError((err) => {
-          const code = err?.status ?? 'unknown';
-          this.message = `Failed to load residences (${code}).`;
-          this.locations = [];
-          this.selectedLocationId = '';
-          this.clearDashboard();
-          this.cdr.markForCheck();
-          return of([] as ResidentialLocationDto[]);
-        }),
-        finalize(() => {
-          this.loadingLocations = false;
-          this.cdr.markForCheck();
-        }),
-      )
-      .subscribe();
-  }
-
-  private loadDashboard(locationId: string): void {
-    if (!locationId) return;
+  private loadDashboard(): void {
+    const locationId = this.getLocationId();
 
     this.message = '';
     this.loadingData = true;
+    this.summaryData = [];
+    this.alerts = [];
     this.cdr.markForCheck();
 
-    forkJoin({
-      summary: this.dashboard.getSummaryData(locationId).pipe(
-        catchError((err) => {
-          const code = err?.status ?? 'unknown';
-          this.message = `Failed to load dashboard summary (${code}).`;
-          return of([] as ComplianceSummaryView[]);
-        }),
-      ),
-      chart: this.dashboard.getChartData(locationId).pipe(
-        catchError((err) => {
-          const code = err?.status ?? 'unknown';
-          this.message = this.message || `Failed to load chart (${code}).`;
-          return of([] as ChartDatum[]);
-        }),
-      ),
-      queue: this.dashboard.getCaseManagerWorkQueue(locationId).pipe(
-        catchError((err) => {
-          const code = err?.status ?? 'unknown';
-          this.message = this.message || `Failed to load work queue (${code}).`;
-          return of(null);
-        }),
-      ),
-    })
+    this.dashboard
+      .getSummaryData()
       .pipe(
         take(1),
-        tap(({ summary, chart, queue }) => {
-          this.summaryData = Array.isArray(summary) ? summary : [];
-          this.chartData = Array.isArray(chart) ? chart : [];
-          this.workQueue = queue;
-
-          this.alerts = this.summaryData
-            .filter((d) => d.status === 'critical')
-            .map((d) => `${d.title}: ${d.count} issue(s)`);
-
-          this.cdr.markForCheck();
+        catchError((err: unknown) => {
+          const code = this.errorCode(err);
+          console.error('DASHBOARD SUMMARY ERROR', err);
+          this.message = `Failed to load dashboard summary (${code}).`;
+          return of([] as ComplianceSummaryView[]);
         }),
         finalize(() => {
           this.loadingData = false;
           this.cdr.markForCheck();
         }),
       )
-      .subscribe();
-  }
+      .subscribe((summary) => {
+        console.log('DASHBOARD SUMMARY DATA', summary);
 
-  navigateTo(s: ComplianceSummaryView): void {
-    if (s?.link?.length) {
-      this.router.navigate(s.link, { queryParams: s.queryParams ?? {} });
-      return;
-    }
+        this.summaryData = Array.isArray(summary) ? summary : [];
 
-    if (s?.module) {
-      this.router.navigate(['/', s.module], {
-        queryParams: s?.queryParams ?? {},
+        this.alerts = this.summaryData
+          .filter((d) => d.status === 'critical')
+          .map((d) => `${d.title}: ${d.count} findings`);
+
+        if (!this.summaryData.length && !this.message) {
+          this.message = 'No out-of-compliance findings found.';
+        }
+
+        this.cdr.markForCheck();
       });
+  }
+
+  private ensureLocationId(): void {
+    const existing = localStorage.getItem('locationId');
+
+    if (!existing?.trim()) {
+      localStorage.setItem('locationId', DEFAULT_LOCATION_ID);
     }
   }
 
-  navigateToWorkQueueItem(item: CaseManagerWorkQueueItem): void {
-    if (item?.routeCommands?.length) {
-      this.router.navigate(item.routeCommands, {
-        queryParams: item.queryParams ?? {},
-      });
+  private getLocationId(): string {
+    return (
+      localStorage.getItem('locationId')?.trim() || DEFAULT_LOCATION_ID
+    );
+  }
+
+  private errorCode(err: unknown): string {
+    if (typeof err === 'object' && err !== null && 'status' in err) {
+      return String((err as { status?: unknown }).status ?? 'unknown');
     }
-  }
 
-  locationLabel(r: ResidentialLocationDto): string {
-    const code = (r.locationCode || '').trim();
-    const name = (r.name || '').trim();
-
-    if (code && name) return `${code} — ${name}`;
-    return name || code || 'Unnamed location';
-  }
-
-  private clearDashboard(): void {
-    this.summaryData = [];
-    this.chartData = [];
-    this.workQueue = null;
-    this.alerts = [];
+    return 'unknown';
   }
 }

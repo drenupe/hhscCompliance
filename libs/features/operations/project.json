@@ -1,0 +1,13 @@
+{
+  "name": "operations",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/operations/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:operations", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

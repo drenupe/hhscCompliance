@@ -1,0 +1,1 @@
+export * from './lib/executive-dashboard/executive-dashboard.component';

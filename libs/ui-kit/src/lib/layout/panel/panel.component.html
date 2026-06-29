@@ -1,0 +1,8 @@
+<section class="hhsc-panel" [ngClass]="'hhsc-panel--' + variant">
+  <header class="hhsc-panel__header" *ngIf="kicker || title">
+    <p class="hhsc-panel__kicker" *ngIf="kicker">{{ kicker }}</p>
+    <h2 class="hhsc-panel__title" *ngIf="title">{{ title }}</h2>
+  </header>
+
+  <ng-content></ng-content>
+</section>

@@ -1,92 +1,132 @@
-// libs/features/dashboard/src/lib/module-workbench/module-workbench.component.ts
-
 import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    OnInit,
-    inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, of, take } from 'rxjs';
 
 import {
-    ModuleCorrectionEntityGroup,
-    ModuleCorrectionView,
+  ComplianceDashboardService,
+  ModuleAffectedEntity,
+  ModuleCorrectionArea,
+  ModuleCorrectionView,
 } from '@hhsc-compliance/data-access';
 
-import { ModuleWorkbenchService } from '@hhsc-compliance/data-access';
-
 @Component({
-    selector: 'lib-module-workbench',
-    standalone: true,
-    imports: [CommonModule],
-    templateUrl: './module-workbench.component.html',
-    styleUrls: ['./module-workbench.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'lib-module-workbench',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './module-workbench.component.html',
+  styleUrls: ['./module-workbench.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModuleWorkbenchComponent implements OnInit {
-    private readonly route = inject(ActivatedRoute);
-    private readonly router = inject(Router);
-    private readonly api = inject(ModuleWorkbenchService);
-    private readonly cdr = inject(ChangeDetectorRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly api = inject(ComplianceDashboardService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-    loading = false;
-    error = '';
+  loading = false;
+  error = '';
+  module = '';
 
-    data: ModuleCorrectionView | null = null;
+  data: ModuleCorrectionView | null = null;
 
-    ngOnInit(): void {
-        const module = this.route.snapshot.paramMap.get('module');
+  get affectedEntities(): ModuleAffectedEntity[] {
+    const map = new Map<string, ModuleAffectedEntity>();
 
-        if (!module) {
-            this.error = 'Module is required';
-            return;
+    for (const area of this.data?.areas ?? []) {
+      for (const entity of area.affectedEntities ?? []) {
+        const key = `${entity.entityType}:${entity.entityId}`;
+        const existing = map.get(key);
+
+        if (!existing) {
+          map.set(key, { ...entity });
+          continue;
         }
 
-        this.load(module);
+        existing.findingCount += entity.findingCount;
+        existing.criticalCount += entity.criticalCount;
+        existing.highCount += entity.highCount;
+        existing.mediumCount += entity.mediumCount;
+      }
     }
 
-    private load(module: string): void {
-        this.loading = true;
-        this.error = '';
+    return Array.from(map.values()).sort((a, b) => {
+      if (b.criticalCount !== a.criticalCount) {
+        return b.criticalCount - a.criticalCount;
+      }
 
-        this.api
-            .getModuleCorrection(module)
-            .pipe(
-                take(1),
-                catchError((err) => {
-                    this.error = `Failed to load module (${err?.status ?? 'unknown'})`;
-                    this.loading = false;
-                    this.cdr.markForCheck();
-                    return of(null);
-                }),
-            )
-            .subscribe((result) => {
-                this.data = result;
-                this.loading = false;
-                this.cdr.markForCheck();
-            });
+      if (b.highCount !== a.highCount) {
+        return b.highCount - a.highCount;
+      }
+
+      return b.findingCount - a.findingCount;
+    });
+  }
+
+  ngOnInit(): void {
+    const module = this.route.snapshot.paramMap.get('module');
+
+    if (!module) {
+      this.error = 'Module is required';
+      return;
     }
 
-    previewFindings(
-        group: ModuleCorrectionEntityGroup,
-    ): ModuleCorrectionEntityGroup['findings'] {
-        return group.findings.slice(0, 3);
+    this.module = module;
+    this.load(module);
+  }
+
+  private load(module: string): void {
+    this.loading = true;
+    this.error = '';
+    this.cdr.markForCheck();
+
+    this.api
+      .getModuleCorrection(module)
+      .pipe(
+        take(1),
+        catchError((err) => {
+          this.error = `Failed to load module (${err?.status ?? 'unknown'})`;
+          this.loading = false;
+          this.cdr.markForCheck();
+          return of(null);
+        }),
+      )
+      .subscribe((result) => {
+        this.data = result;
+        this.loading = false;
+        this.cdr.markForCheck();
+      });
+  }
+
+  openEntity(entity: ModuleAffectedEntity): void {
+    this.router.navigate([
+      '/',
+      'dashboard',
+      'modules',
+      this.module,
+      'entities',
+      entity.entityType,
+      entity.entityId,
+    ]);
+  }
+
+  openCorrectionArea(area: ModuleCorrectionArea): void {
+    if (!area.routeCommands?.length) {
+      return;
     }
 
+    this.router.navigate(area.routeCommands, {
+      queryParams: area.queryParams ?? {},
+    });
+  }
 
-    openEntity(group: ModuleCorrectionEntityGroup): void {
-        if (!this.data) return;
-
-        this.router.navigate([
-            '/',
-            'dashboard',
-            'modules',
-            this.data.module,
-            'entities',
-            group.entityId,
-        ]);
-    }
+  goBack(): void {
+    this.router.navigate(['/', 'dashboard']);
+  }
 }

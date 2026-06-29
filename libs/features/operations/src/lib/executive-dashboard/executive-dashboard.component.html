@@ -1,0 +1,247 @@
+<lib-page [fluid]="true">
+  <section class="executive-dashboard">
+    <ng-container *ngIf="vm$ | async as vm">
+      <div class="state-card" *ngIf="vm.loading">
+        <span class="pulse-dot"></span>
+        Loading Executive Intelligence Dashboard...
+      </div>
+
+      <div
+        class="state-card state-card--error"
+        *ngIf="vm.loading === false && vm.error"
+      >
+        {{ vm.error }}
+      </div>
+
+      <ng-container *ngIf="vm.loading === false && vm.view as view">
+        <lib-hero
+          eyebrow="Executive Intelligence"
+          [title]="view.title"
+          [subtitle]="view.subtitle"
+          [statusLabel]="view.riskLevel + ' Risk'"
+          [statusTone]="
+            view.riskLevel === 'LOW'
+              ? 'healthy'
+              : view.riskLevel === 'MODERATE'
+                ? 'warning'
+                : 'danger'
+          "
+          primaryMetricLabel="Provider Health"
+          [primaryMetricValue]="view.providerHealthScore + '%'"
+          primaryMetricHelper="Agency-wide provider health score"
+          [metrics]="view.heroMetrics"
+          [actions]="heroActions"
+          (actionSelected)="onHeroAction($event)"
+        ></lib-hero>
+
+        <lib-grid [columns]="4" gap="16px" class="executive-kpis">
+          <lib-metric-card
+            *ngFor="let metric of view.kpiMetrics"
+            [label]="metric.label"
+            [value]="metric.value"
+            [detail]="metric.detail"
+            [status]="
+              metric.status === 'healthy'
+                ? 'HEALTHY'
+                : metric.status === 'attention'
+                  ? 'ATTENTION'
+                  : metric.status === 'critical'
+                    ? 'CRITICAL'
+                    : 'HEALTHY'
+            "
+          ></lib-metric-card>
+        </lib-grid>
+
+        <section class="executive-focus-grid">
+          <lib-provider-health-gauge
+            [score]="view.providerHealthScore"
+            title="Provider Health"
+            subtitle="Executive Score"
+            trend="Quarterly movement"
+            [metrics]="view.providerHealthMetrics"
+          ></lib-provider-health-gauge>
+
+          <lib-executive-briefing-card
+            [summary]="view.briefingSummary"
+            [tone]="
+              view.riskLevel === 'LOW'
+                ? 'healthy'
+                : view.riskLevel === 'MODERATE'
+                  ? 'attention'
+                  : 'critical'
+            "
+            [items]="view.briefingItems"
+          ></lib-executive-briefing-card>
+        </section>
+
+        <section class="trend-grid">
+          <lib-trend-card
+            *ngFor="let trend of view.trends"
+            [kicker]="trend.kicker"
+            [title]="trend.title"
+            [value]="trend.value"
+            [detail]="trend.detail"
+            [direction]="trend.direction"
+            [tone]="trend.tone"
+            [points]="trend.points"
+          ></lib-trend-card>
+        </section>
+
+        <section class="analytics-grid">
+          <lib-analytics-card
+            kicker="Risk Analytics"
+            title="Findings by Severity"
+            summary="Current unresolved compliance exposure across provider modules."
+            [value]="view.riskLevel"
+            detail="Risk Level"
+            [tone]="
+              view.riskLevel === 'LOW'
+                ? 'healthy'
+                : view.riskLevel === 'MODERATE'
+                  ? 'attention'
+                  : 'critical'
+            "
+            [data]="view.severityAnalytics"
+          ></lib-analytics-card>
+
+          <lib-analytics-card
+            kicker="Module Analytics"
+            title="Top Module Risk Scores"
+            summary="Highest risk areas currently impacting provider health."
+            [value]="view.moduleRiskScores.length"
+            detail="Tracked Modules"
+            tone="attention"
+            [data]="view.moduleRiskAnalytics"
+          ></lib-analytics-card>
+        </section>
+
+        <section class="action-grid">
+          <lib-executive-action-center
+            [actions]="view.executiveActions"
+            (open)="openExecutiveAction($event)"
+          ></lib-executive-action-center>
+        </section>
+
+        <section class="heat-map-grid">
+          <lib-compliance-heat-map
+            [locations]="view.heatMapLocations"
+            [rows]="view.heatMapRows"
+            (open)="openHeatMapCell($event)"
+          ></lib-compliance-heat-map>
+        </section>
+
+        <section class="executive-grid">
+          <lib-panel
+            id="executiveAlerts"
+            kicker="Executive Alerts"
+            title="Leadership Attention Required"
+            variant="highlight"
+          >
+            <div
+              class="executive-list"
+              *ngIf="view.alerts.length; else noAlerts"
+            >
+              <button
+                type="button"
+                class="executive-list__item"
+                *ngFor="let alert of view.alerts"
+                (click)="openAlert(alert)"
+              >
+                <span
+                  class="severity"
+                  [class.severity--critical]="alert.severity === 'CRITICAL'"
+                >
+                  {{ alert.severity }}
+                </span>
+
+                <div>
+                  <h3>{{ alert.title }}</h3>
+                  <p>{{ alert.message }}</p>
+                </div>
+
+                <strong *ngIf="alert.count !== undefined">
+                  {{ alert.count }}
+                </strong>
+              </button>
+            </div>
+
+            <ng-template #noAlerts>
+              <div class="empty-state">No executive alerts at this time.</div>
+            </ng-template>
+          </lib-panel>
+
+          <lib-panel
+            kicker="Executive Recommendations"
+            title="Recommended Actions"
+          >
+            <div
+              class="executive-list"
+              *ngIf="view.recommendations.length; else noRecommendations"
+            >
+              <button
+                type="button"
+                class="executive-list__item"
+                *ngFor="let recommendation of view.recommendations"
+                (click)="openRecommendation(recommendation)"
+              >
+                <span
+                  class="severity"
+                  [class.severity--critical]="
+                    recommendation.priority === 'CRITICAL'
+                  "
+                >
+                  {{ recommendation.priority }}
+                </span>
+
+                <div>
+                  <h3>{{ recommendation.title }}</h3>
+                  <p>{{ recommendation.message }}</p>
+                </div>
+              </button>
+            </div>
+
+            <ng-template #noRecommendations>
+              <div class="empty-state">
+                No recommendations currently available.
+              </div>
+            </ng-template>
+          </lib-panel>
+
+          <lib-panel
+            id="moduleRisk"
+            class="panel--wide"
+            kicker="Module Risk"
+            title="Risk by Compliance Area"
+          >
+            <div class="risk-table">
+              <button
+                type="button"
+                class="risk-row"
+                *ngFor="let module of view.moduleRiskScores"
+                (click)="openModule(module)"
+              >
+                <div>
+                  <h3>{{ module.title }}</h3>
+                  <p>{{ module.module }}</p>
+                </div>
+
+                <span>{{ module.openFindings }} Open</span>
+                <span>{{ module.criticalFindings }} Critical</span>
+                <span>{{ module.highFindings }} High</span>
+
+                <strong
+                  [class.risk-low]="module.riskLevel === 'LOW'"
+                  [class.risk-moderate]="module.riskLevel === 'MODERATE'"
+                  [class.risk-high]="module.riskLevel === 'HIGH'"
+                  [class.risk-critical]="module.riskLevel === 'CRITICAL'"
+                >
+                  {{ module.riskLevel }}
+                </strong>
+              </button>
+            </div>
+          </lib-panel>
+        </section>
+      </ng-container>
+    </ng-container>
+  </section>
+</lib-page>

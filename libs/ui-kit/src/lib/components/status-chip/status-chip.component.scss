@@ -1,0 +1,105 @@
+:host {
+  display: inline-flex;
+}
+
+.hhsc-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 12px;
+
+  border-radius: var(--hhsc-radius-pill);
+
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .04em;
+
+  border: 1px solid transparent;
+
+  transition: var(--hhsc-transition-fast);
+}
+
+.hhsc-status-chip__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+/* Healthy */
+
+.hhsc-status-chip--healthy {
+  color: var(--hhsc-success);
+  background: rgba(50,213,131,.10);
+  border-color: rgba(50,213,131,.22);
+}
+
+.hhsc-status-chip--healthy
+.hhsc-status-chip__dot {
+  background: var(--hhsc-success);
+}
+
+/* Attention */
+
+.hhsc-status-chip--attention {
+  color: var(--hhsc-warning);
+  background: rgba(245,185,66,.10);
+  border-color: rgba(245,185,66,.24);
+}
+
+.hhsc-status-chip--attention
+.hhsc-status-chip__dot {
+  background: var(--hhsc-warning);
+}
+
+/* Warning */
+
+.hhsc-status-chip--warning {
+  color: #ff9b42;
+  background: rgba(255,155,66,.10);
+  border-color: rgba(255,155,66,.22);
+}
+
+.hhsc-status-chip--warning
+.hhsc-status-chip__dot {
+  background: #ff9b42;
+}
+
+/* Critical */
+
+.hhsc-status-chip--critical {
+  color: var(--hhsc-danger);
+  background: rgba(239,68,68,.10);
+  border-color: rgba(239,68,68,.25);
+}
+
+.hhsc-status-chip--critical
+.hhsc-status-chip__dot {
+  background: var(--hhsc-danger);
+}
+
+/* Info */
+
+.hhsc-status-chip--info {
+  color: var(--hhsc-primary);
+  background: rgba(79,215,255,.10);
+  border-color: rgba(79,215,255,.22);
+}
+
+.hhsc-status-chip--info
+.hhsc-status-chip__dot {
+  background: var(--hhsc-primary);
+}
+
+/* Neutral */
+
+.hhsc-status-chip--neutral {
+  color: var(--hhsc-text-secondary);
+  background: rgba(255,255,255,.05);
+  border-color: var(--hhsc-border);
+}
+
+.hhsc-status-chip--neutral
+.hhsc-status-chip__dot {
+  background: var(--hhsc-text-secondary);
+}

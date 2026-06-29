@@ -31,7 +31,12 @@ const depConstraints = [
   },
   {
     sourceTag: 'scope:feature',
-    onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'scope:data', 'scope:models'],
+    onlyDependOnLibsWithTags: [
+      'scope:shared',
+      'scope:ui',
+      'scope:data',
+      'scope:models',
+    ],
   },
   {
     sourceTag: 'scope:data',
@@ -41,7 +46,6 @@ const depConstraints = [
   { sourceTag: 'scope:shared', onlyDependOnLibsWithTags: [] },
   { sourceTag: 'scope:models', onlyDependOnLibsWithTags: [] },
 ];
-
 
 export default [
   // Nx base presets

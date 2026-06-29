@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.activity-list {
+  display: grid;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--hhsc-border);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item span {
+  color: var(--hhsc-success);
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.activity-item p {
+  margin: 0;
+  color: #b7c9d6;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.activity-item small {
+  display: block;
+  margin-top: 4px;
+  color: var(--hhsc-text-muted);
+  font-size: 12px;
+}

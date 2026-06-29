@@ -1,0 +1,14 @@
+<div class="activity-list">
+  <div
+    class="activity-item"
+    *ngFor="let item of items"
+  >
+    <span>✓</span>
+
+    <div>
+      <p>{{ item.message }}</p>
+
+      <small>{{ item.timestamp }}</small>
+    </div>
+  </div>
+</div>

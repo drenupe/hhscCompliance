@@ -1,0 +1,60 @@
+<aside class="panel executive-panel">
+  <div class="panel-header">
+    <div>
+      <p class="panel-kicker">Executive Intelligence</p>
+      <h2>Agency Risk Summary</h2>
+    </div>
+  </div>
+
+  <p class="executive-panel__summary">
+    {{ executive.providerHealthSummary }}
+  </p>
+
+  <div class="executive-panel__metrics">
+    <div>
+      <strong>{{ executive.surveyRiskLevel }}</strong>
+      <small>Survey Risk</small>
+    </div>
+
+    <div>
+      <strong>{{ executive.readinessTrend }}</strong>
+      <small>Trend</small>
+    </div>
+
+    <div>
+      <strong>{{ executive.capCompletionRate }}%</strong>
+      <small>CAP Completion</small>
+    </div>
+
+    <div>
+      <strong>{{ executive.staffReadinessRate }}%</strong>
+      <small>Staff Ready</small>
+    </div>
+
+    <div>
+      <strong>{{ executive.billingRiskLevel }}</strong>
+      <small>Billing Risk</small>
+    </div>
+  </div>
+
+  <div class="executive-risk-list" *ngIf="executive.risks.length">
+    <p class="risk-title">Top Risks</p>
+
+    <button
+      *ngFor="let risk of executive.risks"
+      type="button"
+      class="executive-risk-row"
+      [ngClass]="priorityClass(risk.level)"
+      (click)="openRisk(risk)"
+    >
+      <span class="executive-risk-icon">!</span>
+
+      <div class="executive-risk-content">
+        <strong>{{ risk.title }}</strong>
+        <p>{{ risk.summary }}</p>
+      </div>
+
+      <span class="executive-risk-arrow">→</span>
+    </button>
+  </div>
+</aside>

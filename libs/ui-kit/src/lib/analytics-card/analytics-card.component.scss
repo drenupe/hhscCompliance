@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.analytics-card {
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--hhsc-border);
+  border-radius: var(--hhsc-radius-lg);
+  background:
+    radial-gradient(circle at top right, rgba(24, 216, 255, 0.08), transparent 18rem),
+    rgba(255, 255, 255, 0.035);
+  color: var(--hhsc-text-primary);
+}
+
+.analytics-card--healthy {
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.analytics-card--attention {
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+.analytics-card--critical {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.analytics-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.analytics-card__kicker {
+  margin: 0 0 0.5rem;
+  color: var(--hhsc-primary);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.analytics-card h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+}
+
+.analytics-card__summary {
+  margin: 0.55rem 0 0;
+  color: var(--hhsc-text-secondary);
+  line-height: 1.5;
+}
+
+.analytics-card__value {
+  min-width: 86px;
+  text-align: right;
+}
+
+.analytics-card__value strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.analytics-card__value span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--hhsc-text-muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.analytics-card__bars {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.25rem;
+}
+
+.analytics-card__bar-row {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.analytics-card__bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--hhsc-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.analytics-card__bar-label strong {
+  color: var(--hhsc-text-primary);
+}
+
+.analytics-card__track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.analytics-card__bar {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.analytics-card__bar--healthy {
+  background: #22c55e;
+}
+
+.analytics-card__bar--attention {
+  background: #f59e0b;
+}
+
+.analytics-card__bar--critical {
+  background: #ef4444;
+}
+
+.analytics-card__bar--neutral {
+  background: var(--hhsc-primary);
+}
+
+.analytics-card small {
+  color: var(--hhsc-text-muted);
+}

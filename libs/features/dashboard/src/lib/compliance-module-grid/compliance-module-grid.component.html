@@ -1,0 +1,25 @@
+<div class="compliance-grid">
+  <button
+    *ngFor="let module of modules | slice: 0 : 6"
+    type="button"
+    class="module-card"
+    (click)="openModule(module)"
+  >
+    <lib-status-chip
+      [label]="statusLabel(module.status)"
+      [variant]="statusVariant(module.status)"
+    ></lib-status-chip>
+
+    <h3>{{ module.title }}</h3>
+    <p>{{ module.subtitle }}</p>
+
+    <div class="module-card__bottom">
+      <strong>{{ module.findingCount }}</strong>
+      <small>
+        {{ module.criticalCount }} critical • {{ module.dueSoon }} due soon
+      </small>
+    </div>
+
+    <span class="card-link">Open Module →</span>
+  </button>
+</div>

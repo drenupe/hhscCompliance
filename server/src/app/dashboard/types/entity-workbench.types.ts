@@ -1,14 +1,25 @@
-export type EntityWorkbenchSeverity = 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
+export type EntityWorkbenchStatus =
+  | 'COMPLIANT'
+  | 'NON_COMPLIANT'
+  | 'UNKNOWN';
+
+export type EntityWorkbenchSeverity =
+  | 'LOW'
+  | 'MED'
+  | 'HIGH'
+  | 'CRITICAL';
 
 export interface EntityWorkbenchFinding {
   id: string;
+  module: string;
+  subcategory: string | null;
   ruleCode: string;
-  status: string;
+  status: EntityWorkbenchStatus;
   severity: EntityWorkbenchSeverity;
   message: string | null;
-  subcategory: string | null;
-  routeCommands?: any[] | null;
-  queryParams?: Record<string, any> | null;
+  lastCheckedAt: Date | string | null;
+  routeCommands?: unknown;
+  queryParams?: unknown;
 }
 
 export interface EntityWorkbenchSection {
@@ -17,6 +28,7 @@ export interface EntityWorkbenchSection {
   findingCount: number;
   criticalCount: number;
   highCount: number;
+  mediumCount: number;
   findings: EntityWorkbenchFinding[];
 }
 

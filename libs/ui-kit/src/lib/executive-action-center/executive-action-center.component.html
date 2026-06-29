@@ -1,0 +1,64 @@
+<article class="action-center">
+  <header class="action-center__header">
+    <div>
+      <p>{{ kicker }}</p>
+      <h3>{{ title }}</h3>
+      <span>{{ summary }}</span>
+    </div>
+
+    <div class="action-center__impact">
+      <strong>+{{ totalHealthGain }}%</strong>
+      <span>Potential health gain</span>
+    </div>
+  </header>
+
+  <div class="action-center__list" *ngIf="actions.length; else noActions">
+    <button
+      type="button"
+      class="action-center__item"
+      *ngFor="let action of actions"
+      (click)="openAction(action)"
+    >
+      <span
+        class="action-center__priority"
+        [class.action-center__priority--critical]="action.priority === 'Critical'"
+        [class.action-center__priority--high]="action.priority === 'High'"
+        [class.action-center__priority--medium]="action.priority === 'Medium'"
+        [class.action-center__priority--low]="action.priority === 'Low'"
+      >
+        {{ action.priority }}
+      </span>
+
+      <div>
+        <h4>{{ action.title }}</h4>
+        <p>{{ action.description }}</p>
+        <small *ngIf="action.impactLabel">{{ action.impactLabel }}</small>
+      </div>
+
+      <div class="action-center__gains">
+        <strong *ngIf="action.estimatedHealthGain">
+          +{{ action.estimatedHealthGain }}%
+        </strong>
+        <span>Health</span>
+      </div>
+    </button>
+  </div>
+
+  <ng-template #noActions>
+    <div class="action-center__empty">
+      No executive actions are currently recommended.
+    </div>
+  </ng-template>
+
+  <footer class="action-center__footer" *ngIf="actions.length">
+    <span>
+      Estimated survey readiness gain:
+      <strong>+{{ totalReadinessGain }}%</strong>
+    </span>
+
+    <span>
+      Actions:
+      <strong>{{ actions.length }}</strong>
+    </span>
+  </footer>
+</article>

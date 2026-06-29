@@ -1,0 +1,60 @@
+:host {
+  display: inline-flex;
+}
+
+.lib-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 44px;
+
+  padding: 0 18px;
+
+  border-radius: var(--hhsc-radius-md);
+
+  border: 1px solid transparent;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  transition: var(--hhsc-transition-fast);
+}
+
+.lib-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.lib-button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.lib-button--primary {
+  color: #07141f;
+  background: var(--hhsc-primary);
+}
+
+.lib-button--secondary {
+  color: var(--hhsc-text-primary);
+  background: var(--hhsc-surface-2);
+}
+
+.lib-button--outline {
+  color: var(--hhsc-primary);
+  background: transparent;
+  border-color: var(--hhsc-primary);
+}
+
+.lib-button--ghost {
+  color: var(--hhsc-primary);
+  background: transparent;
+}
+
+.lib-button--danger {
+  color: white;
+  background: var(--hhsc-danger);
+}

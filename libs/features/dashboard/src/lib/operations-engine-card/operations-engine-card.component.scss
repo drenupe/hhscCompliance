@@ -1,0 +1,227 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.engine-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.engine-viewer {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 28px;
+  width: 100%;
+  min-height: 360px;
+  padding: 32px;
+  text-align: left;
+  font: inherit;
+  color: var(--hhsc-text-primary);
+  cursor: pointer;
+  border-radius: 30px;
+  border: 1px solid rgba(24, 216, 255, 0.2);
+  background:
+    radial-gradient(
+      circle at 84% 24%,
+      rgba(24, 216, 255, 0.18),
+      transparent 17rem
+    ),
+    linear-gradient(135deg, rgba(18, 49, 68, 0.96), rgba(8, 26, 40, 0.96));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.engine-viewer:hover,
+.engine-viewer:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(24, 216, 255, 0.48);
+  box-shadow: 0 30px 90px rgba(24, 216, 255, 0.12);
+  outline: none;
+}
+
+.engine-viewer__content {
+  position: relative;
+  z-index: 2;
+}
+
+.engine-viewer h3 {
+  margin: 22px 0 12px;
+  color: var(--hhsc-text-primary);
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.engine-viewer p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--hhsc-text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.engine-viewer__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.engine-viewer__metrics div {
+  padding: 15px;
+  border-radius: var(--hhsc-radius-md);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--hhsc-border);
+}
+
+.engine-viewer__metrics strong {
+  display: block;
+  color: var(--hhsc-text-primary);
+  font-size: 28px;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+}
+
+.engine-viewer__metrics small {
+  display: block;
+  margin-top: 4px;
+  color: var(--hhsc-text-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.engine-viewer__score {
+  align-self: center;
+  justify-self: center;
+}
+
+.card-link {
+  display: inline-flex;
+  margin-top: 22px;
+  color: var(--hhsc-primary);
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.engine-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 48px;
+  padding-top: 0.25rem;
+}
+
+.engine-card__arrow {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  border: 2px solid #38bdf8;
+  border-radius: 999px;
+  background: #0284c7;
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.engine-card__arrow:hover,
+.engine-card__arrow:focus-visible {
+  background: #38bdf8;
+  color: #020617;
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.45);
+  outline: none;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.carousel-dots button {
+  appearance: none;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  cursor: pointer;
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.carousel-dots button.active {
+  width: 28px;
+  background: var(--hhsc-primary);
+}
+
+@media (max-width: 900px) {
+  .engine-viewer {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 24px;
+  }
+
+  .engine-viewer h3 {
+    font-size: 40px;
+  }
+
+  .engine-viewer__score {
+    justify-self: start;
+  }
+
+  .engine-viewer__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .engine-viewer {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .engine-viewer h3 {
+    font-size: 32px;
+  }
+
+  .engine-viewer p {
+    font-size: 14px;
+  }
+
+  .engine-viewer__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .engine-card__footer {
+    gap: 0.75rem;
+  }
+
+  .engine-card__arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+}

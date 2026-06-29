@@ -1,0 +1,20 @@
+<span class="count-pill">{{ priorities.length }}</span>
+
+<div class="priority-list">
+  <button
+    *ngFor="let item of priorities"
+    type="button"
+    class="priority-row"
+    [ngClass]="priorityClass(item.level)"
+    (click)="openPriority(item)"
+  >
+    <span class="priority-marker"></span>
+
+    <div>
+      <strong>{{ item.title }}</strong>
+      <p>{{ item.context }}</p>
+    </div>
+
+    <small>{{ item.due }}</small>
+  </button>
+</div>

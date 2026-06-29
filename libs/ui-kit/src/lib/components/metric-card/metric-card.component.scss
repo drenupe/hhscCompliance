@@ -1,0 +1,55 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.metric-card {
+  min-height: 118px;
+  padding: var(--hhsc-space-5);
+  border-radius: var(--hhsc-radius-md);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--hhsc-border);
+}
+
+.metric-card p {
+  margin: 0;
+  color: var(--hhsc-text-secondary);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: var(--hhsc-space-2);
+  color: var(--hhsc-text-primary);
+  font-size: 34px;
+  font-weight: 950;
+  letter-spacing: -0.06em;
+}
+
+.metric-card small {
+  display: block;
+  margin-top: var(--hhsc-space-1);
+  color: var(--hhsc-text-muted);
+  font-size: 12px;
+}
+
+.metric-card--healthy {
+  border-color: rgba(50, 213, 131, 0.28);
+}
+
+.metric-card--attention {
+  border-color: rgba(245, 185, 66, 0.3);
+}
+
+.metric-card--at-risk {
+  border-color: rgba(255, 138, 52, 0.3);
+}
+
+.metric-card--critical {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.metric-card--neutral {
+  border-color: var(--hhsc-border);
+}

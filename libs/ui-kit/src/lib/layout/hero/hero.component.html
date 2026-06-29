@@ -1,0 +1,61 @@
+<section class="hero">
+  <div class="hero__content">
+    <div class="hero__eyebrow" *ngIf="eyebrow">
+      {{ eyebrow }}
+    </div>
+
+    <div class="hero__header">
+      <div>
+        <h1>{{ title }}</h1>
+        <p *ngIf="subtitle">{{ subtitle }}</p>
+      </div>
+
+      <span
+        class="hero__status"
+        *ngIf="statusLabel"
+        [class.hero__status--healthy]="statusTone === 'healthy'"
+        [class.hero__status--warning]="statusTone === 'warning'"
+        [class.hero__status--danger]="statusTone === 'danger'"
+        [class.hero__status--neutral]="statusTone === 'neutral'"
+      >
+        {{ statusLabel }}
+      </span>
+    </div>
+
+    <div class="hero__body">
+      <div class="hero__primary-metric" *ngIf="primaryMetricLabel">
+        <span>{{ primaryMetricLabel }}</span>
+        <strong>{{ primaryMetricValue }}</strong>
+        <small *ngIf="primaryMetricHelper">{{ primaryMetricHelper }}</small>
+      </div>
+
+      <div class="hero__metrics" *ngIf="metrics.length">
+        <article class="hero__metric" *ngFor="let metric of metrics">
+          <span>{{ metric.label }}</span>
+          <strong>{{ metric.value }}</strong>
+          <small *ngIf="metric.helper">{{ metric.helper }}</small>
+        </article>
+      </div>
+    </div>
+
+    <div class="hero__actions" *ngIf="actions.length">
+      <button
+        type="button"
+        *ngFor="let action of actions"
+        class="hero__button"
+        [class.hero__button--primary]="action.variant === 'primary'"
+        [class.hero__button--secondary]="action.variant === 'secondary'"
+        [class.hero__button--ghost]="action.variant === 'ghost' || !action.variant"
+        (click)="onAction(action.action)"
+      >
+        {{ action.label }}
+      </button>
+    </div>
+  </div>
+
+  <div class="hero__visual" aria-hidden="true">
+    <div class="hero__ring hero__ring--one"></div>
+    <div class="hero__ring hero__ring--two"></div>
+    <div class="hero__orb"></div>
+  </div>
+</section>

@@ -1,37 +1,39 @@
-export type ModuleEntityType =
+export type ModuleCorrectionEntityType =
   | 'RESIDENTIAL'
   | 'CONSUMER'
   | 'EMPLOYEE'
   | 'PROVIDER';
 
-export type ModuleSeverity = 'LOW' | 'MED' | 'HIGH' | 'CRITICAL';
-
-export interface ModuleCorrectionFinding {
-  id: string;
-  ruleCode: string;
-  status: string;
-  severity: ModuleSeverity;
-  message: string | null;
-  subcategory: string | null;
-  routeCommands?: any[] | null;
-  queryParams?: Record<string, any> | null;
-}
-
-export interface ModuleCorrectionEntityGroup {
-  entityType: ModuleEntityType;
+export interface ModuleAffectedEntity {
+  entityType: ModuleCorrectionEntityType;
   entityId: string;
-  entityName: string;
+  entityLabel: string;
   findingCount: number;
   criticalCount: number;
   highCount: number;
-  findings: ModuleCorrectionFinding[];
+  mediumCount: number;
+}
+
+export interface ModuleCorrectionArea {
+  subcategory: string;
+  title: string;
+  findingCount: number;
+  criticalCount: number;
+  highCount: number;
+  mediumCount: number;
+  affectedEntityCount: number;
+  affectedEntities: ModuleAffectedEntity[];
+
+  routeCommands: string[];
+  queryParams: Record<string, string>;
 }
 
 export interface ModuleCorrectionView {
   module: string;
   title: string;
-  entityType: ModuleEntityType;
+  entityType: ModuleCorrectionEntityType;
   totalFindings: number;
+  totalAreas: number;
   totalEntities: number;
-  groups: ModuleCorrectionEntityGroup[];
+  areas: ModuleCorrectionArea[];
 }

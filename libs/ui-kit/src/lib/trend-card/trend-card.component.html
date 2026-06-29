@@ -1,0 +1,33 @@
+<article
+  class="trend-card"
+  [class.trend-card--healthy]="tone === 'healthy'"
+  [class.trend-card--attention]="tone === 'attention'"
+  [class.trend-card--critical]="tone === 'critical'"
+  [class.trend-card--neutral]="tone === 'neutral'"
+>
+  <header class="trend-card__header">
+    <div>
+      <p class="trend-card__kicker" *ngIf="kicker">{{ kicker }}</p>
+      <h3>{{ title }}</h3>
+      <p class="trend-card__detail" *ngIf="detail">{{ detail }}</p>
+    </div>
+
+    <div class="trend-card__metric">
+      <strong>{{ value }}</strong>
+      <span>{{ trendSymbol }}</span>
+    </div>
+  </header>
+
+  <div class="trend-card__chart" *ngIf="points.length">
+    <div class="trend-card__bar" *ngFor="let point of points">
+      <div class="trend-card__bar-wrap">
+        <span [style.height]="pointHeight(point.value)"></span>
+      </div>
+
+      <div class="trend-card__legend">
+        <small>{{ point.label }}</small>
+        <strong>{{ point.value }}{{ isPercentValue ? '%' : '' }}</strong>
+      </div>
+    </div>
+  </div>
+</article>

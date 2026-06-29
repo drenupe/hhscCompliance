@@ -27,7 +27,8 @@ import { PeopleModule } from './people/people.module';
 import { SurveyModule } from './survey/survey.module';
 import { RemediationModule } from './remediation/remediation.module';
 import { ComplianceRecheckModule } from './compliance-recheck/compliance-recheck.module';
-
+import { OperationsModule } from './operations/operations.module';
+import { ExecutiveModule } from './executive/executive.module';
 
 
 const NODE_ENV = process.env.NODE_ENV ?? 'development';
@@ -69,7 +70,9 @@ const NODE_ENV = process.env.NODE_ENV ?? 'development';
     DashboardModule,
     ComplianceRecheckModule,
     ComplianceResultsModule,
-    ComplianceEngineModule
+    ComplianceEngineModule,
+    OperationsModule,
+    ExecutiveModule
   ],
   controllers: [AppController],
   providers: [AppService,RolesGuard],

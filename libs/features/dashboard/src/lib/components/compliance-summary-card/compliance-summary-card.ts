@@ -7,19 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type SummaryStatus = 'ok' | 'warning' | 'critical';
-
-export interface ComplianceSummaryView {
-  title: string;
-  module: string;
-  count: number;
-  status: SummaryStatus;
-  lastUpdated?: string;
-
-  // ✅ deep link support
-  link?: any[];
-  queryParams?: Record<string, any>;
-}
+import { ComplianceSummaryView } from '@hhsc-compliance/data-access';
 
 @Component({
   selector: 'lib-compliance-summary-card',
@@ -32,14 +20,12 @@ export interface ComplianceSummaryView {
 export class ComplianceSummaryCard {
   @Input() summary?: ComplianceSummaryView;
 
-  // ✅ IMPORTANT: emit the whole object (not a string)
   @Output() viewDetails = new EventEmitter<ComplianceSummaryView>();
 
   get statusClass(): string {
-  const s = this.summary?.status ?? 'ok';
-  return `is-${s}`;
-}
-
+    const status = this.summary?.status ?? 'ok';
+    return `is-${status}`;
+  }
 
   get icon(): string {
     switch (this.summary?.status) {
@@ -51,10 +37,14 @@ export class ComplianceSummaryCard {
         return '✔';
     }
   }
-  
-onView(e?: Event) {
-  console.log('[card] click', { hasSummary: !!this.summary, summary: this.summary });
-  if (this.summary) this.viewDetails.emit(this.summary);
-}
 
+  onView(event?: Event): void {
+    event?.stopPropagation();
+
+    if (!this.summary) {
+      return;
+    }
+
+    this.viewDetails.emit(this.summary);
+  }
 }
