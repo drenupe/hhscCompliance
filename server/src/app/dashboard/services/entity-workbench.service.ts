@@ -5,7 +5,7 @@ import {
   EntityWorkbenchSection,
   EntityWorkbenchStatus,
   EntityWorkbenchView,
-} from '../types/entity-workbench.types';
+} from '../../../../../libs/shared-models/src/lib/dashboard/types/entity-workbench.types';
 import {
   defaultEntityTypeForModule,
   entityLabel,

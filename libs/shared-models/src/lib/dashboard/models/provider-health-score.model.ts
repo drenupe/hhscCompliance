@@ -11,13 +11,10 @@ export interface ProviderHealthInputs {
   openFindings: number;
   criticalFindings: number;
   highFindings: number;
-
   openCaps: number;
   overdueCaps: number;
   capsWithoutEvidence: number;
-
   surveyReadinessScore: number;
-
   moduleRiskScore: number;
 }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { ProviderHealthService } from './provider-intelligence/provider-health.service';
 import { ProviderAlertService } from './provider-intelligence/provider-alert.service';
+import { ProviderHealthService } from './provider-intelligence/provider-health.service';
 import { ProviderRecommendationService } from './provider-intelligence/provider-recommendation.service';
 import { RiskScoringService } from './provider-intelligence/risk-scoring.service';
-import { ProviderIntelligenceView } from '../types/provider-intelligence.types';
+import { ProviderIntelligenceView } from '@hhsc-compliance/shared-models';
 
 @Injectable()
 export class ProviderIntelligenceService {
@@ -24,10 +24,20 @@ export class ProviderIntelligenceService {
       this.getEvidenceRows(),
     ]);
 
-    const totals = this.calculateTotals(summaryRows, capRows, evidenceRows);
+    const moduleRiskScores = summaryRows.map((row) =>
+      this.riskScoringService.toModuleRiskScore(row),
+    );
 
-    const providerHealthScore =
-      this.healthService.scoreProviderHealth(totals);
+    const highestModuleRiskScore = moduleRiskScores.length
+      ? Math.max(...moduleRiskScores.map((module) => module.riskScore))
+      : 0;
+
+    const totals = this.calculateTotals(
+      summaryRows,
+      capRows,
+      evidenceRows,
+      highestModuleRiskScore,
+    );
 
     const surveyReadinessScore =
       this.healthService.scoreSurveyReadiness(totals);
@@ -35,9 +45,12 @@ export class ProviderIntelligenceService {
     const operationalHealthScore =
       this.healthService.scoreOperationalHealth(totals);
 
-    const moduleRiskScores = summaryRows.map((row) =>
-      this.riskScoringService.toModuleRiskScore(row),
-    );
+    const healthAnalysis = this.healthService.scoreProviderHealth({
+      ...totals,
+      moduleRiskScore: highestModuleRiskScore,
+    });
+
+    const providerHealthScore = healthAnalysis.providerHealthScore;
 
     return {
       providerHealthScore,
@@ -45,17 +58,21 @@ export class ProviderIntelligenceService {
       operationalHealthScore,
       riskLevel:
         this.riskScoringService.riskLevelFromHealthScore(providerHealthScore),
+      healthAnalysis: {
+        score: providerHealthScore,
+        breakdown: healthAnalysis.breakdown,
+      },
       metrics: [
         {
           label: 'Provider Health',
           value: `${providerHealthScore}%`,
-          detail: 'Overall operational standing',
+          detail: 'Weighted executive health score',
           status: this.healthService.metricStatus(providerHealthScore),
         },
         {
           label: 'Survey Readiness',
           value: `${surveyReadinessScore}%`,
-          detail: 'Readiness based on open risk',
+          detail: 'Readiness based on current compliance exposure',
           status: this.healthService.metricStatus(surveyReadinessScore),
         },
         {
@@ -130,6 +147,7 @@ export class ProviderIntelligenceService {
     summaryRows: any[],
     capRows: any[],
     evidenceRows: any[],
+    moduleRiskScore: number,
   ) {
     const capTotals = capRows[0] ?? {};
 
@@ -149,6 +167,7 @@ export class ProviderIntelligenceService {
       openCaps: Number(capTotals.open_caps ?? 0),
       overdueCaps: Number(capTotals.overdue_caps ?? 0),
       capsWithoutEvidence: evidenceRows.length,
+      moduleRiskScore,
     };
   }
 }

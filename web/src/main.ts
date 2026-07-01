@@ -1,5 +1,9 @@
 import 'zone.js';
 import './styles.scss';
+
 import { bootstrapApplication } from '@angular/platform-browser';
-import { AppShellComponent, appConfig } from '@hhsc-compliance/web-shell';
-bootstrapApplication(AppShellComponent, appConfig).catch(console.error);
+
+import { App } from './app/app';
+import { appConfig } from './app/app.config';
+
+bootstrapApplication(App, appConfig).catch(console.error);

@@ -1,11 +1,6 @@
-import { Route } from '@angular/router';
+import { Routes } from '@angular/router';
 
-export const appRoutes: Route[] = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'provider-onboarding',
-  },
+export const publicRoutes: Routes = [
   {
     path: 'provider-onboarding',
     loadComponent: () =>

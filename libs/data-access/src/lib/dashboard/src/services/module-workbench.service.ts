@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ModuleWorkbench } from '../../../../../../shared-models/src/lib/dashboard/module-workbench.model';
+import { ModuleWorkbench } from '../../../../../../shared-models/src/lib/dashboard/models/module-workbench.model';
 import { EntityWorkbenchView, ModuleCorrectionEntityType } from './compliance-dashboard.service';
 
 @Injectable({

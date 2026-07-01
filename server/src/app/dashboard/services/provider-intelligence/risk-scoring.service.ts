@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProviderModuleRiskScore, ProviderRiskLevel } from '../../types/provider-intelligence.types';
+import { ProviderModuleRiskScore, ProviderRiskLevel } from '../../../../../../libs/shared-models/src/lib/dashboard/types/provider-intelligence.types';
 
 
 @Injectable()

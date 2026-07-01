@@ -6,7 +6,7 @@ import {
   ModuleCorrectionArea,
   ModuleCorrectionEntityType,
   ModuleCorrectionView,
-} from '../types/module-correction.types';
+} from '../../../../../libs/shared-models/src/lib/dashboard/types/module-correction.types';
 
 import {
   defaultEntityTypeForModule,

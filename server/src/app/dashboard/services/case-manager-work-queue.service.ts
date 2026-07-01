@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import {
   CaseManagerWorkQueueItem,
   CaseManagerWorkQueueView,
-} from '../types/dashboard.types';
+} from '../../../../../libs/shared-models/src/lib/dashboard/types/dashboard.types';
 import { normalizeSeverity, titleForSection } from './dashboard-labels';
 
 @Injectable()
