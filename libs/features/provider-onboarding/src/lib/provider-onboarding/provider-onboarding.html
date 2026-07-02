@@ -1,127 +1,95 @@
 <section class="onboarding">
-
   <header class="hero">
-    <h1>Welcome to the HCBS Operating System</h1>
+    <div class="hero__content">
+      <p class="eyebrow">Agency Onboarding</p>
 
-    <p>
-      Thank you for trusting us to become part of your organization.
-    </p>
+      <h1>Welcome to the HCBS Operating System</h1>
 
-    <p>
-      Our goal is simple:
-    </p>
+      <p class="hero__lead">
+        Thank you for trusting us to become part of your organization. We will help you build your agency, reduce administrative work, improve compliance, protect reimbursement, and improve quality of care.
+      </p>
 
-    <ul>
-      <li>Reduce administrative work</li>
-      <li>Improve compliance</li>
-      <li>Protect reimbursement</li>
-      <li>Improve quality of care</li>
-    </ul>
+      <div class="hero__actions">
+        <button class="btn btn--primary">Begin Agency Setup</button>
+        <button class="btn btn--secondary">Schedule Customer Success</button>
+      </div>
+    </div>
 
-    <button class="primary">
-      Begin Agency Setup
-    </button>
-
-    <button class="secondary">
-      Schedule Customer Success
-    </button>
+    <div class="hero__panel">
+      <span class="panel__label">Setup Progress</span>
+      <strong>{{ progress }}%</strong>
+      <p>Agency profile nearly complete</p>
+    </div>
   </header>
 
   <section class="card">
-
-    <h2>Do you already have electronic records?</h2>
-
-    <div class="choices">
-
-      <div class="choice">
-        <h3>I already have electronic records</h3>
-
-        <p>
-          Upload formatted CSV templates and let the platform build your agency automatically.
-        </p>
-      </div>
-
-      <div class="choice">
-        <h3>I have paper records</h3>
-
-        <p>
-          We'll guide you through setup with help from Customer Success.
-        </p>
-      </div>
-
-      <div class="choice">
-        <h3>I'm a new provider</h3>
-
-        <p>
-          We'll build your agency from scratch together.
-        </p>
-      </div>
-
+    <div class="section-heading">
+      <p class="eyebrow">Start Here</p>
+      <h2>How should we build your agency?</h2>
     </div>
 
+    <div class="choices">
+      <button
+        class="choice"
+        *ngFor="let option of setupOptions"
+        type="button"
+      >
+        <span class="choice__icon">{{ option.icon }}</span>
+        <h3>{{ option.title }}</h3>
+        <p>{{ option.description }}</p>
+      </button>
+    </div>
   </section>
 
-  <section class="card">
+  <section class="card card--accent">
+    <div class="section-heading">
+      <p class="eyebrow">Agency Creation Engine</p>
+      <h2>Upload CSV files and let the platform build your agency</h2>
+      <p>
+        Use formatted templates to import provider information, employees, consumers, locations, authorizations, and training records.
+      </p>
+    </div>
 
-    <h2>Agency Creation Engine</h2>
+    <div class="template-grid">
+      <div class="template" *ngFor="let template of csvTemplates">
+        <span>{{ template }}</span>
+        <small>CSV Template</small>
+      </div>
+    </div>
 
-    <p>
-      Upload your existing agency information using our formatted CSV templates.
-    </p>
-
-    <ul>
-
-      <li>Provider Information</li>
-      <li>Employees</li>
-      <li>Consumers</li>
-      <li>Residential Locations</li>
-      <li>Authorizations</li>
-      <li>Training Records</li>
-
-    </ul>
-
-    <button class="primary">
-      Download Templates
-    </button>
-
-    <button class="primary">
-      Upload CSV Files
-    </button>
-
+    <div class="card__actions">
+      <button class="btn btn--primary">Download Templates</button>
+      <button class="btn btn--secondary">Upload CSV Files</button>
+    </div>
   </section>
 
   <section class="card success">
+    <div class="success__summary">
+      <div>
+        <p class="eyebrow">Great News</p>
+        <h2>{{ progress }}% Complete</h2>
+        <p>
+          We completed approximately {{ progress }}% of your agency setup.
+          Your attention is needed to finish the remaining items.
+        </p>
+      </div>
 
-    <h2>Great News!</h2>
-
-    <h1>{{ progress }}%</h1>
-
-    <p>
-      We've completed approximately {{ progress }}% of your agency setup.
-    </p>
-
-    <p>
-      Your attention is needed to complete the remaining setup.
-    </p>
+      <div class="progress-ring">
+        {{ progress }}%
+      </div>
+    </div>
 
     <h3>Needs Your Attention</h3>
 
-    <ul>
-
+    <ul class="attention-list">
       <li *ngFor="let item of attentionItems">
         {{ item }}
       </li>
-
     </ul>
 
-    <button class="primary">
-      Review Remaining Items
-    </button>
-
-    <button class="secondary">
-      Need Help?
-    </button>
-
+    <div class="card__actions">
+      <button class="btn btn--primary">Review Remaining Items</button>
+      <button class="btn btn--secondary">Need Help?</button>
+    </div>
   </section>
-
 </section>
