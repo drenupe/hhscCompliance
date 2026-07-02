@@ -56,7 +56,7 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx,html}"]
+        "lintFilePatterns": ["web/src/**/*.{ts,tsx,js,jsx,html}"]
       }
     }
   }
