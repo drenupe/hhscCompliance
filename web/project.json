@@ -2,7 +2,7 @@
   "name": "web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/web/src",
+  "sourceRoot": "web/src",
   "tags": ["type:app", "surface:web"],
   "targets": {
     "build": {
