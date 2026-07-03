@@ -1,0 +1,175 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  padding: 48px 24px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 34%),
+    #f5f7fb;
+  color: #172033;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.csv-wizard {
+  display: grid;
+  max-width: 1120px;
+  gap: 24px;
+  margin: 0 auto;
+}
+
+.wizard-hero,
+.drop-zone,
+.notice,
+.wizard-actions {
+  background: #ffffff;
+  border: 1px solid #e4e8f1;
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+.wizard-hero {
+  padding: 40px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #2563eb;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #172033;
+  font-size: clamp(2.3rem, 5vw, 4.3rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.wizard-hero p {
+  max-width: 780px;
+  margin: 22px 0 0;
+  color: #647084;
+  line-height: 1.7;
+}
+
+.wizard-progress {
+  max-width: 560px;
+  margin-top: 30px;
+}
+
+.wizard-progress__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: #344054;
+  font-weight: 800;
+}
+
+.wizard-progress__top strong {
+  color: #2563eb;
+}
+
+.wizard-progress__bar {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5eaf3;
+}
+
+.wizard-progress__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #2563eb;
+}
+
+.drop-zone {
+  padding: 34px;
+  border-style: dashed;
+  text-align: center;
+}
+
+.drop-zone strong {
+  display: block;
+  color: #172033;
+  font-size: 1.35rem;
+}
+
+.drop-zone p {
+  margin: 8px 0 0;
+  color: #647084;
+}
+
+.template-list {
+  display: grid;
+  gap: 14px;
+}
+
+.notice {
+  padding: 18px 22px;
+  color: #92400e;
+  background: #fffbeb;
+  border-color: #fde68a;
+  font-weight: 800;
+}
+
+.wizard-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px;
+}
+
+.btn {
+  min-height: 46px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn--primary {
+  color: #ffffff;
+  background: #2563eb;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.btn--secondary {
+  color: #1d4ed8;
+  background: #ffffff;
+  border-color: #bfdbfe;
+}
+
+.btn--secondary:hover {
+  background: #eff6ff;
+}
+
+@media (max-width: 720px) {
+  :host {
+    padding: 28px 16px;
+  }
+
+  .wizard-hero {
+    padding: 28px;
+  }
+
+  .wizard-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

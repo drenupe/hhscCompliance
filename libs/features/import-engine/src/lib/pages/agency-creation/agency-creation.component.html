@@ -1,0 +1,57 @@
+<section class="agency-creation">
+  <header class="hero">
+    <p class="eyebrow">Agency Creation Engine</p>
+
+    <h1>Let’s build your agency.</h1>
+
+    <p>
+      Import what you already have, then complete anything missing with guided setup.
+      The platform will help you build your provider profile, employees, consumers,
+      locations, training records, and authorizations.
+    </p>
+
+    <div class="progress">
+      <div class="progress__top">
+        <span>Step 1 of 9</span>
+        <strong>Setup Method</strong>
+      </div>
+
+      <div class="progress__bar">
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="methods">
+    <button
+      class="method"
+      type="button"
+      *ngFor="let method of setupMethods"
+      [class.method--selected]="selectedMethod === method.type"
+      (click)="selectMethod(method.type)"
+    >
+      <div class="method__header">
+        <h2>{{ method.title }}</h2>
+        <span *ngIf="method.badge">{{ method.badge }}</span>
+      </div>
+
+      <p>{{ method.description }}</p>
+
+      <ul>
+        <li *ngFor="let bullet of method.bullets">
+          {{ bullet }}
+        </li>
+      </ul>
+    </button>
+  </section>
+
+  <footer class="actions">
+    <button class="btn btn--secondary" type="button">
+      Back
+    </button>
+
+  <button class="btn btn--primary" type="button" (click)="continueToImport()">
+  Continue
+</button>
+  </footer>
+</section>

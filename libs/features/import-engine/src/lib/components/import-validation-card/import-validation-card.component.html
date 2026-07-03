@@ -1,0 +1,118 @@
+<section class="validation-card">
+
+  <header class="validation-card__header">
+
+    <div>
+
+      <h3>{{ result.templateName }}</h3>
+
+      <p>
+        {{ result.validRecords }}
+        of
+        {{ result.totalRecords }}
+        records validated.
+      </p>
+
+    </div>
+
+    <span [class]="statusClass">
+      {{ statusLabel }}
+    </span>
+
+  </header>
+
+  <section class="validation-card__stats">
+
+    <div class="stat">
+
+      <span class="stat__label">
+        Valid
+      </span>
+
+      <strong>
+        {{ result.validRecords }}
+      </strong>
+
+    </div>
+
+    <div class="stat">
+
+      <span class="stat__label">
+        Warnings
+      </span>
+
+      <strong>
+        {{ result.warningCount }}
+      </strong>
+
+    </div>
+
+    <div class="stat">
+
+      <span class="stat__label">
+        Errors
+      </span>
+
+      <strong>
+        {{ result.errorCount }}
+      </strong>
+
+    </div>
+
+  </section>
+
+  <section
+    *ngIf="hasIssues"
+    class="validation-card__issues"
+  >
+
+    <h4>
+      Validation Findings
+    </h4>
+
+    <article
+      *ngFor="let issue of result.issues"
+      class="issue"
+    >
+
+      <header class="issue__header">
+
+        <strong>
+          {{ issue.title }}
+        </strong>
+
+        <span class="issue__severity">
+          {{ issue.severity | titlecase }}
+        </span>
+
+      </header>
+
+      <p>
+        {{ issue.description }}
+      </p>
+
+      <p *ngIf="issue.affectedRows?.length">
+
+        <strong>
+          Rows:
+        </strong>
+
+        {{ issue.affectedRows?.join(', ') }}
+
+      </p>
+
+      <p>
+
+        <strong>
+          Recommendation:
+        </strong>
+
+        {{ issue.recommendedAction }}
+
+      </p>
+
+    </article>
+
+  </section>
+
+</section>

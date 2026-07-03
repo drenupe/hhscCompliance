@@ -1,0 +1,19 @@
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.detail strong {
+  color: #172033;
+  font-size: 1rem;
+  font-weight: 700;
+}

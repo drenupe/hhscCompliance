@@ -27,6 +27,9 @@
       ],
       "@hhsc-compliance/finance": ["libs/features/finance/src/index.ts"],
       "@hhsc-compliance/home": ["libs/features/home/src/index.ts"],
+      "@hhsc-compliance/import-engine": [
+        "libs/features/import-engine/src/index.ts"
+      ],
       "@hhsc-compliance/iss": ["libs/features/iss/src/index.ts"],
       "@hhsc-compliance/medical": ["libs/features/medical/src/index.ts"],
       "@hhsc-compliance/operations": ["libs/features/operations/src/index.ts"],

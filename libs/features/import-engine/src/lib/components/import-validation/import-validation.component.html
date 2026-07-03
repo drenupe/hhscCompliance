@@ -1,0 +1,115 @@
+<section class="validation">
+
+  <header class="validation__hero">
+
+    <div>
+
+      <h1>
+        Import Validation
+      </h1>
+
+      <p>
+        We've analyzed each uploaded CSV and identified any issues that should
+        be reviewed before your agency is created.
+      </p>
+
+    </div>
+
+    <div class="validation__score">
+
+      <span>
+        Readiness
+      </span>
+
+      <strong>
+        {{ summary.readinessPercent }}%
+      </strong>
+
+    </div>
+
+  </header>
+
+  <section class="validation__summary">
+
+    <article class="summary-card">
+
+      <span class="summary-card__label">
+        Files Uploaded
+      </span>
+
+      <strong>
+        {{ summary.totalFilesUploaded }}
+      </strong>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-card__label">
+        Records Ready
+      </span>
+
+      <strong>
+        {{ summary.totalRecordsReady }}
+      </strong>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-card__label">
+        Warnings
+      </span>
+
+      <strong>
+        {{ summary.totalWarnings }}
+      </strong>
+
+    </article>
+
+    <article class="summary-card">
+
+      <span class="summary-card__label">
+        Errors
+      </span>
+
+      <strong>
+        {{ summary.totalErrors }}
+      </strong>
+
+    </article>
+
+  </section>
+
+  <section class="validation__results">
+
+    <lib-import-validation-card
+      *ngFor="
+        let result of validationResults();
+        trackBy: trackByTemplate
+      "
+      [result]="result"
+    >
+    </lib-import-validation-card>
+
+  </section>
+
+  <footer class="validation__footer">
+
+    <button
+      class="btn btn--secondary"
+      type="button"
+    >
+      Back to Uploads
+    </button>
+
+    <button
+      class="btn btn--primary"
+      type="button"
+    >
+      Continue to Review
+    </button>
+
+  </footer>
+
+</section>

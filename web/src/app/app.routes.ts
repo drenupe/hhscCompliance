@@ -6,11 +6,12 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     redirectTo: 'provider-onboarding',
   },
+     
   {
     path: 'provider-onboarding',
-    loadComponent: () =>
+    loadChildren: () =>
       import('@hhsc-compliance/provider-onboarding').then(
-        (m) => m.ProviderOnboardingPage,
+        (m) => m.providerOnboardingRoutes,
       ),
   },
 ];

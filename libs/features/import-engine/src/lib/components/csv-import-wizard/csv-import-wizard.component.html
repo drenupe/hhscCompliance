@@ -1,0 +1,60 @@
+<section class="csv-wizard">
+  <header class="wizard-hero">
+    <p class="eyebrow">CSV Import Wizard</p>
+
+    <h1>Upload what you already have.</h1>
+
+    <p>
+      Upload your existing agency records. The platform will detect records,
+      validate data, find missing information, and guide you through anything
+      that still needs to be completed manually.
+    </p>
+
+    <section class="wizard-progress" aria-label="CSV upload progress">
+      <div class="wizard-progress__top">
+        <span>{{ uploadedCount }} of {{ totalCount }} files uploaded</span>
+        <strong>{{ uploadPercent }}%</strong>
+      </div>
+
+      <div class="wizard-progress__bar" aria-hidden="true">
+        <span [style.width.%]="uploadPercent"></span>
+      </div>
+    </section>
+  </header>
+
+  <section class="drop-zone" aria-label="CSV upload drop zone">
+    <strong>Drag your agency folder here</strong>
+    <p>or upload individual CSV templates below.</p>
+  </section>
+
+  <section class="template-list" aria-label="CSV template list">
+    @for (template of templates; track template.id) {
+      <lib-csv-upload-card
+        [template]="template"
+        (upload)="uploadTemplate($event)"
+        (remove)="removeTemplate($event)"
+      />
+    }
+  </section>
+
+  @if (!canContinue) {
+    <aside class="notice" aria-live="polite">
+      Upload all required CSV files before continuing to validation.
+    </aside>
+  }
+
+  <footer class="wizard-actions">
+    <button class="btn btn--secondary" type="button" (click)="goBack()">
+      Back
+    </button>
+
+    <button
+      class="btn btn--primary"
+      type="button"
+      [disabled]="!canContinue"
+      (click)="continueToValidation()"
+    >
+      Continue to Validation
+    </button>
+  </footer>
+</section>

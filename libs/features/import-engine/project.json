@@ -1,7 +1,7 @@
 {
-  "name": "provider-onboarding",
+  "name": "import-engine",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/features/provider-onboarding/src",
+  "sourceRoot": "libs/features/import-engine/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": ["scope:feature", "type:feature"],
@@ -10,7 +10,7 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../../coverage/libs/features/provider-onboarding"
+        "reportsDirectory": "../../../coverage/libs/features/import-engine"
       }
     },
     "lint": {

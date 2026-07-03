@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-
-interface SetupOption {
-  icon: string;
-  title: string;
-  description: string;
-}
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'lib-provider-onboarding-page',
@@ -15,37 +10,9 @@ interface SetupOption {
   styleUrls: ['./provider-onboarding.scss'],
 })
 export class ProviderOnboardingPage {
+  private readonly router = inject(Router);
+
   progress = 85;
-
-  setupOptions: SetupOption[] = [
-    {
-      icon: '📁',
-      title: 'I already have electronic records',
-      description:
-        'Upload formatted CSV templates and let the platform build your agency automatically.',
-    },
-    {
-      icon: '📄',
-      title: 'I have paper records',
-      description:
-        'We will guide you through setup with help from Customer Success.',
-    },
-    {
-      icon: '✨',
-      title: "I'm a new provider",
-      description:
-        'We will build your agency from scratch using a guided setup process.',
-    },
-  ];
-
-  csvTemplates = [
-    'Provider Information',
-    'Employees',
-    'Consumers',
-    'Residential Locations',
-    'Authorizations',
-    'Training Records',
-  ];
 
   attentionItems = [
     'Verify RN license',
@@ -53,4 +20,8 @@ export class ProviderOnboardingPage {
     'Upload 2 missing service authorizations',
     'Confirm provider contact information',
   ];
+
+  beginAgencySetup(): void {
+    this.router.navigate(['/provider-onboarding/agency-creation']);
+  }
 }
