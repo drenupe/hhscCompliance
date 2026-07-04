@@ -37,7 +37,7 @@ export class CsvUploadCardComponent {
   }
 
   get statusClass(): string {
-    switch (this.template.status) {
+    switch (this.template.requirement) {
       case 'required':
         return 'status status--required';
 
