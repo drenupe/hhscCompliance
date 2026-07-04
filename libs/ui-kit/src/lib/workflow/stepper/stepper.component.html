@@ -1,0 +1,59 @@
+<nav
+  [class]="hostClasses.join(' ')"
+  aria-label="Workflow progress"
+>
+  @if (showProgress) {
+    <div
+      class="stepper__progress"
+      aria-hidden="true"
+    >
+      <span [style.width.%]="progressPercent()"></span>
+    </div>
+  }
+
+  <ol class="stepper__list">
+    @for (step of steps; track step.id; let index = $index) {
+      <li [class]="getStepClasses(step, index).join(' ')">
+        <button
+          class="stepper__button"
+          type="button"
+          [disabled]="!clickable || step.disabled"
+          [attr.aria-current]="step.id === currentStepId ? 'step' : null"
+          (click)="selectStep(step)"
+        >
+          <span class="stepper__marker">
+            @if (showIcons && step.icon) {
+              <span class="stepper__icon">
+                {{ step.icon }}
+              </span>
+            } @else if (showNumbers && variant !== 'dots') {
+              <span class="stepper__number">
+                {{ index + 1 }}
+              </span>
+            } @else {
+              <span class="stepper__dot"></span>
+            }
+          </span>
+
+          <span class="stepper__content">
+            <span class="stepper__title">
+              {{ step.title }}
+            </span>
+
+            @if (step.badge) {
+              <span class="stepper__badge">
+                {{ step.badge }}
+              </span>
+            }
+
+            @if (showDescriptions && step.description) {
+              <span class="stepper__description">
+                {{ step.description }}
+              </span>
+            }
+          </span>
+        </button>
+      </li>
+    }
+  </ol>
+</nav>

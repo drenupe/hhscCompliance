@@ -4,3 +4,5 @@ export * from './lib/components/csv-import-wizard/csv-import-wizard.component';
 export * from './lib/components/csv-upload-card/csv-upload-card.component';
 export * from './lib/components/import-validation/import-validation.component';
 export * from './lib/components/import-validation-card/import-validation-card.component';
+
+export * from './lib/workflows/agency-creation.workflow';

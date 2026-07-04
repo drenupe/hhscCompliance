@@ -17,3 +17,7 @@ export * from './lib/executive-action-center/executive-action-center.component';
 export * from './lib/provider-health-gauge/provider-health-gauge.component';
 
 export * from './lib/compliance-heat-map/compliance-heat-map.component';
+
+export * from './lib/workflow/stepper';
+
+export * from './lib/workflow/models/workflow.model';
