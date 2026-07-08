@@ -11,4 +11,7 @@ export interface ImportTemplate {
   status: ImportStatus;
   uploaded: boolean;
   recordsFound?: number;
+
+  headers?: string[];
+  sampleRow?: Record<string, string>;
 }

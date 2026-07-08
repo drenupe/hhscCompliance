@@ -1,0 +1,33 @@
+<header class="workflow-header">
+  <div class="workflow-header__copy">
+    @if (eyebrow) {
+      <p class="workflow-header__eyebrow">{{ eyebrow }}</p>
+    }
+
+    <h1>{{ title }}</h1>
+
+    @if (subtitle) {
+      <p class="workflow-header__subtitle">{{ subtitle }}</p>
+    }
+  </div>
+
+  <div class="workflow-header__side">
+    @if (currentStepLabel) {
+      <span class="workflow-header__step">{{ currentStepLabel }}</span>
+    }
+
+    @if (showProgress) {
+      <strong>{{ progress }}%</strong>
+    }
+
+    @if (lastSaved) {
+      <small>Saved {{ lastSaved }}</small>
+    }
+
+    <div class="workflow-header__actions">
+      <button type="button" (click)="saveDraft.emit()">Save Draft</button>
+      <button type="button" (click)="help.emit()">Help</button>
+      <button type="button" (click)="exit.emit()">Exit</button>
+    </div>
+  </div>
+</header>

@@ -7,11 +7,17 @@ import {
 } from '@angular/core';
 
 import { ImportTemplate } from '@hhsc-compliance/shared-models';
+import { CardComponent } from '@hhsc-compliance/ui-kit';
+
+export interface CsvUploadEvent {
+  template: ImportTemplate;
+  file: File;
+}
 
 @Component({
   selector: 'lib-csv-upload-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CardComponent],
   templateUrl: './csv-upload-card.component.html',
   styleUrls: ['./csv-upload-card.component.scss'],
 })
@@ -23,10 +29,17 @@ export class CsvUploadCardComponent {
   disabled = false;
 
   @Output()
-  upload = new EventEmitter<ImportTemplate>();
+  upload = new EventEmitter<CsvUploadEvent>();
 
   @Output()
   remove = new EventEmitter<ImportTemplate>();
+
+  @Output()
+  downloadTemplate = new EventEmitter<ImportTemplate>();
+
+  get inputId(): string {
+    return `csv-upload-${this.template.id}`;
+  }
 
   get buttonLabel(): string {
     if (this.disabled) {
@@ -52,12 +65,32 @@ export class CsvUploadCardComponent {
     }
   }
 
-  onUpload(): void {
+  onDownloadTemplate(): void {
     if (this.disabled) {
       return;
     }
 
-    this.upload.emit(this.template);
+    this.downloadTemplate.emit(this.template);
+  }
+
+  onFileSelected(event: Event): void {
+    if (this.disabled) {
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.upload.emit({
+      template: this.template,
+      file,
+    });
+
+    input.value = '';
   }
 
   onRemove(): void {

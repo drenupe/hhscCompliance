@@ -1,0 +1,69 @@
+<section class="workflow-shell">
+  @if (showHeader) {
+    <lib-workflow-header
+      [eyebrow]="eyebrow"
+      [title]="title"
+      [subtitle]="subtitle"
+      [progress]="progress"
+      [currentStepLabel]="currentStepLabel"
+      [lastSaved]="lastSaved"
+      [showProgress]="showProgress"
+      (saveDraft)="save.emit()"
+      (help)="help.emit()"
+      (exit)="exit.emit()"
+    />
+  }
+
+  <section
+    class="workflow-shell__nav"
+    [class.workflow-shell__nav--sticky]="sticky"
+  >
+    <lib-stepper
+      [steps]="steps"
+      [currentStepId]="currentStepId"
+      [title]="''"
+      [subtitle]="''"
+      [variant]="stepperVariant"
+      orientation="horizontal"
+      width="fill"
+      alignment="space-between"
+      [size]="stepperSize"
+      [sticky]="false"
+      [showHeader]="false"
+      [showProgress]="showProgress"
+      [showDescriptions]="showDescriptions"
+      [clickable]="true"
+      [allowHistoryNavigation]="true"
+      (stepSelected)="stepSelected.emit($event)"
+    >
+      <ng-content
+        select="[workflow-after-steps]"
+        workflow-after-steps
+      ></ng-content>
+    </lib-stepper>
+
+    @if (showToolbar) {
+      <lib-workflow-toolbar>
+        <ng-content select="[workflow-toolbar]"></ng-content>
+      </lib-workflow-toolbar>
+    }
+  </section>
+
+  <main class="workflow-shell__content">
+    <ng-content></ng-content>
+  </main>
+
+  @if (showFooter) {
+    <lib-workflow-footer
+      [previousLabel]="previousLabel"
+      [nextLabel]="nextLabel"
+      [saveLabel]="saveLabel"
+      [disablePrevious]="disablePrevious"
+      [disableNext]="disableNext"
+      [showSave]="showSave"
+      (previous)="previous.emit()"
+      (next)="next.emit()"
+      (save)="save.emit()"
+    />
+  }
+</section>

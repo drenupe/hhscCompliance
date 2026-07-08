@@ -1,20 +1,50 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+
+import {
+  ProcessEngineService,
+  ProcessStateService,
+} from '@hhsc-compliance/data-access';
+
+import {
+  CsvParserService,
+  ImportMapperService,
+} from '@hhsc-compliance/data-access';
 
 import { ImportTemplate } from '@hhsc-compliance/shared-models';
 
-import { CsvUploadCardComponent } from '../csv-upload-card/csv-upload-card.component';
+import {
+  WorkflowShellComponent,
+} from '@hhsc-compliance/ui-kit';
+
+import {
+  CsvUploadCardComponent,
+  CsvUploadEvent,
+} from '../csv-upload-card/csv-upload-card.component';
+
+import { AGENCY_CREATION_WORKFLOW } from '../../workflows/agency-creation.workflow';
 
 @Component({
   selector: 'lib-csv-import-wizard',
   standalone: true,
-  imports: [CommonModule, CsvUploadCardComponent],
+  imports: [CommonModule, CsvUploadCardComponent, WorkflowShellComponent],
   templateUrl: './csv-import-wizard.component.html',
   styleUrls: ['./csv-import-wizard.component.scss'],
 })
 export class CsvImportWizardComponent {
   private readonly router = inject(Router);
+  private readonly processEngine = inject(ProcessEngineService);
+  private readonly processState = inject(ProcessStateService);
+  private readonly csvParser = inject(CsvParserService);
+  private readonly importMapper = inject(ImportMapperService);
+
+  readonly workflow = AGENCY_CREATION_WORKFLOW;
+  readonly currentStepId = 'import';
+  readonly steps = this.workflow.steps;
+
+  readonly processing = signal(false);
+  readonly error = signal('');
 
   templates: ImportTemplate[] = [
     {
@@ -24,9 +54,32 @@ export class CsvImportWizardComponent {
         'Agency name, provider number, contact details, and administrator information.',
       requirement: 'required',
       expectedFileName: 'provider.csv',
-      status: 'uploaded',
-      uploaded: true,
-      recordsFound: 1,
+      status: 'not-started',
+      uploaded: false,
+      headers: [
+        'agency_name',
+        'provider_number',
+        'license_number',
+        'administrator_name',
+        'phone',
+        'email',
+        'address',
+        'city',
+        'state',
+        'zip',
+      ],
+      sampleRow: {
+        agency_name: 'ABC Residential Services',
+        provider_number: '123456',
+        license_number: 'HCS-123456',
+        administrator_name: 'Jane Smith',
+        phone: '214-555-0100',
+        email: 'admin@example.com',
+        address: '123 Main St',
+        city: 'Dallas',
+        state: 'TX',
+        zip: '75201',
+      },
     },
     {
       id: 'employees',
@@ -35,9 +88,30 @@ export class CsvImportWizardComponent {
         'Staff names, job titles, hire dates, phone numbers, and employment status.',
       requirement: 'required',
       expectedFileName: 'employees.csv',
-      status: 'uploaded',
-      uploaded: true,
-      recordsFound: 184,
+      status: 'not-started',
+      uploaded: false,
+      headers: [
+        'employee_id',
+        'first_name',
+        'last_name',
+        'job_title',
+        'hire_date',
+        'phone',
+        'email',
+        'status',
+        'assigned_location_id',
+      ],
+      sampleRow: {
+        employee_id: 'EMP-001',
+        first_name: 'Maria',
+        last_name: 'Johnson',
+        job_title: 'Direct Support Professional',
+        hire_date: '2026-01-15',
+        phone: '214-555-0101',
+        email: 'maria@example.com',
+        status: 'active',
+        assigned_location_id: 'LOC-001',
+      },
     },
     {
       id: 'consumers',
@@ -46,9 +120,28 @@ export class CsvImportWizardComponent {
         'Consumer demographics, Medicaid numbers, assigned homes, and case manager links.',
       requirement: 'required',
       expectedFileName: 'consumers.csv',
-      status: 'uploaded',
-      uploaded: true,
-      recordsFound: 72,
+      status: 'not-started',
+      uploaded: false,
+      headers: [
+        'consumer_id',
+        'first_name',
+        'last_name',
+        'medicaid_number',
+        'date_of_birth',
+        'assigned_location_id',
+        'case_manager_name',
+        'level_of_need',
+      ],
+      sampleRow: {
+        consumer_id: 'CON-001',
+        first_name: 'James',
+        last_name: 'Harris',
+        medicaid_number: 'MCD123456',
+        date_of_birth: '1985-06-10',
+        assigned_location_id: 'LOC-001',
+        case_manager_name: 'Sarah Adams',
+        level_of_need: 'LON 5',
+      },
     },
     {
       id: 'locations',
@@ -57,9 +150,28 @@ export class CsvImportWizardComponent {
         'Group homes, host homes, addresses, location codes, and capacity details.',
       requirement: 'required',
       expectedFileName: 'locations.csv',
-      status: 'uploaded',
-      uploaded: true,
-      recordsFound: 8,
+      status: 'not-started',
+      uploaded: false,
+      headers: [
+        'location_id',
+        'location_name',
+        'location_type',
+        'address',
+        'city',
+        'state',
+        'zip',
+        'capacity',
+      ],
+      sampleRow: {
+        location_id: 'LOC-001',
+        location_name: 'Main Street Home',
+        location_type: 'Four Person Home',
+        address: '456 Main St',
+        city: 'Dallas',
+        state: 'TX',
+        zip: '75216',
+        capacity: '4',
+      },
     },
     {
       id: 'training',
@@ -70,6 +182,20 @@ export class CsvImportWizardComponent {
       expectedFileName: 'training.csv',
       status: 'not-started',
       uploaded: false,
+      headers: [
+        'employee_id',
+        'training_name',
+        'completion_date',
+        'expiration_date',
+        'trainer',
+      ],
+      sampleRow: {
+        employee_id: 'EMP-001',
+        training_name: 'Abuse Neglect Exploitation',
+        completion_date: '2026-01-20',
+        expiration_date: '2027-01-20',
+        trainer: 'Jane Smith',
+      },
     },
     {
       id: 'authorizations',
@@ -80,8 +206,28 @@ export class CsvImportWizardComponent {
       expectedFileName: 'authorizations.csv',
       status: 'not-started',
       uploaded: false,
+      headers: [
+        'consumer_id',
+        'service_code',
+        'service_name',
+        'start_date',
+        'end_date',
+        'authorized_units',
+      ],
+      sampleRow: {
+        consumer_id: 'CON-001',
+        service_code: 'HCS',
+        service_name: 'Supported Home Living',
+        start_date: '2026-01-01',
+        end_date: '2026-12-31',
+        authorized_units: '365',
+      },
     },
   ];
+
+  constructor() {
+    this.processEngine.updateTemplates(this.templates);
+  }
 
   get uploadedCount(): number {
     return this.templates.filter((template) => template.uploaded).length;
@@ -92,11 +238,9 @@ export class CsvImportWizardComponent {
   }
 
   get uploadPercent(): number {
-    if (this.totalCount === 0) {
-      return 0;
-    }
-
-    return Math.round((this.uploadedCount / this.totalCount) * 100);
+    return this.totalCount === 0
+      ? 0
+      : Math.round((this.uploadedCount / this.totalCount) * 100);
   }
 
   get canContinue(): boolean {
@@ -105,19 +249,95 @@ export class CsvImportWizardComponent {
       .every((template) => template.uploaded);
   }
 
-  uploadTemplate(template: ImportTemplate): void {
-    this.templates = this.templates.map((item) =>
-      item.id === template.id
-        ? {
-            ...item,
-            uploaded: true,
-            status: 'uploaded',
-            recordsFound: item.recordsFound ?? 1,
-          }
-        : item,
-    );
+  get requiredTemplates(): ImportTemplate[] {
+  return this.templates.filter((template) => template.requirement === 'required');
+}
+
+get recommendedTemplates(): ImportTemplate[] {
+  return this.templates.filter((template) => template.requirement !== 'required');
+}
+
+get requiredCount(): number {
+  return this.requiredTemplates.length;
+}
+
+get recommendedCount(): number {
+  return this.recommendedTemplates.length;
+}
+
+get requiredUploadedCount(): number {
+  return this.requiredTemplates.filter((template) => template.uploaded).length;
+}
+
+get recommendedUploadedCount(): number {
+  return this.recommendedTemplates.filter((template) => template.uploaded).length;
+}
+
+
+
+  downloadTemplate(template: ImportTemplate): void {
+    const headers = template.headers ?? ['id', 'name'];
+    const sampleRow = template.sampleRow ?? {};
+
+    const rows = [
+      headers.join(','),
+      headers
+        .map((header: string) =>
+          this.escapeCsvValue(sampleRow[header] ?? ''),
+        )
+        .join(','),
+    ];
+
+    const blob = new Blob([rows.join('\n')], {
+      type: 'text/csv;charset=utf-8;',
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = template.expectedFileName;
+    link.click();
+
+    URL.revokeObjectURL(url);
   }
 
+  async uploadTemplate(event: CsvUploadEvent): Promise<void> {
+    this.processing.set(true);
+    this.error.set('');
+
+    try {
+      const parsed = await this.csvParser.parse(event.file);
+
+      this.importMapper.map(event.template.id, parsed);
+
+      this.templates = this.templates.map((item) =>
+        item.id === event.template.id
+          ? {
+              ...item,
+              uploaded: true,
+              status: 'uploaded',
+              recordsFound: parsed.rowCount,
+            }
+          : item,
+      );
+
+      this.processEngine.updateTemplates(this.templates);
+    } catch {
+      this.error.set(
+        'The CSV could not be read. Please check the file and try again.',
+      );
+    } finally {
+      this.processing.set(false);
+    }
+  }
+
+
+  downloadAllTemplates(): void {
+  for (const template of this.templates) {
+    this.downloadTemplate(template);
+  }
+}
   removeTemplate(template: ImportTemplate): void {
     this.templates = this.templates.map((item) =>
       item.id === template.id
@@ -129,6 +349,8 @@ export class CsvImportWizardComponent {
           }
         : item,
     );
+
+    this.processEngine.updateTemplates(this.templates);
   }
 
   goBack(): void {
@@ -140,6 +362,17 @@ export class CsvImportWizardComponent {
       return;
     }
 
+    this.processEngine.validate();
+
     this.router.navigate(['/provider-onboarding/agency-creation/validation']);
+  }
+
+  private escapeCsvValue(value: string): string {
+    const needsQuotes =
+      value.includes(',') || value.includes('"') || value.includes('\n');
+
+    const escaped = value.replace(/"/g, '""');
+
+    return needsQuotes ? `"${escaped}"` : escaped;
   }
 }

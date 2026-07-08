@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.workflow-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #f8fafc;
+}
+
+.workflow-toolbar--start {
+  justify-content: flex-start;
+}
+
+.workflow-toolbar--center {
+  justify-content: center;
+}
+
+.workflow-toolbar--end {
+  justify-content: flex-end;
+}
+
+.workflow-toolbar--between {
+  justify-content: space-between;
+}

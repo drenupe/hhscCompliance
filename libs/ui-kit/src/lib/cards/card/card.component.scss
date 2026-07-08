@@ -1,0 +1,146 @@
+:host {
+  display: block;
+
+  --card-text: #0f172a;
+  --card-muted: #64748b;
+  --card-border: #cbd5e1;
+  --card-surface: #ffffff;
+  --card-filled: #f8fafc;
+  --card-brand: #2563eb;
+}
+
+.card {
+  display: block;
+  overflow: hidden;
+  color: var(--card-text);
+  transition:
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease,
+    background 200ms ease;
+}
+
+.card--full-height {
+  height: 100%;
+}
+
+.card--elevated {
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  background: var(--card-surface);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+.card--outlined {
+  border: 1px solid var(--card-border);
+  background: var(--card-surface);
+}
+
+.card--filled {
+  border: 1px solid transparent;
+  background: var(--card-filled);
+}
+
+.card--ghost {
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.card--interactive {
+  cursor: pointer;
+}
+
+.card--interactive:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+  transform: translateY(-1px);
+}
+
+.card--padding-none {
+  padding: 0;
+}
+
+.card--padding-sm {
+  padding: 0.75rem;
+}
+
+.card--padding-md {
+  padding: 1.25rem;
+}
+
+.card--padding-lg {
+  padding: 1.75rem;
+}
+
+.card--radius-sm {
+  border-radius: 0.75rem;
+}
+
+.card--radius-md {
+  border-radius: 1rem;
+}
+
+.card--radius-lg {
+  border-radius: 1.25rem;
+}
+
+.card--radius-xl {
+  border-radius: 1.5rem;
+}
+
+.card--density-compact {
+  line-height: 1.25;
+}
+
+.card--density-comfortable {
+  line-height: 1.5;
+}
+
+.card__content {
+  display: block;
+}
+
+::ng-deep [card-header] {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+::ng-deep [card-title] {
+  display: block;
+  margin: 0 0 0.25rem;
+  color: var(--card-text);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+::ng-deep [card-subtitle] {
+  display: block;
+  margin: 0 0 1rem;
+  color: var(--card-muted);
+  font-size: 0.875rem;
+}
+
+::ng-deep [card-actions],
+::ng-deep [card-footer] {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+::ng-deep [card-actions] {
+  justify-content: flex-end;
+}
+
+::ng-deep [card-footer] {
+  justify-content: space-between;
+  color: var(--card-muted);
+  font-size: 0.85rem;
+}
+
+::ng-deep [card-media] {
+  display: block;
+  margin: -1.25rem -1.25rem 1rem;
+}

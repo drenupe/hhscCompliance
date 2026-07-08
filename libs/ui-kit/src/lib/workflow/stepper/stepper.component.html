@@ -1,15 +1,34 @@
-<nav
-  [class]="hostClasses.join(' ')"
-  aria-label="Workflow progress"
->
+<nav [class]="hostClasses.join(' ')" aria-label="Workflow progress">
+  <ng-content select="[workflow-header]"></ng-content>
+
+  @if (showHeader) {
+    <header class="stepper__header">
+      <div class="stepper__header-copy">
+        @if (title) {
+          <h2 class="stepper__heading">{{ title }}</h2>
+        }
+
+        @if (subtitle) {
+          <p class="stepper__subtitle">{{ subtitle }}</p>
+        }
+      </div>
+
+      <div class="stepper__meta">
+        <span>{{ currentStepLabel }}</span>
+        <strong>{{ progressLabel }}%</strong>
+      </div>
+    </header>
+  }
+
+  <ng-content select="[workflow-toolbar]"></ng-content>
+
   @if (showProgress) {
-    <div
-      class="stepper__progress"
-      aria-hidden="true"
-    >
+    <div class="stepper__progress" aria-hidden="true">
       <span [style.width.%]="progressPercent()"></span>
     </div>
   }
+
+  <ng-content select="[workflow-before-steps]"></ng-content>
 
   <ol class="stepper__list">
     @for (step of steps; track step.id; let index = $index) {
@@ -17,18 +36,15 @@
         <button
           class="stepper__button"
           type="button"
-          [disabled]="!clickable || step.disabled"
+          [disabled]="!canSelectStep(step, index)"
           [attr.aria-current]="step.id === currentStepId ? 'step' : null"
-          (click)="selectStep(step)"
+          [attr.title]="getStepTooltip(step, index)"
+          (click)="selectStep(step, index)"
         >
           <span class="stepper__marker">
-            @if (showIcons && step.icon) {
-              <span class="stepper__icon">
-                {{ step.icon }}
-              </span>
-            } @else if (showNumbers && variant !== 'dots') {
-              <span class="stepper__number">
-                {{ index + 1 }}
+            @if (getMarkerLabel(step, index)) {
+              <span class="stepper__marker-label">
+                {{ getMarkerLabel(step, index) }}
               </span>
             } @else {
               <span class="stepper__dot"></span>
@@ -53,7 +69,22 @@
             }
           </span>
         </button>
+
+        @if (index < steps.length - 1) {
+          <span
+            [class]="getConnectorClasses(index).join(' ')"
+            aria-hidden="true"
+          ></span>
+        }
       </li>
     }
   </ol>
+
+  <ng-content select="[workflow-after-steps]"></ng-content>
+
+  <ng-content></ng-content>
+
+  <ng-content select="[workflow-actions]"></ng-content>
+
+  <ng-content select="[workflow-footer]"></ng-content>
 </nav>

@@ -1,0 +1,153 @@
+:host {
+  display: block;
+}
+
+.workflow-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.workflow-shell__nav {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.workflow-shell__nav--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+}
+
+.workflow-shell__content {
+  display: grid;
+  gap: 1.25rem;
+}
+
+
+.workflow-shell__nav ::ng-deep .stepper {
+  display: grid;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 1rem;
+  border: 0;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  color: #172033;
+  box-shadow: none;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__list {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__step {
+  position: relative;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  min-width: 0;
+  align-items: center !important;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__step:last-child {
+  flex: 0 0 auto !important;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__button {
+  position: relative;
+  z-index: 2;
+  display: flex !important;
+  flex: 0 0 auto;
+  gap: 0.55rem;
+  align-items: center;
+  min-width: 0;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  text-align: left;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__marker {
+  display: grid;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 2px solid #cbd5e1;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__content {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__title {
+  overflow: hidden;
+  max-width: 8rem;
+  color: #475569;
+  font-size: 0.84rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__connector {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  height: 3px;
+  min-width: 1.5rem;
+  margin: 0 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e5e7eb;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__connector::after {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: inherit;
+  background: #2563eb;
+  content: '';
+}
+
+.workflow-shell__nav ::ng-deep .stepper__connector--complete::after {
+  width: 100%;
+  background: #16a34a;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__connector--active::after {
+  width: 100%;
+  background: #2563eb;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__step--complete .stepper__marker {
+  border-color: #16a34a;
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.workflow-shell__nav ::ng-deep .stepper__step--active .stepper__marker {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.14);
+}
+
+.workflow-shell__nav ::ng-deep .stepper__step--active .stepper__title {
+  color: #1e293b;
+}

@@ -21,3 +21,7 @@ export * from './lib/compliance-heat-map/compliance-heat-map.component';
 export * from './lib/workflow/stepper';
 
 export * from './lib/workflow/models/workflow.model';
+
+export * from './lib/cards';
+
+export * from './lib/workflow';

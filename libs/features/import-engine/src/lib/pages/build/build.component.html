@@ -1,0 +1,60 @@
+<section class="build">
+  <header class="build__header">
+    <p class="eyebrow">Build</p>
+    <h1>Creating provider workspace</h1>
+    <p>
+      The engine is creating the provider, relationships, compliance foundation,
+      and dashboard setup.
+    </p>
+  </header>
+
+  <section class="build__progress-card">
+    <div class="progress-ring">
+      <strong>{{ progress() }}%</strong>
+      <span>Complete</span>
+    </div>
+
+    <div class="progress-copy">
+      <h2>Building agency records</h2>
+
+      @if (buildPlan(); as plan) {
+        <p>
+          Creating records for
+          <strong>{{ plan.providerName }}</strong>.
+          Estimated time: {{ plan.estimatedSeconds }} seconds.
+        </p>
+      }
+
+      <div class="bar">
+        <span [style.width.%]="progress()"></span>
+      </div>
+    </div>
+  </section>
+
+  @if (error()) {
+    <div class="error">
+      {{ error() }}
+    </div>
+  }
+
+  @if (buildPlan(); as plan) {
+    <section class="build-list">
+      @for (item of plan.items; track item.id) {
+        <article class="build-item">
+          <div>
+            <strong>{{ item.label }}</strong>
+            <span>{{ item.count }} records</span>
+          </div>
+
+          <b>
+            @if (progress() === 100) {
+              ✓
+            } @else {
+              …
+            }
+          </b>
+        </article>
+      }
+    </section>
+  }
+</section>

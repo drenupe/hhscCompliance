@@ -1,66 +1,79 @@
-<article
-  class="upload-card"
-  [class.upload-card--uploaded]="template.uploaded"
-  [class.upload-card--disabled]="disabled"
+<lib-card
+  [appearance]="template.uploaded ? 'elevated' : 'outlined'"
+  padding="md"
+  radius="lg"
+  [interactive]="!disabled"
 >
-  <header class="upload-card__header">
+  <div card-header>
     <div>
-      <h3>{{ template.name }}</h3>
+      <h3 card-title>{{ template.name }}</h3>
 
       <span [class]="statusClass">
         {{ template.status }}
       </span>
     </div>
 
-    <div
-      class="upload-card__check"
-      *ngIf="template.uploaded"
-    >
-      ✓
-    </div>
-  </header>
+    @if (template.uploaded) {
+      <div class="upload-card__check">
+        ✓
+      </div>
+    }
+  </div>
 
-  <p class="upload-card__description">
+  <p card-subtitle>
     {{ template.description }}
   </p>
 
   <section class="upload-card__details">
-
     <div class="detail">
       <span class="detail__title">Expected File</span>
       <strong>{{ template.expectedFileName }}</strong>
     </div>
 
-    <div
-      class="detail"
-      *ngIf="template.uploaded"
-    >
-     <span class="detail__title">Records Found</span>
-      <strong>{{ template.recordsFound || 0 }}</strong>
-    </div>
-
+    @if (template.uploaded) {
+      <div class="detail">
+        <span class="detail__title">Records Found</span>
+        <strong>{{ template.recordsFound || 0 }}</strong>
+      </div>
+    }
   </section>
 
-  <footer class="upload-card__footer">
-
+  <div card-actions>
     <button
-      class="btn btn--primary"
-      type="button"
-      [disabled]="disabled"
-      (click)="onUpload()"
-    >
-      {{ buttonLabel }}
-    </button>
-
-    <button
-      *ngIf="template.uploaded"
       class="btn btn--secondary"
       type="button"
       [disabled]="disabled"
-      (click)="onRemove()"
+      (click)="onDownloadTemplate()"
     >
-      Remove
+      Download Template
     </button>
 
-  </footer>
-</article>
+    <input
+      class="upload-card__input"
+      type="file"
+      accept=".csv,text/csv"
+      [id]="inputId"
+      [disabled]="disabled"
+      (change)="onFileSelected($event)"
+    />
+
+    <label
+      class="btn btn--primary"
+      [class.btn--disabled]="disabled"
+      [for]="inputId"
+    >
+      {{ buttonLabel }}
+    </label>
+
+    @if (template.uploaded) {
+      <button
+        class="btn btn--secondary"
+        type="button"
+        [disabled]="disabled"
+        (click)="onRemove()"
+      >
+        Remove
+      </button>
+    }
+  </div>
+</lib-card>

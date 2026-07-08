@@ -1,0 +1,31 @@
+<footer class="workflow-footer">
+  <button
+    class="btn btn--secondary"
+    type="button"
+    [disabled]="disablePrevious"
+    (click)="previous.emit()"
+  >
+    {{ previousLabel }}
+  </button>
+
+  <div class="workflow-footer__right">
+    @if (showSave) {
+      <button
+        class="btn btn--ghost"
+        type="button"
+        (click)="save.emit()"
+      >
+        {{ saveLabel }}
+      </button>
+    }
+
+    <button
+      class="btn btn--primary"
+      type="button"
+      [disabled]="disableNext"
+      (click)="next.emit()"
+    >
+      {{ nextLabel }}
+    </button>
+  </div>
+</footer>

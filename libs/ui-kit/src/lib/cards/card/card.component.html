@@ -1,0 +1,17 @@
+<article [class]="classes.join(' ')">
+  <ng-content select="[card-media]"></ng-content>
+
+  <ng-content select="[card-header]"></ng-content>
+
+  <ng-content select="[card-title]"></ng-content>
+
+  <ng-content select="[card-subtitle]"></ng-content>
+
+  <div class="card__content">
+    <ng-content></ng-content>
+  </div>
+
+  <ng-content select="[card-actions]"></ng-content>
+
+  <ng-content select="[card-footer]"></ng-content>
+</article>

@@ -1,184 +1,27 @@
-:host {
+::ng-deep [workflow-header],
+::ng-deep [workflow-toolbar],
+::ng-deep [workflow-before-steps],
+::ng-deep [workflow-after-steps],
+::ng-deep [workflow-actions],
+::ng-deep [workflow-footer] {
   display: block;
-
-  --workflow-stepper-brand: #2563eb;
-  --workflow-stepper-success: #16a34a;
-  --workflow-stepper-warning: #f59e0b;
-  --workflow-stepper-error: #dc2626;
-  --workflow-stepper-text: #172033;
-  --workflow-stepper-muted: #64748b;
-  --workflow-stepper-border: #cbd5e1;
-  --workflow-stepper-surface: #ffffff;
-  --workflow-stepper-track: #e5e7eb;
-  --workflow-stepper-radius: 999px;
-  --workflow-stepper-marker-size: 2.5rem;
-  --workflow-stepper-gap: 1rem;
 }
 
-.stepper {
-  display: grid;
-  gap: 1.5rem;
-  width: 100%;
-  color: var(--workflow-stepper-text);
-}
-
-.stepper__progress {
-  height: 6px;
-  overflow: hidden;
-  border-radius: var(--workflow-stepper-radius);
-  background: var(--workflow-stepper-track);
-}
-
-.stepper__progress span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--workflow-stepper-brand);
-  transition: width 250ms ease;
-}
-
-.stepper__list {
-  display: flex;
-  gap: var(--workflow-stepper-gap);
-  align-items: flex-start;
-  justify-content: space-between;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.stepper__step {
-  flex: 1;
-  min-width: 0;
-}
-
-.stepper__button {
+::ng-deep [workflow-toolbar],
+::ng-deep [workflow-actions] {
   display: flex;
   gap: 0.75rem;
-  align-items: flex-start;
-  width: 100%;
-  padding: 0.5rem;
-  border: 0;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-.stepper__button:disabled {
-  cursor: default;
+::ng-deep [workflow-header] {
+  margin-bottom: 0.25rem;
 }
 
-.stepper__marker {
-  display: grid;
-  flex-shrink: 0;
-  width: var(--workflow-stepper-marker-size);
-  height: var(--workflow-stepper-marker-size);
-  place-items: center;
-  border: 2px solid var(--workflow-stepper-border);
-  border-radius: var(--workflow-stepper-radius);
-  background: var(--workflow-stepper-surface);
-}
-
-.stepper__number {
-  font-weight: 800;
-}
-
-.stepper__dot {
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.stepper__content {
-  display: grid;
-  gap: 0.25rem;
-}
-
-.stepper__title {
-  font-weight: 800;
-}
-
-.stepper__description {
+::ng-deep [workflow-before-steps],
+::ng-deep [workflow-after-steps],
+::ng-deep [workflow-footer] {
   color: var(--workflow-stepper-muted);
-  font-size: 0.875rem;
-}
-
-.stepper__badge {
-  width: fit-content;
-  padding: 0.15rem 0.5rem;
-  border-radius: var(--workflow-stepper-radius);
-  background: #eef2ff;
-  font-size: 0.75rem;
-  font-weight: 800;
-}
-
-.stepper__step--complete .stepper__marker {
-  border-color: var(--workflow-stepper-success);
-  background: var(--workflow-stepper-success);
-  color: #ffffff;
-}
-
-.stepper__step--active .stepper__marker {
-  border-color: var(--workflow-stepper-brand);
-  background: var(--workflow-stepper-brand);
-  color: #ffffff;
-}
-
-.stepper__step--warning .stepper__marker {
-  border-color: var(--workflow-stepper-warning);
-  background: var(--workflow-stepper-warning);
-  color: #ffffff;
-}
-
-.stepper__step--error .stepper__marker {
-  border-color: var(--workflow-stepper-error);
-  background: var(--workflow-stepper-error);
-  color: #ffffff;
-}
-
-.stepper__step--disabled {
-  opacity: 0.45;
-}
-
-.stepper--width-content {
-  width: fit-content;
-}
-
-.stepper--width-auto {
-  width: auto;
-}
-
-.stepper--width-fill {
-  width: 100%;
-}
-
-.stepper--vertical .stepper__list {
-  flex-direction: column;
-}
-
-.stepper--compact {
-  --workflow-stepper-marker-size: 2rem;
-}
-
-.stepper--compact .stepper__description {
-  display: none;
-}
-
-.stepper--large {
-  --workflow-stepper-marker-size: 3rem;
-}
-
-.stepper--large .stepper__title {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-  .stepper--responsive .stepper__list {
-    flex-direction: column;
-  }
-
-  .stepper--responsive .stepper__step {
-    width: 100%;
-  }
+  font-size: 0.85rem;
 }

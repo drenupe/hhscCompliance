@@ -1,60 +1,161 @@
-<section class="csv-wizard">
-  <header class="wizard-hero">
-    <p class="eyebrow">CSV Import Wizard</p>
+<lib-workflow-shell
+  eyebrow="Provider Onboarding"
+  [steps]="steps"
+  [currentStepId]="currentStepId"
+  [title]="workflow.title || ''"
+  [subtitle]="workflow.subtitle || ''"
+  [sticky]="true"
+  [showDescriptions]="false"
+  previousLabel="Back"
+  nextLabel="Continue to Validation"
+  [disablePrevious]="processing()"
+  [disableNext]="!canContinue || processing()"
+  (previous)="goBack()"
+  (next)="continueToValidation()"
+>
+  <div workflow-toolbar>
+    <span class="toolbar-status">
+      {{ uploadedCount }} of {{ totalCount }} files uploaded
+    </span>
 
-    <h1>Upload what you already have.</h1>
+    <strong class="toolbar-percent">
+      {{ uploadPercent }}%
+    </strong>
+  </div>
 
-    <p>
-      Upload your existing agency records. The platform will detect records,
-      validate data, find missing information, and guide you through anything
-      that still needs to be completed manually.
-    </p>
-
-    <section class="wizard-progress" aria-label="CSV upload progress">
-      <div class="wizard-progress__top">
-        <span>{{ uploadedCount }} of {{ totalCount }} files uploaded</span>
-        <strong>{{ uploadPercent }}%</strong>
+  <section class="import-workspace">
+    <header class="workspace-header">
+      <div>
+        <p class="eyebrow">Agency Import</p>
+        <h2>Import your agency records</h2>
+        <p>
+          Download the templates, complete them, then upload your CSV files.
+        </p>
       </div>
 
-      <div class="wizard-progress__bar" aria-hidden="true">
-        <span [style.width.%]="uploadPercent"></span>
+      <div class="workspace-score">
+        <span>{{ uploadPercent }}%</span>
+        <small>Complete</small>
+      </div>
+    </header>
+
+    <section class="desktop-command-grid" aria-label="Import command center">
+      <article class="command-panel">
+        <p class="panel-label">Step 1</p>
+        <h3>Download templates</h3>
+        <p>
+          Get all required and recommended CSV templates in one click.
+        </p>
+
+        <button
+          type="button"
+          class="primary-action"
+          [disabled]="processing()"
+          (click)="downloadAllTemplates()"
+        >
+          Download All Templates
+        </button>
+      </article>
+
+      <article class="command-panel command-panel--upload">
+        <p class="panel-label">Step 2</p>
+        <h3>Upload completed files</h3>
+        <p>
+          Select your completed CSV files. Multiple files can be uploaded one at
+          a time from the file cards below.
+        </p>
+
+        <div class="upload-progress" aria-label="Upload progress">
+          <div class="upload-progress__track">
+            <span [style.width.%]="uploadPercent"></span>
+          </div>
+
+          <strong>{{ uploadedCount }} / {{ totalCount }} uploaded</strong>
+        </div>
+      </article>
+
+      <aside class="command-panel status-panel">
+        <p class="panel-label">Import status</p>
+
+        <div class="status-row">
+          <span>Required files</span>
+          <strong>{{ requiredUploadedCount }} / {{ requiredCount }}</strong>
+        </div>
+
+        <div class="status-row">
+          <span>Recommended files</span>
+          <strong>{{ recommendedUploadedCount }} / {{ recommendedCount }}</strong>
+        </div>
+
+        <div class="status-row">
+          <span>Ready for validation</span>
+          <strong>{{ canContinue ? 'Yes' : 'No' }}</strong>
+        </div>
+      </aside>
+    </section>
+
+    @if (error()) {
+      <aside class="notice notice--error" aria-live="polite">
+        {{ error() }}
+      </aside>
+    }
+
+    @if (processing()) {
+      <aside class="notice" aria-live="polite">
+        Reading file...
+      </aside>
+    }
+
+    <section class="template-section" aria-labelledby="required-files-title">
+      <header class="section-heading">
+        <div>
+          <p class="eyebrow">Required files</p>
+          <h3 id="required-files-title">Upload these first</h3>
+        </div>
+
+        <span>{{ requiredUploadedCount }} of {{ requiredCount }} complete</span>
+      </header>
+
+      <div class="template-grid template-grid--required">
+        @for (template of requiredTemplates; track template.id) {
+          <lib-csv-upload-card
+            [template]="template"
+            [disabled]="processing()"
+            (downloadTemplate)="downloadTemplate($event)"
+            (upload)="uploadTemplate($event)"
+            (remove)="removeTemplate($event)"
+          />
+        }
       </div>
     </section>
-  </header>
 
-  <section class="drop-zone" aria-label="CSV upload drop zone">
-    <strong>Drag your agency folder here</strong>
-    <p>or upload individual CSV templates below.</p>
-  </section>
+    <section class="template-section" aria-labelledby="recommended-files-title">
+      <header class="section-heading">
+        <div>
+          <p class="eyebrow">Recommended files</p>
+          <h3 id="recommended-files-title">Add these if available</h3>
+        </div>
 
-  <section class="template-list" aria-label="CSV template list">
-    @for (template of templates; track template.id) {
-      <lib-csv-upload-card
-        [template]="template"
-        (upload)="uploadTemplate($event)"
-        (remove)="removeTemplate($event)"
-      />
+        <span>{{ recommendedUploadedCount }} of {{ recommendedCount }} complete</span>
+      </header>
+
+      <div class="template-grid">
+        @for (template of recommendedTemplates; track template.id) {
+          <lib-csv-upload-card
+            [template]="template"
+            [disabled]="processing()"
+            (downloadTemplate)="downloadTemplate($event)"
+            (upload)="uploadTemplate($event)"
+            (remove)="removeTemplate($event)"
+          />
+        }
+      </div>
+    </section>
+
+    @if (!canContinue) {
+      <aside class="notice" aria-live="polite">
+        Upload all required files before continuing to validation.
+      </aside>
     }
   </section>
-
-  @if (!canContinue) {
-    <aside class="notice" aria-live="polite">
-      Upload all required CSV files before continuing to validation.
-    </aside>
-  }
-
-  <footer class="wizard-actions">
-    <button class="btn btn--secondary" type="button" (click)="goBack()">
-      Back
-    </button>
-
-    <button
-      class="btn btn--primary"
-      type="button"
-      [disabled]="!canContinue"
-      (click)="continueToValidation()"
-    >
-      Continue to Validation
-    </button>
-  </footer>
-</section>
+</lib-workflow-shell>

@@ -1,0 +1,119 @@
+<section class="review">
+  <header class="review__header">
+    <div>
+      <p class="eyebrow">Review</p>
+      <h1>Ready to build this provider?</h1>
+      <p>
+        Confirm the imported information before the platform creates the agency,
+        records, relationships, and compliance foundation.
+      </p>
+    </div>
+
+    <aside class="readiness">
+      <span>Readiness</span>
+      <strong>{{ readiness().overallScore }}%</strong>
+      <small>
+        {{ readiness().errors }} errors • {{ readiness().warnings }} warnings
+      </small>
+    </aside>
+  </header>
+
+  <section class="grid">
+    <article class="card">
+      <h2>Provider Summary</h2>
+
+      <dl>
+        <div>
+          <dt>Agency</dt>
+          <dd>{{ provider().agencyName || 'Not provided' }}</dd>
+        </div>
+
+        <div>
+          <dt>License</dt>
+          <dd>{{ provider().licenseNumber || 'Not provided' }}</dd>
+        </div>
+
+        <div>
+          <dt>Region</dt>
+          <dd>{{ provider().region || 'Not provided' }}</dd>
+        </div>
+
+        <div>
+          <dt>Administrator</dt>
+          <dd>{{ provider().administratorName || 'Not provided' }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="card">
+      <h2>Import Summary</h2>
+
+      <div class="summary-list">
+        @for (template of templates(); track template.id) {
+          <div class="summary-item">
+            <div>
+              <strong>{{ template.name }}</strong>
+              <span>{{ template.requirement }}</span>
+            </div>
+
+            <b>{{ template.recordsFound || 0 }}</b>
+          </div>
+        }
+      </div>
+    </article>
+  </section>
+
+  <section class="card">
+    <h2>Validation Summary</h2>
+
+    <div class="readiness-grid">
+      @for (category of readiness().categories; track category.id) {
+        <div class="readiness-card">
+          <span>{{ category.label }}</span>
+          <strong>{{ category.score }}%</strong>
+          <small>
+            {{ category.errors }} errors • {{ category.warnings }} warnings
+          </small>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Build Preview</h2>
+
+    @if (buildPlan(); as plan) {
+      <p>
+        The engine will create records for
+        <strong>{{ plan.providerName }}</strong>.
+        Estimated time: <strong>{{ plan.estimatedSeconds }} seconds</strong>.
+      </p>
+
+      <div class="build-list">
+        @for (item of plan.items; track item.id) {
+          <div class="build-item">
+            <span>{{ item.label }}</span>
+            <strong>{{ item.count }}</strong>
+          </div>
+        }
+      </div>
+    } @else {
+      <p>No build plan available yet.</p>
+    }
+  </section>
+
+  <footer class="actions">
+    <button type="button" class="btn btn--secondary" (click)="previous()">
+      Previous
+    </button>
+
+    <button
+      type="button"
+      class="btn btn--primary"
+      [disabled]="!readiness().readyToBuild"
+      (click)="buildProvider()"
+    >
+      Build Provider
+    </button>
+  </footer>
+</section>

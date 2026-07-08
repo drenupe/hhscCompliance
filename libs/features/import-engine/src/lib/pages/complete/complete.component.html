@@ -1,0 +1,94 @@
+<section class="complete">
+  <header class="complete__hero">
+    <div class="complete__check">✓</div>
+
+    <div>
+      <p class="eyebrow">Complete</p>
+      <h1>Provider workspace created</h1>
+      <p>
+        The agency setup is complete. The provider is ready for operations,
+        compliance tracking, and dashboard review.
+      </p>
+    </div>
+  </header>
+
+  @if (result(); as buildResult) {
+    <section class="summary-card">
+      <div>
+        <span>Provider</span>
+        <strong>{{ buildResult.providerName }}</strong>
+      </div>
+
+      <div>
+        <span>Build Time</span>
+        <strong>{{ buildResult.durationSeconds }} sec</strong>
+      </div>
+
+      <div>
+        <span>Created</span>
+        <strong>{{ buildResult.createdAt | date: 'short' }}</strong>
+      </div>
+    </section>
+
+    <section class="created-grid">
+      <article class="created-card">
+        <span>Providers</span>
+        <strong>{{ buildResult.created.providers }}</strong>
+      </article>
+
+      <article class="created-card">
+        <span>Residential Locations</span>
+        <strong>{{ buildResult.created.residentialLocations }}</strong>
+      </article>
+
+      <article class="created-card">
+        <span>Consumers</span>
+        <strong>{{ buildResult.created.consumers }}</strong>
+      </article>
+
+      <article class="created-card">
+        <span>Employees</span>
+        <strong>{{ buildResult.created.employees }}</strong>
+      </article>
+
+      <article class="created-card">
+        <span>Relationships</span>
+        <strong>{{ buildResult.created.relationships }}</strong>
+      </article>
+
+      <article class="created-card">
+        <span>Compliance Modules</span>
+        <strong>{{ buildResult.created.complianceModules }}</strong>
+      </article>
+    </section>
+
+    @if (buildResult.warnings.length) {
+      <section class="warnings">
+        <h2>Warnings</h2>
+
+        <ul>
+          @for (warning of buildResult.warnings; track warning) {
+            <li>{{ warning }}</li>
+          }
+        </ul>
+      </section>
+    }
+  } @else {
+    <section class="summary-card">
+      <div>
+        <span>Status</span>
+        <strong>No build result found</strong>
+      </div>
+    </section>
+  }
+
+  <footer class="actions">
+    <button type="button" class="btn btn--secondary" (click)="importAnotherProvider()">
+      Import Another Provider
+    </button>
+
+    <button type="button" class="btn btn--primary" (click)="goToDashboard()">
+      Go to Operations Dashboard
+    </button>
+  </footer>
+</section>
