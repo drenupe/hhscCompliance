@@ -1,60 +1,97 @@
-<section class="build">
-  <header class="build__header">
-    <p class="eyebrow">Build</p>
-    <h1>Creating provider workspace</h1>
-    <p>
-      The engine is creating the provider, relationships, compliance foundation,
-      and dashboard setup.
-    </p>
-  </header>
+<lib-workspace maxWidth="wide" padding="md">
+  <lib-workflow-shell
+    eyebrow="Provider Onboarding"
+    [steps]="steps"
+    [currentStepId]="currentStepId"
+    title="Agency Creation"
+    subtitle="Build your organization from existing records."
+    [sticky]="false"
+    [showDescriptions]="false"
+    [showToolbar]="false"
+    [showFooter]="false"
+  >
+    <section class="build">
+      <header class="build-hero">
+        <div>
+          <p class="eyebrow">Build Intelligence Engine</p>
+          <h1>Creating provider workspace</h1>
+          <p>
+            The engine is preparing your provider, relationships, compliance
+            foundation, and dashboard setup.
+          </p>
+        </div>
 
-  <section class="build__progress-card">
-    <div class="progress-ring">
-      <strong>{{ progress() }}%</strong>
-      <span>Complete</span>
-    </div>
+        <aside class="build-score">
+          <span>Progress</span>
+          <strong>{{ progress() }}%</strong>
+        </aside>
+      </header>
 
-    <div class="progress-copy">
-      <h2>Building agency records</h2>
-
-      @if (buildPlan(); as plan) {
-        <p>
-          Creating records for
-          <strong>{{ plan.providerName }}</strong>.
-          Estimated time: {{ plan.estimatedSeconds }} seconds.
-        </p>
-      }
-
-      <div class="bar">
-        <span [style.width.%]="progress()"></span>
-      </div>
-    </div>
-  </section>
-
-  @if (error()) {
-    <div class="error">
-      {{ error() }}
-    </div>
-  }
-
-  @if (buildPlan(); as plan) {
-    <section class="build-list">
-      @for (item of plan.items; track item.id) {
-        <article class="build-item">
+      <section class="build-console">
+        <div class="build-console__header">
           <div>
-            <strong>{{ item.label }}</strong>
-            <span>{{ item.count }} records</span>
+            <p class="eyebrow">Build Console</p>
+
+            @if (buildPlan(); as plan) {
+              <h2>{{ plan.providerName }}</h2>
+              <p>Estimated build time: {{ plan.estimatedSeconds }} seconds</p>
+            } @else {
+              <h2>No build plan found</h2>
+              <p>Return to validation and generate a build plan.</p>
+            }
           </div>
 
-          <b>
-            @if (progress() === 100) {
-              ✓
-            } @else {
-              …
-            }
-          </b>
-        </article>
+          @if (building()) {
+            <button
+              type="button"
+              class="cancel-button"
+              (click)="cancelBuild()"
+            >
+              Cancel Import
+            </button>
+          }
+        </div>
+
+        <div class="bar" aria-label="Build progress">
+          <span [style.width.%]="progress()"></span>
+        </div>
+      </section>
+
+      @if (error()) {
+        <aside class="build-error" aria-live="polite">
+          {{ error() }}
+        </aside>
       }
+
+      <section class="stage-list" aria-label="Build stages">
+        @for (stage of stages(); track stage.id) {
+          <article
+            class="stage-row"
+            [class.stage-row--running]="stage.status === 'running'"
+            [class.stage-row--complete]="stage.status === 'complete'"
+            [class.stage-row--failed]="stage.status === 'failed'"
+          >
+            <div class="stage-row__icon" aria-hidden="true">
+              @if (stage.status === 'complete') {
+                ✓
+              } @else if (stage.status === 'running') {
+                …
+              } @else if (stage.status === 'failed') {
+                !
+              } @else {
+                ○
+              }
+            </div>
+
+            <div class="stage-row__copy">
+              <strong>{{ stage.label }}</strong>
+              <span>{{ stage.description }}</span>
+            </div>
+
+            <b>{{ stage.count }}</b>
+          </article>
+        }
+      </section>
     </section>
-  }
-</section>
+  </lib-workflow-shell>
+</lib-workspace>

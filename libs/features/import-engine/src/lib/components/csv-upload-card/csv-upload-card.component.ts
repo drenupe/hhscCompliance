@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 
 import { ImportTemplate } from '@hhsc-compliance/shared-models';
@@ -37,32 +39,61 @@ export class CsvUploadCardComponent {
   @Output()
   downloadTemplate = new EventEmitter<ImportTemplate>();
 
-  get inputId(): string {
-    return `csv-upload-${this.template.id}`;
+  @ViewChild('fileInput')
+  fileInput?: ElementRef<HTMLInputElement>;
+
+  get statusLabel(): string {
+    if (this.template.uploaded) {
+      return 'Uploaded';
+    }
+
+    if (this.template.requirement === 'required') {
+      return 'Required';
+    }
+
+    if (this.template.requirement === 'recommended') {
+      return 'Recommended';
+    }
+
+    return 'Optional';
   }
 
-  get buttonLabel(): string {
+  get statusClass(): string {
+    if (this.template.uploaded) {
+      return 'status status--uploaded';
+    }
+
+    switch (this.template.requirement) {
+      case 'required':
+        return 'status status--required';
+      case 'recommended':
+        return 'status status--recommended';
+      case 'optional':
+        return 'status status--optional';
+      default:
+        return 'status';
+    }
+  }
+
+  get uploadLabel(): string {
     if (this.disabled) {
       return 'Processing...';
     }
 
-    return this.template.uploaded ? 'Replace File' : 'Upload CSV';
+    return this.template.uploaded ? 'Replace CSV' : 'Upload CSV';
   }
 
-  get statusClass(): string {
-    switch (this.template.requirement) {
-      case 'required':
-        return 'status status--required';
+  get recordsLabel(): string {
+    const count = this.template.recordsFound ?? 0;
+    return count === 1 ? '1 record' : `${count} records`;
+  }
 
-      case 'recommended':
-        return 'status status--recommended';
-
-      case 'optional':
-        return 'status status--optional';
-
-      default:
-        return 'status';
+  openFilePicker(): void {
+    if (this.disabled) {
+      return;
     }
+
+    this.fileInput?.nativeElement.click();
   }
 
   onDownloadTemplate(): void {

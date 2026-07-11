@@ -1,0 +1,12 @@
+<section
+  class="workspace"
+  [class.workspace--standard]="maxWidth === 'standard'"
+  [class.workspace--wide]="maxWidth === 'wide'"
+  [class.workspace--full]="maxWidth === 'full'"
+  [class.workspace--padding-none]="padding === 'none'"
+  [class.workspace--padding-sm]="padding === 'sm'"
+  [class.workspace--padding-md]="padding === 'md'"
+  [class.workspace--padding-lg]="padding === 'lg'"
+>
+  <ng-content></ng-content>
+</section>

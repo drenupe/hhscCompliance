@@ -17,7 +17,7 @@ import {
   ProviderIntelligenceView,
   ProviderModuleRiskScore,
   ProviderRecommendation,
-} from '../../../../../data-access/src/lib/dashboard/src/services/compliance-dashboard.service';
+} from '@hhsc-compliance/data-access';
 
 import {
   AnalyticsCardComponent,

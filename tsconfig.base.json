@@ -45,6 +45,9 @@
       "@hhsc-compliance/provider-onboarding": [
         "libs/features/provider-onboarding/src/index.ts"
       ],
+      "@hhsc-compliance/provider-workspace": [
+        "libs/features/provider-workspace/src/index.ts"
+      ],
       "@hhsc-compliance/providers": ["libs/features/providers/src/index.ts"],
       "@hhsc-compliance/remediation": [
         "libs/features/remediation/src/index.ts"

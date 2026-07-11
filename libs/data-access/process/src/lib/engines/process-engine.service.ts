@@ -33,9 +33,13 @@ export class ProcessEngineService {
 
   validate(): void {
     const session = this.state.session();
+    
+    const readiness = this.validation.evaluate(
+      session.templates,
+      this.state.mappedTables(),
+    );
 
-    const readiness = this.validation.evaluate(session.templates);
-
+    console.log('Readiness after validation:', readiness);
     this.state.setReadiness(readiness);
 
     this.state.setBuildPlan(
@@ -45,6 +49,10 @@ export class ProcessEngineService {
       }),
     );
 
+    this.workflow.goTo('validation');
+  }
+
+  goToReview(): void {
     this.workflow.goTo('review');
   }
 

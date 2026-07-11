@@ -25,3 +25,5 @@ export * from './lib/workflow/models/workflow.model';
 export * from './lib/cards';
 
 export * from './lib/workflow';
+
+export * from './lib/workspace';

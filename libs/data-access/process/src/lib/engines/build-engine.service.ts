@@ -19,49 +19,51 @@ export class BuildEngineService {
     const items: OnboardingBuildPlanItem[] = [
       {
         id: 'provider',
-        label: 'Provider',
-        count: session.provider.agencyName ? 1 : 0,
+        label: 'Create Provider',
+        count: 1,
         status: 'pending',
       },
       {
         id: 'residential-locations',
-        label: 'Residential Locations',
-        count: this.getTemplateCount(uploadedTemplates, [
-          'residential',
-          'location',
-          'home',
-        ]),
-        status: 'pending',
-      },
-      {
-        id: 'consumers',
-        label: 'Consumers',
-        count: this.getTemplateCount(uploadedTemplates, ['consumer']),
+        label: 'Create Residential Locations',
+        count: this.getTemplateCount(uploadedTemplates, ['locations']),
         status: 'pending',
       },
       {
         id: 'employees',
-        label: 'Employees',
-        count: this.getTemplateCount(uploadedTemplates, ['employee', 'staff']),
+        label: 'Create Employees',
+        count: this.getTemplateCount(uploadedTemplates, ['employees']),
+        status: 'pending',
+      },
+      {
+        id: 'consumers',
+        label: 'Create Consumers',
+        count: this.getTemplateCount(uploadedTemplates, ['consumers']),
         status: 'pending',
       },
       {
         id: 'relationships',
-        label: 'Relationships',
+        label: 'Link Relationships',
         count: this.estimateRelationships(uploadedTemplates),
         status: 'pending',
       },
       {
         id: 'compliance-modules',
-        label: 'Compliance Modules',
+        label: 'Generate Compliance Baseline',
         count: this.estimateComplianceModules(uploadedTemplates),
+        status: 'pending',
+      },
+      {
+        id: 'dashboard',
+        label: 'Prepare Provider Dashboard',
+        count: 1,
         status: 'pending',
       },
     ];
 
     return {
       providerName: session.provider.agencyName || 'New Provider',
-      estimatedSeconds: Math.max(6, uploadedTemplates.length * 3),
+      estimatedSeconds: Math.max(8, items.length * 2),
       items,
     };
   }
@@ -69,9 +71,7 @@ export class BuildEngineService {
   async build(session: OnboardingSession): Promise<OnboardingBuildResult> {
     const plan = session.buildPlan ?? this.createPlan(session);
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, plan.estimatedSeconds * 250),
-    );
+    await this.delay(600);
 
     return {
       providerId: this.createId(),
@@ -115,7 +115,7 @@ export class BuildEngineService {
       0,
     );
 
-    return Math.round(totalRecords * 1.5);
+    return Math.max(1, Math.round(totalRecords * 1.5));
   }
 
   private estimateComplianceModules(
@@ -126,7 +126,11 @@ export class BuildEngineService {
       0,
     );
 
-    return Math.max(0, Math.round(totalRecords * 0.4));
+    return Math.max(1, Math.round(totalRecords * 0.4));
+  }
+
+  private delay(milliseconds: number): Promise<void> {
+    return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
   }
 
   private createId(): string {

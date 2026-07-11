@@ -1,42 +1,51 @@
 <lib-card
+  class="upload-card"
   [appearance]="template.uploaded ? 'elevated' : 'outlined'"
-  padding="md"
+  padding="sm"
   radius="lg"
   [interactive]="!disabled"
 >
   <div card-header>
-    <div>
-      <h3 card-title>{{ template.name }}</h3>
+    <div class="upload-card__title-group">
+      <div class="upload-card__title-row">
+        <span class="upload-card__icon" aria-hidden="true">
+          {{ template.uploaded ? '✓' : 'CSV' }}
+        </span>
+
+        <h3 card-title>{{ template.name }}</h3>
+      </div>
 
       <span [class]="statusClass">
-        {{ template.status }}
+        {{ statusLabel }}
       </span>
     </div>
-
-    @if (template.uploaded) {
-      <div class="upload-card__check">
-        ✓
-      </div>
-    }
   </div>
 
-  <p card-subtitle>
-    {{ template.description }}
-  </p>
-
-  <section class="upload-card__details">
-    <div class="detail">
-      <span class="detail__title">Expected File</span>
+  <div class="upload-card__body">
+    <div class="upload-card__file">
+      <span>Expected file</span>
       <strong>{{ template.expectedFileName }}</strong>
     </div>
 
     @if (template.uploaded) {
-      <div class="detail">
-        <span class="detail__title">Records Found</span>
-        <strong>{{ template.recordsFound || 0 }}</strong>
+      <div class="upload-card__records">
+        {{ recordsLabel }} found
       </div>
+    } @else {
+      <p class="upload-card__description">
+        {{ template.description }}
+      </p>
     }
-  </section>
+  </div>
+
+  <input
+    #fileInput
+    class="upload-card__input"
+    type="file"
+    accept=".csv,text/csv"
+    [disabled]="disabled"
+    (change)="onFileSelected($event)"
+  />
 
   <div card-actions>
     <button
@@ -45,29 +54,21 @@
       [disabled]="disabled"
       (click)="onDownloadTemplate()"
     >
-      Download Template
+      Template
     </button>
 
-    <input
-      class="upload-card__input"
-      type="file"
-      accept=".csv,text/csv"
-      [id]="inputId"
-      [disabled]="disabled"
-      (change)="onFileSelected($event)"
-    />
-
-    <label
+    <button
       class="btn btn--primary"
-      [class.btn--disabled]="disabled"
-      [for]="inputId"
+      type="button"
+      [disabled]="disabled"
+      (click)="openFilePicker()"
     >
-      {{ buttonLabel }}
-    </label>
+      {{ uploadLabel }}
+    </button>
 
     @if (template.uploaded) {
       <button
-        class="btn btn--secondary"
+        class="btn btn--ghost"
         type="button"
         [disabled]="disabled"
         (click)="onRemove()"

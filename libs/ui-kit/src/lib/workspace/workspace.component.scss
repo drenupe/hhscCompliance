@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.workspace {
+  display: grid;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.workspace--standard {
+  max-width: 1180px;
+}
+
+.workspace--wide {
+  max-width: 1280px;
+}
+
+.workspace--full {
+  max-width: none;
+}
+
+.workspace--padding-none {
+  padding: 0;
+}
+
+.workspace--padding-sm {
+  padding: 16px;
+}
+
+.workspace--padding-md {
+  padding: 24px;
+}
+
+.workspace--padding-lg {
+  padding: 32px;
+}
+
+@media (max-width: 760px) {
+  .workspace--padding-sm,
+  .workspace--padding-md,
+  .workspace--padding-lg {
+    padding: 16px;
+  }
+}

@@ -1,66 +1,97 @@
-<section class="validation">
-  <lib-stepper
-    [steps]="workflow.steps"
+<lib-workspace maxWidth="wide" padding="md">
+  <lib-workflow-shell
+    eyebrow="Provider Onboarding"
+    [steps]="steps"
     [currentStepId]="currentStepId"
-    variant="number"
-    width="fill"
-    alignment="space-between"
-    size="comfortable"
-  ></lib-stepper>
+    title="Agency Creation"
+    subtitle="Build your organization from existing records."
+    [sticky]="false"
+    [showDescriptions]="false"
+    [showToolbar]="false"
+    previousLabel="Back to Uploads"
+    nextLabel="Continue to Review"
+    [disablePrevious]="false"
+    [disableNext]="false"
+    (previous)="goBack()"
+    (next)="continueToReview()"
+  >
+    <section class="validation">
+      <header class="validation-hero">
+        <div>
+          <p class="eyebrow">Validation Engine</p>
+          <h1>Import Validation</h1>
+          <p>
+            Review readiness, warnings, and errors before creating the agency.
+          </p>
+        </div>
 
-  <header class="validation__hero">
-    <div>
-      <p class="validation__eyebrow">Validation Engine</p>
+        <div class="readiness-card">
+          <span>Readiness</span>
+          <strong>{{ summary().readinessPercent }}%</strong>
+        </div>
+      </header>
 
-      <h1>Import Validation</h1>
+      <section class="summary-grid" aria-label="Import validation summary">
+        <article class="summary-card">
+          <span>Files Uploaded</span>
+          <strong>{{ summary().totalFilesUploaded }}</strong>
+        </article>
 
-      <p>
-        We've analyzed each uploaded CSV and identified any issues that should
-        be reviewed before your agency is created.
-      </p>
-    </div>
+        <article class="summary-card">
+          <span>Records Ready</span>
+          <strong>{{ summary().totalRecordsReady }}</strong>
+        </article>
 
-    <div class="validation__score">
-      <span>Readiness</span>
-      <strong>{{ summary.readinessPercent }}%</strong>
-    </div>
-  </header>
+        <article class="summary-card summary-card--warning">
+          <span>Warnings</span>
+          <strong>{{ summary().totalWarnings }}</strong>
+        </article>
 
-  <section class="validation__summary" aria-label="Import validation summary">
-    <article class="summary-card">
-      <span class="summary-card__label">Files Uploaded</span>
-      <strong>{{ summary.totalFilesUploaded }}</strong>
-    </article>
+        <article class="summary-card summary-card--error">
+          <span>Errors</span>
+          <strong>{{ summary().totalErrors }}</strong>
+        </article>
+      </section>
 
-    <article class="summary-card">
-      <span class="summary-card__label">Records Ready</span>
-      <strong>{{ summary.totalRecordsReady }}</strong>
-    </article>
+      <section class="validation-table" aria-label="Validation results">
+        <div class="validation-table__header">
+          <span>Template</span>
+          <span>Total</span>
+          <span>Valid</span>
+          <span>Warnings</span>
+          <span>Errors</span>
+          <span>Status</span>
+        </div>
 
-    <article class="summary-card">
-      <span class="summary-card__label">Warnings</span>
-      <strong>{{ summary.totalWarnings }}</strong>
-    </article>
+        @for (result of validationResults(); track result.templateId) {
+          <div class="validation-table__row">
+            <strong>{{ result.templateName }}</strong>
+            <span>{{ result.totalRecords }}</span>
+            <span>{{ result.validRecords }}</span>
+            <span>{{ result.warningCount }}</span>
+            <span>{{ result.errorCount }}</span>
 
-    <article class="summary-card">
-      <span class="summary-card__label">Errors</span>
-      <strong>{{ summary.totalErrors }}</strong>
-    </article>
-  </section>
-
-  <section class="validation__results" aria-label="Validation results">
-    @for (result of validationResults(); track result.templateId) {
-      <lib-import-validation-card [result]="result"></lib-import-validation-card>
-    }
-  </section>
-
-  <footer class="validation__footer">
-    <button class="btn btn--secondary" type="button">
-      Back to Uploads
-    </button>
-
-    <button class="btn btn--primary" type="button">
-      Continue to Review
-    </button>
-  </footer>
-</section>
+            <span
+              class="status-chip"
+              [class.status-chip--ready]="
+                result.errorCount === 0 && result.warningCount === 0
+              "
+              [class.status-chip--warning]="
+                result.errorCount === 0 && result.warningCount > 0
+              "
+              [class.status-chip--blocked]="result.errorCount > 0"
+            >
+              @if (result.errorCount > 0) {
+                Needs Review
+              } @else if (result.warningCount > 0) {
+                Warnings
+              } @else {
+                Ready
+              }
+            </span>
+          </div>
+        }
+      </section>
+    </section>
+  </lib-workflow-shell>
+</lib-workspace>

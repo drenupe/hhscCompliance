@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import {
   ImportSummary,
@@ -7,26 +8,27 @@ import {
 } from '@hhsc-compliance/shared-models';
 
 import {
-  StepperComponent,
-  StepperStep,
-} from '@hhsc-compliance/ui-kit';
-
-import {
   ProcessEngineService,
   ProcessStateService,
 } from '@hhsc-compliance/data-access';
 
-import { ImportValidationCardComponent } from '../import-validation-card/import-validation-card.component';
+import {
+  StepperStep,
+  WorkflowShellComponent,
+  WorkspaceComponent,
+} from '@hhsc-compliance/ui-kit';
+
 import { AGENCY_CREATION_WORKFLOW } from '../../workflows/agency-creation.workflow';
 
 @Component({
   selector: 'lib-import-validation',
   standalone: true,
-  imports: [CommonModule, ImportValidationCardComponent, StepperComponent],
+  imports: [CommonModule, WorkflowShellComponent, WorkspaceComponent],
   templateUrl: './import-validation.component.html',
   styleUrls: ['./import-validation.component.scss'],
 })
 export class ImportValidationComponent {
+  private readonly router = inject(Router);
   private readonly processEngine = inject(ProcessEngineService);
   private readonly processState = inject(ProcessStateService);
 
@@ -53,42 +55,53 @@ export class ImportValidationComponent {
     }),
   );
 
-readonly summary = computed<ImportSummary>(() => {
-  const templates = this.processState.templates();
-  const readiness = this.processState.readiness();
+  readonly summary = computed<ImportSummary>(() => {
+    const templates = this.processState.templates();
+    const readiness = this.processState.readiness();
 
-  return {
-    totalFilesUploaded: templates.filter((template) => template.uploaded).length,
-    totalRecordsReady: templates.reduce(
-      (total, template) => total + (template.recordsFound ?? 0),
-      0,
-    ),
-    totalWarnings: readiness.warnings,
-    totalErrors: readiness.errors,
-    readinessScore: readiness.overallScore,
-    readinessPercent: readiness.overallScore,
-    readyToImport: readiness.readyToBuild,
-    items: readiness.categories.map((category) => {
-      const recordsReady =
-        templates.find((template) => template.id === category.id)
-          ?.recordsFound ?? 0;
+    return {
+      totalFilesUploaded: templates.filter((template) => template.uploaded).length,
+      totalRecordsReady: templates.reduce(
+        (total, template) => total + (template.recordsFound ?? 0),
+        0,
+      ),
+      totalWarnings: readiness.warnings,
+      totalErrors: readiness.errors,
+      readinessScore: readiness.overallScore,
+      readinessPercent: readiness.overallScore,
+      readyToImport: readiness.readyToBuild,
+      items: readiness.categories.map((category) => {
+        const recordsReady =
+          templates.find((template) => template.id === category.id)
+            ?.recordsFound ?? 0;
 
-      return {
-        templateId: category.id,
-        label: category.label,
-        recordsReady,
-        warnings: category.warnings,
-        errors: category.errors,
-      };
-    }),
-  };
-});
+        return {
+          templateId: category.id,
+          label: category.label,
+          recordsReady,
+          warnings: category.warnings,
+          errors: category.errors,
+        };
+      }),
+    };
+  });
 
-  validate(): void {
-    this.processEngine.validate();
+constructor() {
+  this.processEngine.validate();
+
+  window.setTimeout(() => {
+    if (this.summary().totalErrors === 0) {
+      this.continueToReview();
+    }
+  }, 1800);
+}
+
+  goBack(): void {
+    this.router.navigate(['/provider-onboarding/agency-creation/csv-import']);
   }
 
-  trackByTemplate(index: number, item: ImportValidationResult): string {
-    return item.templateId;
+  continueToReview(): void {
+    this.processEngine.goToReview();
+    this.router.navigate(['/provider-onboarding/agency-creation/review']);
   }
 }

@@ -1,161 +1,301 @@
-<lib-workflow-shell
-  eyebrow="Provider Onboarding"
-  [steps]="steps"
-  [currentStepId]="currentStepId"
-  [title]="workflow.title || ''"
-  [subtitle]="workflow.subtitle || ''"
-  [sticky]="true"
-  [showDescriptions]="false"
-  previousLabel="Back"
-  nextLabel="Continue to Validation"
-  [disablePrevious]="processing()"
-  [disableNext]="!canContinue || processing()"
-  (previous)="goBack()"
-  (next)="continueToValidation()"
->
-  <div workflow-toolbar>
-    <span class="toolbar-status">
-      {{ uploadedCount }} of {{ totalCount }} files uploaded
-    </span>
+<lib-workspace maxWidth="wide" padding="none">
+  <lib-workflow-shell
+    eyebrow="Provider Onboarding"
+    [steps]="steps"
+    [currentStepId]="currentStepId"
+    [title]="workflow.title || ''"
+    [subtitle]="workflow.subtitle || ''"
+    [sticky]="true"
+    [showDescriptions]="false"
+    [showToolbar]="false"
+    previousLabel="Back"
+    nextLabel="Continue to Validation"
+    [disablePrevious]="processing()"
+    [disableNext]="!canContinue || processing()"
+    (previous)="goBack()"
+    (next)="continueToValidation()"
+  >
+    <section class="import-workspace">
+      <header class="workspace-header">
+        <div>
+          <p class="eyebrow">Agency Import</p>
+          <h2>Import Command Center</h2>
+          <p>
+            Download the templates, complete them, then upload all completed CSV
+            files together.
+          </p>
+        </div>
 
-    <strong class="toolbar-percent">
-      {{ uploadPercent }}%
-    </strong>
-  </div>
+        <div class="workspace-score">
+          <span>{{ uploadPercent }}%</span>
+          <small>Complete</small>
+        </div>
+      </header>
 
-  <section class="import-workspace">
-    <header class="workspace-header">
-      <div>
-        <p class="eyebrow">Agency Import</p>
-        <h2>Import your agency records</h2>
-        <p>
-          Download the templates, complete them, then upload your CSV files.
-        </p>
-      </div>
+      <section class="desktop-command-grid" aria-label="Import command center">
+        <article class="command-panel">
+          <p class="panel-label">Step 1</p>
+          <h3>Download templates</h3>
+          <p>
+            Get all required and recommended CSV templates in one click.
+          </p>
 
-      <div class="workspace-score">
-        <span>{{ uploadPercent }}%</span>
-        <small>Complete</small>
-      </div>
-    </header>
+          <button
+            type="button"
+            class="primary-action"
+            [disabled]="processing()"
+            (click)="downloadAllTemplates()"
+          >
+            Download All Templates
+          </button>
+        </article>
 
-    <section class="desktop-command-grid" aria-label="Import command center">
-      <article class="command-panel">
-        <p class="panel-label">Step 1</p>
-        <h3>Download templates</h3>
-        <p>
-          Get all required and recommended CSV templates in one click.
-        </p>
+        <article class="command-panel command-panel--upload">
+          <p class="panel-label">Step 2</p>
+          <h3>Upload completed files</h3>
+          <p>
+            Select all completed CSV files at once. The system will match them
+            by filename.
+          </p>
 
-        <button
-          type="button"
-          class="primary-action"
-          [disabled]="processing()"
-          (click)="downloadAllTemplates()"
-        >
-          Download All Templates
-        </button>
-      </article>
+          <input
+            #bulkFileInput
+            class="bulk-upload-input"
+            type="file"
+            accept=".csv,text/csv"
+            multiple
+            [disabled]="processing()"
+            (change)="uploadMultipleTemplates($event)"
+          />
 
-      <article class="command-panel command-panel--upload">
-        <p class="panel-label">Step 2</p>
-        <h3>Upload completed files</h3>
-        <p>
-          Select your completed CSV files. Multiple files can be uploaded one at
-          a time from the file cards below.
-        </p>
+          <button
+            type="button"
+            class="secondary-action"
+            [disabled]="processing()"
+            (click)="bulkFileInput.click()"
+          >
+            Select CSV Files
+          </button>
 
-        <div class="upload-progress" aria-label="Upload progress">
-          <div class="upload-progress__track">
-            <span [style.width.%]="uploadPercent"></span>
+          <div class="upload-progress" aria-label="Upload progress">
+            <div class="upload-progress__track">
+              <span [style.width.%]="uploadPercent"></span>
+            </div>
+
+            <strong>{{ uploadedCount }} / {{ totalCount }} uploaded</strong>
+          </div>
+        </article>
+
+        <aside class="command-panel status-panel">
+          <p class="panel-label">Import status</p>
+
+          <div class="status-row">
+            <span>Required files</span>
+            <strong>{{ requiredUploadedCount }} / {{ requiredCount }}</strong>
           </div>
 
-          <strong>{{ uploadedCount }} / {{ totalCount }} uploaded</strong>
-        </div>
-      </article>
+          <div class="status-row">
+            <span>Recommended files</span>
+            <strong>{{ recommendedUploadedCount }} / {{ recommendedCount }}</strong>
+          </div>
 
-      <aside class="command-panel status-panel">
-        <p class="panel-label">Import status</p>
+          <div class="status-row">
+            <span>Ready for validation</span>
+            <strong>{{ canContinue ? 'Yes' : 'No' }}</strong>
+          </div>
+        </aside>
+      </section>
 
-        <div class="status-row">
-          <span>Required files</span>
-          <strong>{{ requiredUploadedCount }} / {{ requiredCount }}</strong>
-        </div>
+      @if (uploadMessage()) {
+        <aside class="notice notice--success" aria-live="polite">
+          {{ uploadMessage() }}
+        </aside>
+      }
 
-        <div class="status-row">
-          <span>Recommended files</span>
-          <strong>{{ recommendedUploadedCount }} / {{ recommendedCount }}</strong>
-        </div>
+      @if (error()) {
+        <aside class="notice notice--error" aria-live="polite">
+          {{ error() }}
+        </aside>
+      }
 
-        <div class="status-row">
-          <span>Ready for validation</span>
-          <strong>{{ canContinue ? 'Yes' : 'No' }}</strong>
+      @if (processing()) {
+        <aside class="notice" aria-live="polite">
+          Reading files...
+        </aside>
+      }
+
+      <section class="template-section" aria-labelledby="required-files-title">
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">Required files</p>
+            <h3 id="required-files-title">Upload these first</h3>
+          </div>
+
+          <span>{{ requiredUploadedCount }} of {{ requiredCount }} complete</span>
+        </header>
+
+        <div class="import-table" role="table" aria-label="Required import files">
+          <div class="import-table__header" role="row">
+            <span role="columnheader">File Type</span>
+            <span role="columnheader">Expected File</span>
+            <span role="columnheader">Status</span>
+            <span role="columnheader">Records</span>
+            <span role="columnheader">Actions</span>
+          </div>
+
+          @for (template of requiredTemplates; track template.id) {
+            <div class="import-table__row" role="row">
+              <div class="file-cell" role="cell">
+                <span
+                  class="file-icon"
+                  [class.file-icon--uploaded]="template.uploaded"
+                  aria-hidden="true"
+                >
+                  {{ template.uploaded ? '✓' : 'CSV' }}
+                </span>
+
+                <div>
+                  <strong>{{ template.name }}</strong>
+                  <small>{{ template.description }}</small>
+                </div>
+              </div>
+
+              <span class="file-name" role="cell">
+                {{ template.expectedFileName }}
+              </span>
+
+              <span role="cell">
+                <span
+                  class="status-chip"
+                  [class.status-chip--uploaded]="template.uploaded"
+                  [class.status-chip--waiting]="!template.uploaded"
+                >
+                  {{ template.uploaded ? 'Uploaded' : 'Waiting' }}
+                </span>
+              </span>
+
+              <strong class="records-cell" role="cell">
+                {{ template.uploaded ? (template.recordsFound || 0) : '—' }}
+              </strong>
+
+              <div class="actions-cell" role="cell">
+                <button
+                  type="button"
+                  class="table-action"
+                  [disabled]="processing()"
+                  (click)="downloadTemplate(template)"
+                >
+                  Template
+                </button>
+
+                @if (template.uploaded) {
+                  <button
+                    type="button"
+                    class="table-action table-action--danger"
+                    [disabled]="processing()"
+                    (click)="removeTemplate(template)"
+                  >
+                    Remove
+                  </button>
+                }
+              </div>
+            </div>
+          }
         </div>
-      </aside>
+      </section>
+
+      <section
+        class="template-section"
+        aria-labelledby="recommended-files-title"
+      >
+        <header class="section-heading">
+          <div>
+            <p class="eyebrow">Recommended files</p>
+            <h3 id="recommended-files-title">Add these if available</h3>
+          </div>
+
+          <span>{{ recommendedUploadedCount }} of {{ recommendedCount }} complete</span>
+        </header>
+
+        <div
+          class="import-table import-table--compact"
+          role="table"
+          aria-label="Recommended import files"
+        >
+          <div class="import-table__header" role="row">
+            <span role="columnheader">File Type</span>
+            <span role="columnheader">Expected File</span>
+            <span role="columnheader">Status</span>
+            <span role="columnheader">Records</span>
+            <span role="columnheader">Actions</span>
+          </div>
+
+          @for (template of recommendedTemplates; track template.id) {
+            <div class="import-table__row" role="row">
+              <div class="file-cell" role="cell">
+                <span
+                  class="file-icon"
+                  [class.file-icon--uploaded]="template.uploaded"
+                  aria-hidden="true"
+                >
+                  {{ template.uploaded ? '✓' : 'CSV' }}
+                </span>
+
+                <div>
+                  <strong>{{ template.name }}</strong>
+                  <small>{{ template.description }}</small>
+                </div>
+              </div>
+
+              <span class="file-name" role="cell">
+                {{ template.expectedFileName }}
+              </span>
+
+              <span role="cell">
+                <span
+                  class="status-chip"
+                  [class.status-chip--uploaded]="template.uploaded"
+                  [class.status-chip--waiting]="!template.uploaded"
+                >
+                  {{ template.uploaded ? 'Uploaded' : 'Waiting' }}
+                </span>
+              </span>
+
+              <strong class="records-cell" role="cell">
+                {{ template.uploaded ? (template.recordsFound || 0) : '—' }}
+              </strong>
+
+              <div class="actions-cell" role="cell">
+                <button
+                  type="button"
+                  class="table-action"
+                  [disabled]="processing()"
+                  (click)="downloadTemplate(template)"
+                >
+                  Template
+                </button>
+
+                @if (template.uploaded) {
+                  <button
+                    type="button"
+                    class="table-action table-action--danger"
+                    [disabled]="processing()"
+                    (click)="removeTemplate(template)"
+                  >
+                    Remove
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      @if (!canContinue) {
+        <aside class="notice" aria-live="polite">
+          Upload all required files before continuing to validation.
+        </aside>
+      }
     </section>
-
-    @if (error()) {
-      <aside class="notice notice--error" aria-live="polite">
-        {{ error() }}
-      </aside>
-    }
-
-    @if (processing()) {
-      <aside class="notice" aria-live="polite">
-        Reading file...
-      </aside>
-    }
-
-    <section class="template-section" aria-labelledby="required-files-title">
-      <header class="section-heading">
-        <div>
-          <p class="eyebrow">Required files</p>
-          <h3 id="required-files-title">Upload these first</h3>
-        </div>
-
-        <span>{{ requiredUploadedCount }} of {{ requiredCount }} complete</span>
-      </header>
-
-      <div class="template-grid template-grid--required">
-        @for (template of requiredTemplates; track template.id) {
-          <lib-csv-upload-card
-            [template]="template"
-            [disabled]="processing()"
-            (downloadTemplate)="downloadTemplate($event)"
-            (upload)="uploadTemplate($event)"
-            (remove)="removeTemplate($event)"
-          />
-        }
-      </div>
-    </section>
-
-    <section class="template-section" aria-labelledby="recommended-files-title">
-      <header class="section-heading">
-        <div>
-          <p class="eyebrow">Recommended files</p>
-          <h3 id="recommended-files-title">Add these if available</h3>
-        </div>
-
-        <span>{{ recommendedUploadedCount }} of {{ recommendedCount }} complete</span>
-      </header>
-
-      <div class="template-grid">
-        @for (template of recommendedTemplates; track template.id) {
-          <lib-csv-upload-card
-            [template]="template"
-            [disabled]="processing()"
-            (downloadTemplate)="downloadTemplate($event)"
-            (upload)="uploadTemplate($event)"
-            (remove)="removeTemplate($event)"
-          />
-        }
-      </div>
-    </section>
-
-    @if (!canContinue) {
-      <aside class="notice" aria-live="polite">
-        Upload all required files before continuing to validation.
-      </aside>
-    }
-  </section>
-</lib-workflow-shell>
+  </lib-workflow-shell>
+</lib-workspace>

@@ -3,32 +3,29 @@ import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
-  ProcessEngineService,
-  ProcessStateService,
-} from '@hhsc-compliance/data-access';
-
-import {
   CsvParserService,
   ImportMapperService,
+  ProcessEngineService,
+  ProcessStateService,
 } from '@hhsc-compliance/data-access';
 
 import { ImportTemplate } from '@hhsc-compliance/shared-models';
 
 import {
   WorkflowShellComponent,
+  WorkspaceComponent,
 } from '@hhsc-compliance/ui-kit';
-
-import {
-  CsvUploadCardComponent,
-  CsvUploadEvent,
-} from '../csv-upload-card/csv-upload-card.component';
 
 import { AGENCY_CREATION_WORKFLOW } from '../../workflows/agency-creation.workflow';
 
 @Component({
   selector: 'lib-csv-import-wizard',
   standalone: true,
-  imports: [CommonModule, CsvUploadCardComponent, WorkflowShellComponent],
+  imports: [
+    CommonModule,
+    WorkflowShellComponent,
+    WorkspaceComponent,
+  ],
   templateUrl: './csv-import-wizard.component.html',
   styleUrls: ['./csv-import-wizard.component.scss'],
 })
@@ -45,13 +42,13 @@ export class CsvImportWizardComponent {
 
   readonly processing = signal(false);
   readonly error = signal('');
+  readonly uploadMessage = signal('');
 
   templates: ImportTemplate[] = [
     {
       id: 'provider',
       name: 'Provider Information',
-      description:
-        'Agency name, provider number, contact details, and administrator information.',
+      description: 'Agency name, provider number, contact details, and administrator information.',
       requirement: 'required',
       expectedFileName: 'provider.csv',
       status: 'not-started',
@@ -84,8 +81,7 @@ export class CsvImportWizardComponent {
     {
       id: 'employees',
       name: 'Employees',
-      description:
-        'Staff names, job titles, hire dates, phone numbers, and employment status.',
+      description: 'Staff names, job titles, hire dates, phone numbers, and employment status.',
       requirement: 'required',
       expectedFileName: 'employees.csv',
       status: 'not-started',
@@ -116,8 +112,7 @@ export class CsvImportWizardComponent {
     {
       id: 'consumers',
       name: 'Consumers',
-      description:
-        'Consumer demographics, Medicaid numbers, assigned homes, and case manager links.',
+      description: 'Consumer demographics, Medicaid numbers, assigned homes, and case manager links.',
       requirement: 'required',
       expectedFileName: 'consumers.csv',
       status: 'not-started',
@@ -146,8 +141,7 @@ export class CsvImportWizardComponent {
     {
       id: 'locations',
       name: 'Residential Locations',
-      description:
-        'Group homes, host homes, addresses, location codes, and capacity details.',
+      description: 'Group homes, host homes, addresses, location codes, and capacity details.',
       requirement: 'required',
       expectedFileName: 'locations.csv',
       status: 'not-started',
@@ -176,8 +170,7 @@ export class CsvImportWizardComponent {
     {
       id: 'training',
       name: 'Training Records',
-      description:
-        'Employee training history, completion dates, and expiration dates.',
+      description: 'Employee training history, completion dates, and expiration dates.',
       requirement: 'recommended',
       expectedFileName: 'training.csv',
       status: 'not-started',
@@ -200,8 +193,7 @@ export class CsvImportWizardComponent {
     {
       id: 'authorizations',
       name: 'Authorizations',
-      description:
-        'Service authorizations, IPC dates, levels, and approval periods.',
+      description: 'Service authorizations, IPC dates, levels, and approval periods.',
       requirement: 'recommended',
       expectedFileName: 'authorizations.csv',
       status: 'not-started',
@@ -229,6 +221,14 @@ export class CsvImportWizardComponent {
     this.processEngine.updateTemplates(this.templates);
   }
 
+  get requiredTemplates(): ImportTemplate[] {
+    return this.templates.filter((template) => template.requirement === 'required');
+  }
+
+  get recommendedTemplates(): ImportTemplate[] {
+    return this.templates.filter((template) => template.requirement !== 'required');
+  }
+
   get uploadedCount(): number {
     return this.templates.filter((template) => template.uploaded).length;
   }
@@ -243,37 +243,31 @@ export class CsvImportWizardComponent {
       : Math.round((this.uploadedCount / this.totalCount) * 100);
   }
 
-  get canContinue(): boolean {
-    return this.templates
-      .filter((template) => template.requirement === 'required')
-      .every((template) => template.uploaded);
+  get requiredCount(): number {
+    return this.requiredTemplates.length;
   }
 
-  get requiredTemplates(): ImportTemplate[] {
-  return this.templates.filter((template) => template.requirement === 'required');
-}
+  get recommendedCount(): number {
+    return this.recommendedTemplates.length;
+  }
 
-get recommendedTemplates(): ImportTemplate[] {
-  return this.templates.filter((template) => template.requirement !== 'required');
-}
+  get requiredUploadedCount(): number {
+    return this.requiredTemplates.filter((template) => template.uploaded).length;
+  }
 
-get requiredCount(): number {
-  return this.requiredTemplates.length;
-}
+  get recommendedUploadedCount(): number {
+    return this.recommendedTemplates.filter((template) => template.uploaded).length;
+  }
 
-get recommendedCount(): number {
-  return this.recommendedTemplates.length;
-}
+  get canContinue(): boolean {
+    return this.requiredTemplates.every((template) => template.uploaded);
+  }
 
-get requiredUploadedCount(): number {
-  return this.requiredTemplates.filter((template) => template.uploaded).length;
-}
-
-get recommendedUploadedCount(): number {
-  return this.recommendedTemplates.filter((template) => template.uploaded).length;
-}
-
-
+  downloadAllTemplates(): void {
+    for (const template of this.templates) {
+      this.downloadTemplate(template);
+    }
+  }
 
   downloadTemplate(template: ImportTemplate): void {
     const headers = template.headers ?? ['id', 'name'];
@@ -282,9 +276,7 @@ get recommendedUploadedCount(): number {
     const rows = [
       headers.join(','),
       headers
-        .map((header: string) =>
-          this.escapeCsvValue(sampleRow[header] ?? ''),
-        )
+        .map((header) => this.escapeCsvValue(sampleRow[header] ?? ''))
         .join(','),
     ];
 
@@ -302,51 +294,99 @@ get recommendedUploadedCount(): number {
     URL.revokeObjectURL(url);
   }
 
-  async uploadTemplate(event: CsvUploadEvent): Promise<void> {
+  async uploadMultipleTemplates(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files ?? []);
+
+    if (!files.length) {
+      return;
+    }
+
     this.processing.set(true);
     this.error.set('');
+    this.uploadMessage.set('');
+
+    const unmatchedFiles: string[] = [];
+    let processedCount = 0;
 
     try {
-      const parsed = await this.csvParser.parse(event.file);
+      for (const file of files) {
+        const matchedTemplate = this.findTemplateForFile(file);
 
-      this.importMapper.map(event.template.id, parsed);
+        if (!matchedTemplate) {
+          unmatchedFiles.push(file.name);
+          continue;
+        }
 
-      this.templates = this.templates.map((item) =>
-        item.id === event.template.id
-          ? {
-              ...item,
+        const parsed = await this.csvParser.parse(file);
+
+        const mappedTable = this.importMapper.map(matchedTemplate.id, parsed);
+
+        this.processState.addMappedTable(mappedTable);
+
+        this.templates = this.templates.map((template) =>
+          template.id === matchedTemplate.id
+            ? {
+              ...template,
               uploaded: true,
               status: 'uploaded',
               recordsFound: parsed.rowCount,
             }
-          : item,
-      );
+            : template,
+        );
+
+        processedCount += 1;
+      }
+
 
       this.processEngine.updateTemplates(this.templates);
+
+      if (this.canContinue) {
+        this.processing.set(true);
+
+        this.processEngine.validate();
+
+        setTimeout(() => {
+          this.processing.set(false);
+
+          this.router.navigate([
+            '/provider-onboarding/agency-creation/validation',
+          ]);
+        }, 300);
+
+        return;
+      }
+
+      if (processedCount > 0) {
+        this.uploadMessage.set(
+          `${processedCount} file${processedCount === 1 ? '' : 's'} processed successfully.`,
+        );
+      }
+
+      if (unmatchedFiles.length) {
+        this.error.set(
+          `These files were not matched: ${unmatchedFiles.join(', ')}. Please use the expected template filenames.`,
+        );
+      }
     } catch {
       this.error.set(
-        'The CSV could not be read. Please check the file and try again.',
+        'One or more CSV files could not be read. Please check the files and try again.',
       );
     } finally {
       this.processing.set(false);
+      input.value = '';
     }
   }
 
-
-  downloadAllTemplates(): void {
-  for (const template of this.templates) {
-    this.downloadTemplate(template);
-  }
-}
   removeTemplate(template: ImportTemplate): void {
     this.templates = this.templates.map((item) =>
       item.id === template.id
         ? {
-            ...item,
-            uploaded: false,
-            status: 'not-started',
-            recordsFound: undefined,
-          }
+          ...item,
+          uploaded: false,
+          status: 'not-started',
+          recordsFound: undefined,
+        }
         : item,
     );
 
@@ -367,11 +407,22 @@ get recommendedUploadedCount(): number {
     this.router.navigate(['/provider-onboarding/agency-creation/validation']);
   }
 
-  private escapeCsvValue(value: string): string {
-    const needsQuotes =
-      value.includes(',') || value.includes('"') || value.includes('\n');
+  private findTemplateForFile(file: File): ImportTemplate | undefined {
+    const fileName = file.name.toLowerCase().trim();
 
-    const escaped = value.replace(/"/g, '""');
+    return this.templates.find(
+      (template) => template.expectedFileName.toLowerCase() === fileName,
+    );
+  }
+
+  private escapeCsvValue(value: unknown): string {
+    const stringValue = String(value ?? '');
+    const needsQuotes =
+      stringValue.includes(',') ||
+      stringValue.includes('"') ||
+      stringValue.includes('\n');
+
+    const escaped = stringValue.replace(/"/g, '""');
 
     return needsQuotes ? `"${escaped}"` : escaped;
   }

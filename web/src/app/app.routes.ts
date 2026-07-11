@@ -14,4 +14,15 @@ export const appRoutes: Route[] = [
         (m) => m.providerOnboardingRoutes,
       ),
   },
+
+
+  {
+  path: 'provider/workspace',
+  loadChildren: () =>
+    import('@hhsc-compliance/provider-workspace').then(
+      (module) => module.providerWorkspaceRoutes,
+    ),
+},
+
+  
 ];

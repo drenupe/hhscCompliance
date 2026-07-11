@@ -4,7 +4,7 @@
   "sourceRoot": "libs/features/operations/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:operations", "type:feature"],
+  "tags": ["scope:feature", "type:feature"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
