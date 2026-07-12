@@ -49,6 +49,9 @@
         "libs/features/provider-workspace/src/index.ts"
       ],
       "@hhsc-compliance/providers": ["libs/features/providers/src/index.ts"],
+      "@hhsc-compliance/regulatory-knowledge": [
+        "libs/regulatory/knowledge/src/index.ts"
+      ],
       "@hhsc-compliance/remediation": [
         "libs/features/remediation/src/index.ts"
       ],
