@@ -1,8 +1,8 @@
 {
   "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "ignoreDeprecations": "6.0",
+  "compilerOptions": {    
     "target": "es2022",
+    "ignoreDeprecations": "6.0",
     "moduleResolution": "bundler",
     "strict": true,
     "noImplicitOverride": true,
