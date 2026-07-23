@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict';
-import { beforeEach, describe, it } from 'node:test';
+import assert = require('node:assert/strict');
 
 import { KnowledgePackLoader } from '../loaders/knowledge-pack.loader';
 import { texasHcsKnowledgePack } from '../packs/texas-hcs/texas-hcs.knowledge-pack';
