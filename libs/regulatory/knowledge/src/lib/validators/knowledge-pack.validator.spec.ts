@@ -115,6 +115,23 @@ describe('KnowledgePackValidator', () => {
     );
   });
 
+  it('preserves the regulatory instrument metadata for the Texas HCS source', () => {
+    const source = texasHcsKnowledgePack.sources.find(
+      (item) => item.id === 'tx-hcs-source-26-tac-chapter-565',
+    );
+
+    expect(source).toBeDefined();
+    expect(source?.regulatoryInstrument).toBe('26 TAC');
+  });
+
+  it('preserves the regulatory instrument metadata for the Texas HCS source', () => {
+    const source = texasHcsKnowledgePack.sources.find(
+      (item) => item.id === 'tx-hcs-source-26-tac-chapter-565',
+    );
+
+    expect(source).toBeDefined();
+    expect(source?.regulatoryInstrument).toBe('26 TAC');
+  });
   it('rejects select questions without options', () => {
     const targetQuestion =
       texasHcsKnowledgePack.questions.find(

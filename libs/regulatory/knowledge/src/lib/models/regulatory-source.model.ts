@@ -10,6 +10,7 @@ export interface RegulatorySource {
   publisher: string;
   sourceType: RegulatorySourceType;
   jurisdiction: string;
+  regulatoryInstrument?: string;
   version: string;
   status: RegulatoryStatus;
   effectiveDate?: string;

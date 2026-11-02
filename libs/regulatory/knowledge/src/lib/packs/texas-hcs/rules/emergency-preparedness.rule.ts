@@ -91,23 +91,40 @@ export const texasHcsEmergencyPreparednessSource: RegulatorySource = {
   publisher: 'Texas Health and Human Services Commission',
   sourceType: 'RULE',
   jurisdiction: 'Texas',
+  regulatoryInstrument: '26 TAC',
   version: '2026.1',
-  status: 'ACTIVE',
+  status: 'UNDER_REVIEW',
+  sourceUrl: 'https://www.law.cornell.edu/regulations/texas/26-Tex-Admin-Code-SS-565-23',
   description:
-    'Texas certification standards governing Home and Community-Based Services and Community First Choice program providers.',
+    'Texas certification standards governing Home and Community-Based Services and Community First Choice program providers. Source provenance and current applicability remain under review.',
 };
 
 export const texasHcsEmergencyPreparednessRule: RegulatoryRule = {
   id: TEXAS_HCS_EMERGENCY_PREPAREDNESS_IDS.rule,
   sourceId: TEXAS_HCS_EMERGENCY_PREPAREDNESS_IDS.source,
   code: 'TX-HCS-EMERGENCY-PREPAREDNESS',
-  citation: '26 TAC Chapter 565',
+  citation: '26 TAC §565.23',
   title: 'Emergency Preparedness and Residential Emergency Planning',
   description:
     'Requires a program provider to maintain location-appropriate emergency planning that protects individuals during fires, disasters, utility failures, evacuations, shelter-in-place events, and other emergencies.',
   chapter: '565',
+  section: '565.23',
   version: '2026.1',
   status: 'UNDER_REVIEW',
+  references: [
+    {
+      sourceId: TEXAS_HCS_EMERGENCY_PREPAREDNESS_IDS.source,
+      citation: '26 TAC §565.23(e)',
+      title: 'Fire drill requirements',
+      url: 'https://www.law.cornell.edu/regulations/texas/26-Tex-Admin-Code-SS-565-23',
+    },
+    {
+      sourceId: TEXAS_HCS_EMERGENCY_PREPAREDNESS_IDS.source,
+      citation: '26 TAC §565.23(f)',
+      title: 'Emergency plan requirements',
+      url: 'https://www.law.cornell.edu/regulations/texas/26-Tex-Admin-Code-SS-565-23',
+    },
+  ],
   tags: [
     'EMERGENCY_PREPAREDNESS',
     'EMERGENCY_PLAN',

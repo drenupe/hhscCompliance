@@ -24,6 +24,7 @@ export class KnowledgePackValidator {
 
     this.validateMetadata(pack, issues);
     this.validateUniqueIds(pack, issues);
+    this.validateSources(pack, issues);
     this.validateRules(pack, issues);
     this.validateRequirements(pack, issues);
     this.validateQuestions(pack, issues);
@@ -120,6 +121,52 @@ export class KnowledgePackValidator {
     this.checkDuplicateIds(pack.guidance, 'guidance', issues);
   }
 
+  private validateSources(
+    pack: KnowledgePack,
+    issues: KnowledgePackValidationIssue[],
+  ): void {
+    pack.sources.forEach((source, index) => {
+      const path = `sources[${index}]`;
+
+      if (!this.hasValue(source.sourceUrl)) {
+        if (source.status === 'ACTIVE') {
+          this.addError(
+            issues,
+            'SOURCE_URL_REQUIRED_FOR_ACTIVE',
+            'An active source must have a source URL.',
+            `${path}.sourceUrl`,
+          );
+        } else {
+          this.addWarning(
+            issues,
+            'SOURCE_URL_MISSING',
+            'Source URL is missing; verify provenance before approval.',
+            `${path}.sourceUrl`,
+          );
+        }
+        return;
+      }
+
+      try {
+        const sourceUrl = source.sourceUrl;
+        if (typeof sourceUrl !== 'string') {
+          throw new Error('Source URL is required.');
+        }
+        const url = new URL(sourceUrl);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          throw new Error('Unsupported URL protocol');
+        }
+      } catch {
+        this.addError(
+          issues,
+          'SOURCE_URL_INVALID',
+          'Source URL must be a valid HTTP or HTTPS URL.',
+          `${path}.sourceUrl`,
+        );
+      }
+    });
+  }
+
   private validateRules(
     pack: KnowledgePack,
     issues: KnowledgePackValidationIssue[],
@@ -172,6 +219,26 @@ export class KnowledgePackValidator {
           issues,
           'RULE_CITATION_REQUIRED',
           'Rule citation is required.',
+          `${path}.citation`,
+        );
+      }
+
+      if (!this.hasValue(rule.section)) {
+        this.addError(
+          issues,
+          'RULE_SECTION_REQUIRED',
+          'A regulatory rule must identify a specific section.',
+          `${path}.section`,
+        );
+      } else if (
+        this.hasValue(rule.citation) &&
+        typeof rule.section === 'string' &&
+        !rule.citation.includes(rule.section)
+      ) {
+        this.addError(
+          issues,
+          'RULE_CITATION_SECTION_MISMATCH',
+          'The citation must include the rule section identifier.',
           `${path}.citation`,
         );
       }
@@ -415,12 +482,13 @@ export class KnowledgePackValidator {
 
       if (
         evidence.minimumCount !== undefined &&
-        evidence.minimumCount < 0
+        (!Number.isInteger(evidence.minimumCount) ||
+          evidence.minimumCount < 0)
       ) {
         this.addError(
           issues,
           'EVIDENCE_MINIMUM_COUNT_INVALID',
-          'Evidence minimumCount cannot be negative.',
+          'Evidence minimumCount must be a non-negative integer.',
           `${path}.minimumCount`,
         );
       }
@@ -493,6 +561,17 @@ export class KnowledgePackValidator {
         'MIN_VALUE validation requires minValue.',
         `${path}.minValue`,
       );
+    } else if (
+      rule.ruleType === 'MIN_VALUE' &&
+      (typeof rule.minValue !== 'number' ||
+        !Number.isFinite(rule.minValue))
+    ) {
+      this.addError(
+        issues,
+        'VALIDATION_MIN_VALUE_INVALID',
+        'MIN_VALUE must be a finite number.',
+        `${path}.minValue`,
+      );
     }
 
     if (
@@ -503,6 +582,17 @@ export class KnowledgePackValidator {
         issues,
         'VALIDATION_MAX_VALUE_REQUIRED',
         'MAX_VALUE validation requires maxValue.',
+        `${path}.maxValue`,
+      );
+    } else if (
+      rule.ruleType === 'MAX_VALUE' &&
+      (typeof rule.maxValue !== 'number' ||
+        !Number.isFinite(rule.maxValue))
+    ) {
+      this.addError(
+        issues,
+        'VALIDATION_MAX_VALUE_INVALID',
+        'MAX_VALUE must be a finite number.',
         `${path}.maxValue`,
       );
     }
@@ -517,6 +607,17 @@ export class KnowledgePackValidator {
         'PATTERN validation requires pattern.',
         `${path}.pattern`,
       );
+    } else if (rule.ruleType === 'PATTERN') {
+      try {
+        new RegExp(rule.pattern as string);
+      } catch {
+        this.addError(
+          issues,
+          'VALIDATION_PATTERN_INVALID',
+          'PATTERN must be a valid regular expression.',
+          `${path}.pattern`,
+        );
+      }
     }
 
     if (
